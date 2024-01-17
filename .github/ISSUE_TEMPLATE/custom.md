@@ -3,7 +3,6 @@ name: User Story Template
 about: Default user story template
 title: " USER STORY: <Title Goes Here>"
 labels: Backlog
-projects: ['Erikas-Ramanauskas/4']
 assignees: plexoio
 
 ---
