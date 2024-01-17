@@ -30,6 +30,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME'),]
 
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
