@@ -1,0 +1,11 @@
+<!-- accounts/templates/Register.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Login</h2>
+<form method="post">
+    {% csrf_token %}
+    <!-- Your login form fields here -->
+    <button type="submit">Register</button>
+</form>
+{% endblock %}
