@@ -5,6 +5,8 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import dj_database_url
+if os.path.isfile('env.py'):
+    import env
 
 # Initialize Cloudinary
 cloudinary.config( 
@@ -17,12 +19,17 @@ cloudinary.config(
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zv@z+w(hr_2mav_n-$a31%2511a1$h5c_c(c3v$2-hu4j31k^0'
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
+DEBUG_MODE = os.environ.get('DEBUG_MODE', 'False').lower() == 'true'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG_MODE
 
-ALLOWED_HOSTS = ['8000-jesseross00-janhackatho-yoac5dkm57x.ws-eu107.gitpod.io', '127.0.0.1']
+if DEBUG:
+    ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
+else:
+    ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME'),]
+
 
 # Application definition
 INSTALLED_APPS = [
