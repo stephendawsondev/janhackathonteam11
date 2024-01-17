@@ -118,3 +118,5 @@ if not DEBUG:
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGOUT_REDIRECT_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'dashboard'
