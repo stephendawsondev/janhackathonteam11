@@ -1,11 +1,10 @@
-<!-- accounts/templates/Register.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Login</h2>
+<h2>Register</h2>
 <form method="post">
     {% csrf_token %}
-    <!-- Your login form fields here -->
+    {{ form.as_p }}
     <button type="submit">Register</button>
 </form>
 {% endblock %}

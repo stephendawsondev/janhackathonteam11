@@ -2,6 +2,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<header class="container my-5">
+    {% if user.is_authenticated %}
+    <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+    <h1>Welcome, {{ user.username }}!</h1>
+    {% if user_profile %}
+        <p>Indebt: ${{ user_profile.indebt }}</p>
+        <p>Savings: ${{ user_profile.savings }}</p>
+        <p>Invested: ${{ user_profile.invested }}</p>
+        <p>Current Balance: ${{ current_balance }}</p>
+    {% else %}
+        <p>No profile data available.</p>
+    {% endif %}
+{% else %}
+    <p>Please log in to view this page.</p>
+
+{% endif %} </header>
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
