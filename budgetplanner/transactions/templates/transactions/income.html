@@ -1,4 +1,44 @@
-<!-- transactions/templates/income.html -->
-<!-- transactions/templates/transactions/income.html -->
-<p>Details about income.</p>
-<!-- Add more content specific to income here -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body">
+    {% if messages %}
+        {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'income' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Record Income</button>
+    </form>
+
+    <h2>Monthly Income Total</h2>
+    <p>This month's total income: {{ monthly_income_total }}</p>
+
+    <h2>Yearly Income Total</h2>
+    <p>This year's total income: {{ yearly_income_total }}</p>
+
+    <h2>Recent Incomes</h2>
+    {% if incomes %}
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Source</th>
+            </tr>
+            {% for income in incomes %}
+            <tr>
+                <td>{{ income.date }}</td>
+                <td>{{ income.amount }}</td>
+                <td>{{ income.source }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No incomes recorded.</p>
+    {% endif %}
+</div>
+
+
+{% endblock %}
