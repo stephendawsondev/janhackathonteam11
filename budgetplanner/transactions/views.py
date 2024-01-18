@@ -4,8 +4,11 @@ from .forms import ExpenseForm
 from .models import Expense
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+
 def income_view(request):
     return render(request, 'transactions/income.html')
+
 
 @login_required
 def expenditure_view(request):
@@ -16,7 +19,8 @@ def expenditure_view(request):
             expense.user = request.user
             expense.save()
             messages.success(request, 'Expense added successfully!')
-            return redirect('expenditure')  # Redirect back to the expenditure page to show the new expense
+            # Redirect back to the expenditure page to show the new expense
+            return redirect('expenditure')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -34,7 +38,10 @@ def expenditure_view(request):
         'datewise_totals': datewise_totals,
     }
     return render(request, 'transactions/expenditure.html', context)
+
 # views.py
+
+
 @login_required
 def add_expense_view(request):
     if request.method == 'POST':
@@ -49,9 +56,11 @@ def add_expense_view(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = ExpenseForm()
-    
+
     # If not POST or form not valid, just show the form again
     return render(request, 'transactions/add_expense_form.html', {'form': form})
+
+
 def reports_view(request):
     return render(request, 'transactions/reports.html')
 
