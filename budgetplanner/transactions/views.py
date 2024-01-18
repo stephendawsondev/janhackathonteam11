@@ -8,6 +8,7 @@ from .models import Expense, Income
 from datetime import datetime, timedelta
 from decimal import Decimal
 
+
 @login_required
 def income_view(request):
     if request.method == 'POST':
@@ -22,7 +23,7 @@ def income_view(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = IncomeForm()
-        
+
     # Calculate totals similarly as we did for expenses
     today = datetime.today()
     start_of_month = today.replace(day=1)
@@ -39,7 +40,8 @@ def income_view(request):
     ).aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
 
     incomes = Income.objects.filter(user=request.user).order_by('-date')
-    datewise_totals = incomes.values('date').annotate(total=Sum('amount')).order_by('-date')
+    datewise_totals = incomes.values('date').annotate(
+        total=Sum('amount')).order_by('-date')
 
     context = {
         'form': form,
@@ -49,6 +51,8 @@ def income_view(request):
     }
 
     return render(request, 'transactions/income.html', context)
+
+
 @login_required
 def expenditure_view(request):
     if request.method == 'POST':
@@ -65,11 +69,13 @@ def expenditure_view(request):
         form = ExpenseForm()
 
     expenses = Expense.objects.filter(user=request.user).order_by('-date')
-    datewise_totals = expenses.values('date').annotate(total=Sum('amount')).order_by('-date')
+    datewise_totals = expenses.values('date').annotate(
+        total=Sum('amount')).order_by('-date')
 
     # Get current date and calculate the start of the week, month, and year
     current_date = now().date()
-    start_of_week = current_date - timedelta(days=current_date.weekday()) + timedelta(days=3)
+    start_of_week = current_date - \
+        timedelta(days=current_date.weekday()) + timedelta(days=3)
     start_of_month = current_date.replace(day=1)
     start_of_year = current_date.replace(month=1, day=1)
 
@@ -78,15 +84,19 @@ def expenditure_view(request):
         start_of_week -= timedelta(weeks=1)
 
     # Aggregate expenses
-    weekly_totals = expenses.filter(date__gte=start_of_week).aggregate(weekly_total=Sum('amount'))
-    monthly_totals = expenses.filter(date__gte=start_of_month).aggregate(monthly_total=Sum('amount'))
-    yearly_totals = expenses.filter(date__gte=start_of_year).aggregate(yearly_total=Sum('amount'))
-    
+    weekly_totals = expenses.filter(
+        date__gte=start_of_week).aggregate(weekly_total=Sum('amount'))
+    monthly_totals = expenses.filter(
+        date__gte=start_of_month).aggregate(monthly_total=Sum('amount'))
+    yearly_totals = expenses.filter(
+        date__gte=start_of_year).aggregate(yearly_total=Sum('amount'))
+
     # Calculate daily totals for the current week
     daily_totals = []
     for i in range(7):
         day = start_of_week + timedelta(days=i)
-        total = expenses.filter(date=day).aggregate(total=Sum('amount'))['total'] or 0
+        total = expenses.filter(date=day).aggregate(
+            total=Sum('amount'))['total'] or 0
         daily_totals.append({'day': day, 'total': total})
 
     context = {
@@ -100,7 +110,9 @@ def expenditure_view(request):
     }
 
     return render(request, 'transactions/expenditure.html', context)
+
 # views.py
+
 
 def reports_view(request):
     return render(request, 'transactions/reports.html')
