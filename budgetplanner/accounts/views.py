@@ -54,8 +54,13 @@ def password_reset_view(request):
                 email_template_name='registration/password_reset_email.html',
                 subject_template_name='registration/password_reset_subject.txt'
             )
+
+            # In preparation for when we add toast messages
             messages.success(
                 request, 'Instructions to reset your password have been sent to your email.')
+            messages.error(
+                request, 'An error occurred while sending the email. Please try again later.')
+
             return redirect(reverse('login'))
     else:
         form = PasswordResetForm()
