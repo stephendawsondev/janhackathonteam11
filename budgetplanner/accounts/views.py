@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm
 from .models import UserProfile
-from transactions.models import Budget
+from transactions.models import Budget,Income,Expense
+from django.db.models import Sum
+from django.utils.timezone import now
+from datetime import timedelta
+from transactions.models import get_income_totals, get_expense_totals
 
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
+
 def register_view(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -49,8 +54,20 @@ def dashboard_view(request):
             user_profile = UserProfile.objects.get(user=request.user)
             context['user_profile'] = user_profile
             context['current_balance'] = user_profile.current_balance()
+            context.update(get_income_totals(request.user))
+            context.update(get_expense_totals(request.user))
+            context = {
+        'weekly_income_total': weekly_income_total,
+        'monthly_income_total': monthly_income_total,
+        'yearly_income_total': yearly_income_total,
+        'weekly_expenditure_total': weekly_expenditure_total,
+        'monthly_expenditure_total': monthly_expenditure_total,
+        'yearly_expenditure_total': yearly_expenditure_total,
+        # ... other context variables
+        }
         except UserProfile.DoesNotExist:
             context['user_profile'] = None
+        
     return render(request, 'dashboard.html', context)
 # Create your views here.
 def faq_view(request):

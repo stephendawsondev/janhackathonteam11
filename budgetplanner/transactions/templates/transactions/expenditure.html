@@ -10,9 +10,22 @@
     <form method="post" action="{% url 'expenditure' %}">
         {% csrf_token %}
         {{ form.as_p }}
-
         <button type="submit" class="btn btn-primary">Submit Expense</button>
     </form>
+
+    <h2>Weekly Total</h2>
+    <p>This week's total: {{ weekly_totals.weekly_total|default:"0.00" }}</p>
+
+    <h2>Monthly Total</h2>
+    <p>This month's total: {{ monthly_totals.monthly_total|default:"0.00" }}</p>
+
+    <h2>Yearly Total</h2>
+    <p>This year's total: {{ yearly_totals.yearly_total|default:"0.00" }}</p>
+
+    <h2>Daily Totals This Week</h2>
+    {% for day_total in daily_totals %}
+        <p>{{ day_total.day }}: {{ day_total.total|default:"0.00" }}</p>
+    {% endfor %}
 
     <h2>Recent Expenses</h2>
     {% if expenses %}
@@ -35,10 +48,6 @@
     {% else %}
         <p>No expenses recorded.</p>
     {% endif %}
-
-    <h2>Total Expenses by Date</h2>
-    {% for date, total in datewise_totals %}
-        <p>Date: {{ date }} - Total: {{ total }}</p>
-    {% endfor %}
 </div>
+
 {% endblock %}
