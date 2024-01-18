@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <div class="card-body">
     {% if messages %}
         {% for message in messages %}
@@ -8,6 +10,7 @@
     <form method="post" action="{% url 'expenditure' %}">
         {% csrf_token %}
         {{ form.as_p }}
+
         <button type="submit" class="btn btn-primary">Submit Expense</button>
     </form>
 
@@ -18,16 +21,14 @@
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Description</th>
-                <th>Type</th>
-                <th>Recurring</th>
+                <th>Typical Expense</th>
             </tr>
             {% for expense in expenses %}
             <tr>
                 <td>{{ expense.date }}</td>
                 <td>{{ expense.amount }}</td>
                 <td>{{ expense.description }}</td>
-                <td>{{ expense.get_typical_expense_display }}</td>
-                <td>{{ expense.is_recurring|yesno:"Yes,No" }}</td>
+                <td>{{ expense.typical_expense }}</td>
             </tr>
             {% endfor %}
         </table>
@@ -40,3 +41,4 @@
         <p>Date: {{ date }} - Total: {{ total }}</p>
     {% endfor %}
 </div>
+{% endblock %}

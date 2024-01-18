@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 def income_view(request):
     return render(request, 'transactions/income.html')
+
 @login_required
 def expenditure_view(request):
     if request.method == 'POST':
@@ -15,6 +16,7 @@ def expenditure_view(request):
             expense.user = request.user
             expense.save()
             messages.success(request, 'Expense added successfully!')
+            return redirect('expenditure')  # Redirect back to the expenditure page to show the new expense
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
