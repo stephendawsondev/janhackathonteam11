@@ -14,10 +14,10 @@ class Budget(models.Model):
 # Create your models here.
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    budget = models.ForeignKey(Budget, on_delete=models.CASCADE, related_name='expenses')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     date = models.DateField()
+    is_recurring = models.BooleanField(default=False)  # New field for recurring expenses
 
     def __str__(self):
         return f"{self.user.username}'s expense on {self.date}"
