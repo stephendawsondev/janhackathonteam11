@@ -10,7 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
-          margin-bottom: 60px; /* Adjusted for the fixed footer height */
+          margin-bottom: 60px;
+          margin-top:100px;
+          background: linear-gradient(to right,  #ff7e5f,#0079bf,#708090);
+           box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7); /* Sunk-in effect */ /* Blue, White, and Orange gradient *//* Adjusted for the fixed footer height */
         }
     
         .navbar {
@@ -41,7 +44,41 @@
             transform: translateY(-5px);
           }
         }
-    
+        .form-3d {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    perspective: 1000px;
+}
+
+.form-3d input, .form-3d textarea, .form-3d button {
+    background: linear-gradient(45deg, #ff7e5f, #0079bf);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateZ(0);
+    transition: transform 0.3s ease;
+}
+
+.form-3d input:focus, .form-3d textarea:focus {
+    outline: none;
+    transform: translateZ(50px);
+}
+
+.form-3d button:hover {
+    transform: translateZ(50px) scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .form-3d {
+        margin: 0 15px;
+    }
+}
         .footer {
           position: fixed;
           bottom: 0;
@@ -60,6 +97,55 @@
         .footer a:hover {
           color: #17a2b8;
         }
+
+        .bg-glass-3d {
+          background: rgba(255, 255, 255, 0.3); 
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 10px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transform: translateZ(0);
+    transition: transform 0.3s ease;
+}
+
+.bg-glass-3d:hover {
+    transform: translateZ(20px);
+}
+
+.bg-glass-3d p {
+    font-size: 1.1em;
+    line-height: 1.6;
+     /* Ensures text is visible on the glass background */
+}
+
+@media (max-width: 768px) {
+    .bg-glass-3d p {
+        font-size: 1em;
+    }
+}
+.form-register {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-register h2 {
+    color: #0079bf; /* Matching the color scheme */
+}
+
+.form-register input, .form-register button {
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background-color: #0079bf;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #005f8f;
+}
       </style>
 </head>
 <body>
