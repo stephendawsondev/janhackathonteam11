@@ -78,15 +78,3 @@ def dashboard_view(request):
         except UserProfile.DoesNotExist:
             context['user_profile'] = None
     return render(request, 'dashboard.html', context)
-
-
-def faq_view(request):
-    return render(request, 'faq.html')
-
-
-def contact_view(request):
-    return render(request, 'contact.html')
-
-
-def about_view(request):
-    return render(request, 'about.html')
