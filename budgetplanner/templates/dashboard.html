@@ -43,7 +43,15 @@
                     <h3 class="card-title">Expenditure</h3>
                 </div>
                 <div class="card-body">
-                    {% include 'transactions/expenditure.html' %}
+                    {% block expenditure_content %}
+<div class="card-body">
+    <h2>Expenditure Summary</h2>
+    <p>Current Expenditure Total: ${{ current_expenditure_total }}</p>
+    <p>Yearly Expenditure Total: ${{ yearly_expenditure_total }}</p>
+    <a href="{% url 'expenditure' %}" class="btn btn-primary">View Expenditure Details</a>
+</div>
+
+{% endblock %}
                 </div>
             </div>
         </div>

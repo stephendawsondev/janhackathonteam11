@@ -1,1 +1,44 @@
-<p> Details about expense </p>
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body">
+    {% if messages %}
+        {% for message in messages %}
+            <div>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'expenditure' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-primary">Submit Expense</button>
+    </form>
+
+    <h2>Recent Expenses</h2>
+    {% if expenses %}
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Typical Expense</th>
+            </tr>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.date }}</td>
+                <td>{{ expense.amount }}</td>
+                <td>{{ expense.description }}</td>
+                <td>{{ expense.typical_expense }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No expenses recorded.</p>
+    {% endif %}
+
+    <h2>Total Expenses by Date</h2>
+    {% for date, total in datewise_totals %}
+        <p>Date: {{ date }} - Total: {{ total }}</p>
+    {% endfor %}
+</div>
+{% endblock %}
