@@ -4,42 +4,6 @@ from django_summernote.admin import SummernoteModelAdmin
 from .models import WeeklyBudget, MonthlyBudget, YearlyBudget, Expense, Income
 
 
-class WeeklyBudgetAdmin(admin.ModelAdmin):
-    list_display = (
-        'user',
-        'amount',
-        'start_date',
-        'end_date',
-    )
-
-    list_filter = ('start_date', 'end_date')
-    search_fields = ['user', 'amount',]
-
-    ordering = ('start_date',)
-
-class MonthlyBudgetAdmin(admin.ModelAdmin):
-    list_display = (
-        'user',
-        'amount',
-        'month',
-    )
-
-    list_filter = ('month', )
-    search_fields = ['user', 'amount',]
-
-    ordering = ('-month',)
-
-class YearlyBudgetAdmin(admin.ModelAdmin):
-    list_display = (
-        'user',
-        'amount',
-        'year',
-    )
-
-    list_filter = ('year', )
-    search_fields = ['user', 'amount',]
-
-    ordering = ('-year',)
 
 class ExpenseAdmin(SummernoteModelAdmin):
     list_display = (
@@ -75,8 +39,6 @@ class IncomeAdmin(SummernoteModelAdmin):
     ordering = ('-date',)
 
 
-admin.site.register(WeeklyBudget, WeeklyBudgetAdmin)
-admin.site.register(MonthlyBudget, MonthlyBudgetAdmin)
-admin.site.register(YearlyBudget, YearlyBudgetAdmin)
+
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Income, IncomeAdmin)

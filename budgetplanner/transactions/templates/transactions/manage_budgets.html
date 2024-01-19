@@ -1,4 +1,6 @@
+
 {% extends 'dashboard-base/base.html' %}
+
 {% block content %}
 <div class="container">
     <h2>Manage Your Budgets</h2>
@@ -7,47 +9,100 @@
     <h3>Weekly Budget</h3>
     <form method="post">
         {% csrf_token %}
-        {{ weekly_form.as_p }}
-        <button type="submit" name="create_weekly">Create/Update Weekly Budget</button>
+        <div>
+            <label for="{{ weekly_form.amount.id_for_label }}">Amount:</label>
+            {{ weekly_form.amount }}
+            {{ weekly_form.amount.errors }}
+        </div>
+        <div>
+            <label for="{{ weekly_form.start_date.id_for_label }}">Start Date:</label>
+            {{ weekly_form.start_date }}
+            {{ weekly_form.start_date.errors }}
+        </div>
+        <button type="submit" name="weekly_budget">Create Weekly Budget</button>
     </form>
+    
+    <!-- Existing Weekly Budgets -->
+    {% for budget in weekly_budgets %}
+        <div>
+            <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
+            <form method="post" action="{% url 'update_budget' budget.id 'weekly' %}">
+                {% csrf_token %}
+                <button type="submit" name="update_weekly">Edit</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                <button type="submit" name="delete_weekly">Delete</button>
+            </form>
+        
+        </div>
+    {% endfor %}
 
     <!-- Monthly Budget Form -->
     <h3>Monthly Budget</h3>
     <form method="post">
         {% csrf_token %}
-        {{ monthly_form.as_p }}
-        <button type="submit" name="create_monthly">Create/Update Monthly Budget</button>
+        <div>
+            <label for="{{ monthly_form.amount.id_for_label }}">Amount:</label>
+            {{ monthly_form.amount }}
+            {{ monthly_form.amount.errors }}
+        </div>
+        <div>
+            <label for="{{ monthly_form.start_date.id_for_label }}">Start Date:</label>
+            {{ monthly_form.start_date }}
+            {{ monthly_form.start_date.errors }}
+        </div>
+        <button type="submit" name="monthly_budget">Create Monthly Budget</button>
     </form>
+    
+    <!-- Existing Monthly Budgets -->
+    {% for budget in monthly_budgets %}
+        <div>
+            <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
+            <form method="post" action="{% url 'update_budget' budget.id 'monthly' %}">
+                {% csrf_token %}
+                <button type="submit" name="update_monthly">Edit</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                <button type="submit" name="delete_monthly">Delete</button>
+            </form>
+        </div>
+    {% endfor %}
 
     <!-- Yearly Budget Form -->
     <h3>Yearly Budget</h3>
     <form method="post">
         {% csrf_token %}
-        {{ yearly_form.as_p }}
-        <button type="submit" name="create_yearly">Create/Update Yearly Budget</button>
+        <div>
+            <label for="{{ yearly_form.amount.id_for_label }}">Amount:</label>
+            {{ yearly_form.amount }}
+            {{ yearly_form.amount.errors }}
+        </div>
+        <div>
+            <label for="{{ yearly_form.start_date.id_for_label }}">Start Date:</label>
+            {{ yearly_form.start_date }}
+            {{ yearly_form.start_date.errors }}
+        </div>
+        <button type="submit" name="yearly_budget">Create Yearly Budget</button>
     </form>
-
-    <!-- Display Existing Budgets -->
-    <div>
-        <h3>Existing Weekly Budgets</h3>
-        {% for budget in weekly_budgets %}
+    
+    <!-- Existing Yearly Budgets -->
+    {% for budget in yearly_budgets %}
+        <div>
             <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
-            <!-- Add Update/Delete buttons here -->
-        {% endfor %}
-    </div>
-    <div>
-        <h3>Existing Monthly Budgets</h3>
-        {% for budget in monthly_budgets %}
-            <p>Budget for {{ budget.month }}: {{ budget.amount }}</p>
-            <!-- Add Update/Delete buttons here -->
-        {% endfor %}
-    </div>
-    <div>
-        <h3>Existing Yearly Budgets</h3>
-        {% for budget in yearly_budgets %}
-            <p>Budget for {{ budget.year }}: {{ budget.amount }}</p>
-            <!-- Add Update/Delete buttons here -->
-        {% endfor %}
-    </div>
+            <form method="post" action="{% url 'update_budget' budget.id 'yearly' %}">
+                {% csrf_token %}
+                <button type="submit" name="update_yearly">Edit</button>
+            </form>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                <button type="submit" name="delete_yearly">Delete</button>
+            </form>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}

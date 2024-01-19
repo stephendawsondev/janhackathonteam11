@@ -311,6 +311,7 @@ i {
 
 .team1 .pro-pic {
   min-height: 200px;
+  position: relative; 
 }
 
 .team1 .pro-pic .card-img-overlay {

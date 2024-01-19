@@ -1,11 +1,22 @@
 {% extends 'dashboard-base/base.html' %}
 {% block content %}
-<div class="container">
-    <h2>Update Income</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Update</button>
-    </form>
-</div>
+<section>
+    <div class="container section-content mt-5">
+        <h1 class="page-title">Update Income</h1>
+        <form method="post" action="{% url 'update_income' income.id %}">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group mt-3">
+                {{ field|as_crispy_field }}
+            </div>
+            {% endfor %}
+            <div class="row mt-3 justify-content-end">
+                <div class="col col-12 col-lg-3">
+                    <button type="submit" class="btn btn-primary w-100">Update
+                        income</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
 {% endblock %}

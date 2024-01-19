@@ -7,7 +7,7 @@ from django.utils.timezone import now
 from decimal import Decimal
 
 
-class TypicalExpense(models.Model):
+class typicalExpense(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -17,12 +17,12 @@ class TypicalExpense(models.Model):
 
 
 def create_typical_expenses():
-    TypicalExpense.objects.create(name='Rent')
-    TypicalExpense.objects.create(name='Car Insurance')
-    TypicalExpense.objects.create(name='Groceries')
-    TypicalExpense.objects.create(name='Utilities')
-    TypicalExpense.objects.create(name='Health Insurance')
-    TypicalExpense.objects.create(name='Internet Bill')
+    typicalExpense.objects.create(name='Rent')
+    typicalExpense.objects.create(name='Car Insurance')
+    typicalExpense.objects.create(name='Groceries')
+    typicalExpense.objects.create(name='Utilities')
+    typicalExpense.objects.create(name='Health Insurance')
+    typicalExpense.objects.create(name='Internet Bill')
     TypicalExpense.objects.create(name='Dining Out')
     TypicalExpense.objects.create(name='Electricity Bill')
     TypicalExpense.objects.create(name='Gas Bill')
@@ -47,7 +47,7 @@ def create_typical_expenses():
     TypicalExpense.objects.create(name='Home Maintenance')
 
 
-class TypicalIncome(models.Model):
+class typicalIncome(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -65,39 +65,50 @@ class Income(models.Model):
     source = models.CharField(max_length=100)
     date = models.DateField()
     typical_income = models.ForeignKey(
-        TypicalIncome, on_delete=models.SET_NULL, null=True, blank=True)
+        'transactions.TypicalIncome', on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.user.username}'s income from {self.source} on {self.date}"
 
 
 
-class WeeklyBudget(models.Model):
+class Budget(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
 
     def __str__(self):
-        return f"{self.user.username}'s weekly budget from {self.start_date} to {self.end_date}"
+        return f"{self.user.username}'s budget from {self.start_date}"
 
-class MonthlyBudget(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    month = models.DateField()  # Represents the first day of the month
-
-    def __str__(self):
-        return f"{self.user.username}'s monthly budget for {self.month.strftime('%B %Y')}"
-
-class YearlyBudget(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    year = models.DateField()  # Represents the first day of the year
+class WeeklyBudget(Budget):
+    def save(self, *args, **kwargs):
+        self.end_date = self.start_date + timedelta(days=6)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username}'s yearly budget for {self.year.year}"
+        return super().__str__() + f" to {self.end_date}"
+   
 
-# Create your models here.
+class MonthlyBudget(Budget):
+    def save(self, *args, **kwargs):
+        self.end_date = self.start_date + timedelta(days=30)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return super().__str__() + f" to {self.end_date}"
+
+class YearlyBudget(Budget):
+    def save(self, *args, **kwargs):
+        self.end_date = self.start_date + timedelta(days=365)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return super().__str__() + f" to {self.end_date}"
 
 
 class Expense(models.Model):
@@ -106,7 +117,7 @@ class Expense(models.Model):
     description = models.CharField(max_length=50)
     date = models.DateField()
     typical_expense = models.ForeignKey(
-        TypicalExpense, on_delete=models.SET_NULL, null=True, blank=True)
+        typicalExpense, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s expense on {self.date}"
