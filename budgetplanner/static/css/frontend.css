@@ -295,8 +295,3 @@ i {
     left: -5000px;
 }
 
-.footer-sticky {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
