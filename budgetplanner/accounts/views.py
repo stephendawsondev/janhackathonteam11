@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-import random
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
@@ -13,6 +12,9 @@ from django.utils.timezone import now
 from datetime import timedelta
 from transactions.models import get_income_totals, get_expense_totals
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
+
+# Custom Register
 
 
 def register_view(request):
@@ -24,6 +26,8 @@ def register_view(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
+
+# Custom Login
 
 
 def login_view(request):
@@ -41,13 +45,24 @@ def login_view(request):
             # Log the user in
             login(request, user)
             # Redirect to the dashboard view
-            return redirect(reverse('homepage'))
+            return redirect(reverse('dashboard'))
         else:
             # Return an 'invalid login' error message
             return render(request, 'login.html', {'error': 'Invalid username or password.'})
     else:
         # Render the login form template if not a POST request
         return render(request, 'login.html')
+
+# Custom Logout
+
+
+def logout_view(request):
+    messages.info(request,
+                         'You have successfully logged out!')
+    logout(request)
+    return redirect('home')
+
+# Custom Password Reset
 
 
 def password_reset_view(request):
@@ -73,41 +88,8 @@ def password_reset_view(request):
 
     return render(request, 'password_reset.html', {'form': form})
 
-# Allow Unauthenticated users
+# User Dashboard
 
-
-def anonymous_required(redirect_url):
-    """
-    Decorator for views that allows only unauthenticated users to access the view.
-    Redirects authenticated users to the specified URL.
-    """
-    def decorator(view_func):
-        def _wrapped_view(request, *args, **kwargs):
-            if request.user.is_authenticated:
-                return HttpResponseRedirect(reverse(redirect_url))
-            return view_func(request, *args, **kwargs)
-        return _wrapped_view
-    return decorator
-
-# DEMO: User Dashboard
-
-
-@anonymous_required('dashboard')
-def demo_dashboard_view(request):
-    messages.info(
-    request, 'This is just a demo version of the User Dashboard. Please log in to utilize the app.')
-
-    indebt =  random.randint(1, 100)
-    savings = random.randint(100, 500)
-    invested = random.randint(100, 500)
-    current_balance = invested + savings - indebt
-    context = {
-        'indebt': indebt,
-        'savings': savings,
-        'invested': invested,
-        'current_balance': current_balance,
-    }
-    return render(request, 'demo_dashboard.html', context)
 
 @login_required
 def dashboard_view(request):
