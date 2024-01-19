@@ -103,9 +103,15 @@
                     <div class="small"> <i class="fa-solid fa-signal"></i>
                         &nbsp;Online as:
                         <span class="px-1">
+                            {% if request.user.is_authenticated %}
                             <strong>
                                 {{ request.user.username }}
                             </strong>
+                            {% else %}
+                            <strong>
+                                Visitor
+                            </strong>
+                            {% endif %}
                         </span>
                     </div>
                 </div>
