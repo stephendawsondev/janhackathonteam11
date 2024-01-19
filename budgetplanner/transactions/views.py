@@ -116,7 +116,7 @@ def manage_budgets(request):
         'monthly_form': monthly_form,
         'yearly_form': yearly_form
     }
-    return render(request, 'budget/budget_management.html', context)
+    return render(request, 'transactions/manage_budgets.html', context)
 
 @login_required
 def income_view(request):
