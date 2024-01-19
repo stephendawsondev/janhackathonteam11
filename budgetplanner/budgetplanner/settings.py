@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_summernote',
     'accounts',  # Your accounts app
     'transactions',  # Your transactions app
     'support', # Support features
