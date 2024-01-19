@@ -19,10 +19,13 @@
     {% for budget in weekly_budgets %}
         <div>
             <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
+            <form method="post" action="{% url 'update_budget' budget.id 'weekly' %}">
+                {% csrf_token %}
+                <button type="submit">Edit</button>
+            </form>
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="budget_id" value="{{ budget.id }}">
-                <button type="submit" name="update_weekly">Update</button>
                 <button type="submit" name="delete_weekly">Delete</button>
             </form>
         </div>
@@ -44,10 +47,13 @@
     {% for budget in monthly_budgets %}
         <div>
             <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
+            <form method="post" action="{% url 'update_budget' budget.id 'monthly' %}">
+                {% csrf_token %}
+                <button type="submit">Edit</button>
+            </form>
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="budget_id" value="{{ budget.id }}">
-                <button type="submit" name="update_monthly">Update</button>
                 <button type="submit" name="delete_monthly">Delete</button>
             </form>
         </div>
@@ -69,10 +75,13 @@
     {% for budget in yearly_budgets %}
         <div>
             <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
+            <form method="post" action="{% url 'update_budget' budget.id 'yearly' %}">
+                {% csrf_token %}
+                <button type="submit">Edit</button>
+            </form>
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="budget_id" value="{{ budget.id }}">
-                <button type="submit" name="update_yearly">Update</button>
                 <button type="submit" name="delete_yearly">Delete</button>
             </form>
         </div>

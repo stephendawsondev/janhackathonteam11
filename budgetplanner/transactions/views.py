@@ -16,6 +16,36 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from django.forms.widgets import SelectDateWidget
 @login_required
+def update_budget(request, budget_id, budget_type):
+    BudgetModel = {
+        'weekly': WeeklyBudget,
+        'monthly': MonthlyBudget,
+        'yearly': YearlyBudget
+    }.get(budget_type)
+
+    budget = get_object_or_404(BudgetModel, id=budget_id, user=request.user)
+
+    if request.method == 'POST':
+        form = {
+            'weekly': WeeklyBudgetForm,
+            'monthly': MonthlyBudgetForm,
+            'yearly': YearlyBudgetForm
+        }.get(budget_type)(request.POST, instance=budget)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{budget_type.capitalize()} budget updated successfully!')
+            return redirect('manage_budgets')
+    else:
+        form = {
+            'weekly': WeeklyBudgetForm,
+            'monthly': MonthlyBudgetForm,
+            'yearly': YearlyBudgetForm
+        }.get(budget_type)(instance=budget)
+
+    return render(request, 'transactions/update_budget.html', {'form': form, 'budget_type': budget_type})
+
+@login_required
 def manage_budgets(request):
     user = request.user
     current_date = now().date()
