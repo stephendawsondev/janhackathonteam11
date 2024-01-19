@@ -64,5 +64,6 @@ class IncomeAdmin(SummernoteModelAdmin):
 
 
 admin.site.register(WeeklyBudget, WeeklyBudgetAdmin)
+admin.site.register(MonthlyBudget, MonthlyBudgetAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Income, IncomeAdmin)
