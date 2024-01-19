@@ -5,6 +5,8 @@ from django.db.models import Sum
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from decimal import Decimal
+
+
 class TypicalExpense(models.Model):
     name = models.CharField(max_length=100)
 
@@ -12,6 +14,8 @@ class TypicalExpense(models.Model):
         return self.name
 
 # Function to create typical expenses
+
+
 def create_typical_expenses():
     TypicalExpense.objects.create(name='Rent')
     TypicalExpense.objects.create(name='Car Insurance')
@@ -42,21 +46,26 @@ def create_typical_expenses():
     TypicalExpense.objects.create(name='Subscription Services')
     TypicalExpense.objects.create(name='Home Maintenance')
 
+
 class TypicalIncome(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
+
 def create_typical_incomes():
     TypicalIncome.objects.create(name='Salary')
     TypicalIncome.objects.create(name='Bonus')
+
 
 class Income(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     source = models.CharField(max_length=100)
     date = models.DateField()
-    typical_income = models.ForeignKey(TypicalIncome, on_delete=models.SET_NULL, null=True, blank=True)
+    typical_income = models.ForeignKey(
+        TypicalIncome, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s income from {self.source} on {self.date}"
@@ -89,12 +98,15 @@ class YearlyBudget(models.Model):
         return f"{self.user.username}'s yearly budget for {self.year.year}"
 
 # Create your models here.
+
+
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=50)
     date = models.DateField()
-    typical_expense = models.ForeignKey(TypicalExpense, on_delete=models.SET_NULL, null=True, blank=True)
+    typical_expense = models.ForeignKey(
+        TypicalExpense, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s expense on {self.date}"
@@ -119,9 +131,11 @@ def get_income_totals(user):
         'yearly_income_total': yearly_total
     }
 
+
 def get_expense_totals(user):
     current_date = now().date()
-    start_of_week = current_date - timedelta(days=current_date.weekday()) + timedelta(days=3)
+    start_of_week = current_date - \
+        timedelta(days=current_date.weekday()) + timedelta(days=3)
     start_of_month = current_date.replace(day=1)
     start_of_year = current_date.replace(month=1, day=1)
 
