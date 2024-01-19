@@ -11,3 +11,7 @@ def contact_view(request):
 
 def about_view(request):
     return render(request, 'support/about.html')
+
+
+def team_view(request):
+    return render(request, 'support/team.html')
