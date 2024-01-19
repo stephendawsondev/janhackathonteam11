@@ -296,7 +296,41 @@ i {
 }
 
 .footer-sticky {
-    position: fixed;
+    position: relative;
     bottom: 0;
     width: 100%;
 }
+
+/* Team page */
+
+.team1 .subtitle {
+    line-height: 24px;
+}
+
+.team1 .pro-pic {
+    min-height: 200px;
+}
+
+.team1 .pro-pic .card-img-overlay {
+    background: rgba(113, 175, 233, 0.87);
+    display: none;
+}
+
+.team1 .pro-pic .card-img-overlay ul {
+    top: 50%;
+}
+
+.team1 .pro-pic .card-img-overlay ul li a {
+    -webkit-transition: 0.1s ease-in;
+    -o-transition: 0.1s ease-in;
+    transition: 0.1s ease-in;
+} 
+
+.team1 .pro-pic .card-img-overlay ul li a:hover {
+    -webkit-transform: translate3d(0px, -5px, 0px);
+    transform: translate3d(0px, -5px, 0px);
+} 
+
+.team1 .pro-pic:hover .card-img-overlay {
+    display: block;
+} 
