@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 <div class="container">
     <h2>Manage Your Budgets</h2>
@@ -19,7 +18,7 @@
             {{ weekly_form.start_date }}
             {{ weekly_form.start_date.errors }}
         </div>
-        <button type="submit" name="weekly_budget">Create/Update Weekly Budget</button>
+        <button type="submit" name="weekly_budget">Create Weekly Budget</button>
     </form>
     
     <!-- Existing Weekly Budgets -->
@@ -35,6 +34,7 @@
                 <input type="hidden" name="budget_id" value="{{ budget.id }}">
                 <button type="submit" name="delete_weekly">Delete</button>
             </form>
+        
         </div>
     {% endfor %}
 
@@ -52,7 +52,7 @@
             {{ monthly_form.start_date }}
             {{ monthly_form.start_date.errors }}
         </div>
-        <button type="submit" name="monthly_budget">Create/Update Monthly Budget</button>
+        <button type="submit" name="monthly_budget">Create Monthly Budget</button>
     </form>
     
     <!-- Existing Monthly Budgets -->
@@ -85,7 +85,7 @@
             {{ yearly_form.start_date }}
             {{ yearly_form.start_date.errors }}
         </div>
-        <button type="submit" name="yearly_budget">Create/Update Yearly Budget</button>
+        <button type="submit" name="yearly_budget">Create Yearly Budget</button>
     </form>
     
     <!-- Existing Yearly Budgets -->

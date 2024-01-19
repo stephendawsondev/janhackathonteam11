@@ -90,6 +90,15 @@ class WeeklyBudgetForm(forms.ModelForm):
             'start_date': SelectDateWidget()
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        if start_date:
+            # Calculate the end date as 6 days after the start date
+            end_date = start_date + timedelta(days=6)
+            cleaned_data['end_date'] = end_date
+        return cleaned_data
+
 class MonthlyBudgetForm(forms.ModelForm):
     class Meta:
         model = MonthlyBudget
@@ -98,6 +107,15 @@ class MonthlyBudgetForm(forms.ModelForm):
             'start_date': SelectDateWidget()
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        if start_date:
+            # Calculate the end date as the last day of the same month
+            end_date = start_date + timedelta(days=30)
+            cleaned_data['end_date'] = end_date
+        return cleaned_data
+
 class YearlyBudgetForm(forms.ModelForm):
     class Meta:
         model = YearlyBudget
@@ -105,3 +123,12 @@ class YearlyBudgetForm(forms.ModelForm):
         widgets = {
             'start_date': SelectDateWidget(years=range(now().year-10, now().year+10))
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        if start_date:
+            # Calculate the end date as one year from the start date
+            end_date = start_date + timedelta(days=365)
+            cleaned_data['end_date'] = end_date
+        return cleaned_data

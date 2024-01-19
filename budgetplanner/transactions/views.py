@@ -69,7 +69,24 @@ def manage_budgets(request):
                     messages.error(request, 'A weekly budget for this period already exists.')
             else:
                 messages.error(request, 'Please correct the errors in the weekly budget form.')
+         # Handling delete request
+        if 'delete_weekly' in request.POST:
+            budget_id = request.POST.get('budget_id')
+            WeeklyBudget.objects.filter(id=budget_id, user=request.user).delete()
+            messages.success(request, 'Weekly budget deleted successfully!')
+            return redirect('manage_budgets')
+        if 'delete_monthly' in request.POST:
+            budget_id = request.POST.get('budget_id')
+            MonthlyBudget.objects.filter(id=budget_id, user=request.user).delete()
+            messages.success(request, 'Monthly budget deleted successfully!')
+            return redirect('manage_budgets')
 
+        # Handling Yearly Budget Delete
+        if 'delete_yearly' in request.POST:
+            budget_id = request.POST.get('budget_id')
+            YearlyBudget.objects.filter(id=budget_id, user=request.user).delete()
+            messages.success(request, 'Yearly budget deleted successfully!')
+            return redirect('manage_budgets')
         # Handling Monthly Budget Form
         if 'monthly_budget' in request.POST:
             monthly_form = MonthlyBudgetForm(request.POST)
@@ -130,9 +147,7 @@ def handle_budget_update_delete(request, budget_id, BudgetModel, budget_form, bu
         if budget_form.is_valid():
             budget_form.save()
             messages.success(request, f'{budget_type.capitalize()} budget updated successfully!')
-    elif 'delete_' + budget_type in request.POST:
-        budget_instance.delete()
-        messages.success(request, f'{budget_type.capitalize()} budget deleted successfully!')
+
     return redirect('manage_budgets')
 @login_required
 def income_view(request):
