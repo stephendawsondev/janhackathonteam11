@@ -1,12 +1,13 @@
 from django import forms
 from datetime import date, timedelta
 from .models import MonthlyBudget,WeeklyBudget,YearlyBudget
-from .models import Expense, TypicalExpense, Income, TypicalIncome
+from .models import Expense, typicalExpense, Income, typicalIncome
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from decimal import Decimal
 from django.forms.widgets import HiddenInput
 from django.forms import SelectDateWidget
+from django.utils.timezone import now
 from datetime import datetime
 
 def calculate_start_date():
@@ -38,7 +39,7 @@ class ExpenseForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['typical_expense'].queryset = TypicalExpense.objects.all()
+        self.fields['typical_expense'].queryset = typicalExpense.objects.all()
         self.fields['typical_expense'].empty_label = "Select a typical expense"
 
     def clean_amount(self):
@@ -72,7 +73,7 @@ class IncomeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['typical_income'].queryset = TypicalIncome.objects.all()
+        self.fields['typical_income'].queryset = typicalIncome.objects.all()
         self.fields['typical_income'].empty_label = "Select a typical income"
 
     def clean_amount(self):
@@ -84,60 +85,22 @@ class IncomeForm(forms.ModelForm):
 class WeeklyBudgetForm(forms.ModelForm):
     class Meta:
         model = WeeklyBudget
-        fields = ['amount', 'start_date', 'end_date']
+        fields = ['amount', 'start_date']
         widgets = {
-            'amount': forms.NumberInput(attrs={'step': '0.01'}),
-            'start_date': HiddenInput(),  # Hide since it will be set automatically
-            'end_date': HiddenInput(),  # Hide since it will be set automatically
+            'start_date': SelectDateWidget()
         }
-        help_texts = {
-            'amount': 'Enter the total amount you plan to spend for the week.',
-        }
-        error_messages = {
-            'amount': {
-                'invalid': 'Please enter a valid amount with two decimal places.',
-            },
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Automatically calculate and set start and end dates
-        self.fields['start_date'].initial = calculate_start_date()
-        self.fields['end_date'].initial = self.fields['start_date'].initial + timedelta(days=6)
-        self.fields['start_date'].disabled = True
-        self.fields['end_date'].disabled = True
-
-    def clean(self):
-        cleaned_data = super().clean()
-        cleaned_data['start_date'] = calculate_start_date()
-        cleaned_data['end_date'] = cleaned_data['start_date'] + timedelta(days=6)
-        return cleaned_data
-
 class MonthlyBudgetForm(forms.ModelForm):
     class Meta:
         model = MonthlyBudget
-        fields = ['amount', 'month']
+        fields = ['amount', 'start_date']
         widgets = {
-            'amount': forms.NumberInput(attrs={'step': '0.01'}),
-            'month': SelectDateWidget()
-        }
-        error_messages = {
-            'amount': {
-                'invalid': 'Please enter a valid amount with two decimal places.',
-            },
+            'start_date': SelectDateWidget()
         }
 
 class YearlyBudgetForm(forms.ModelForm):
-
     class Meta:
         model = YearlyBudget
-        fields = ['amount', 'year']
+        fields = ['amount', 'start_date']
         widgets = {
-            'amount': forms.NumberInput(attrs={'step': '0.01'}),
-            'year': SelectDateWidget(years=range(datetime.now().year-10, datetime.now().year+10))
-        }
-        error_messages = {
-            'amount': {
-                'invalid': 'Please enter a valid amount with two decimal places.',
-            },
+            'start_date': SelectDateWidget(years=range(now().year-10, now().year+10))
         }

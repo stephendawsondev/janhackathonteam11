@@ -22,8 +22,8 @@ def manage_budgets(request):
 
     # Fetch existing budgets
     weekly_budgets = WeeklyBudget.objects.filter(user=user)
-    monthly_budgets = MonthlyBudget.objects.filter(user=user, month__year=current_date.year)
-    yearly_budgets = YearlyBudget.objects.filter(user=user, year__year=current_date.year)
+    monthly_budgets = MonthlyBudget.objects.filter(user=user, start_date__year=current_date.year)
+    yearly_budgets = YearlyBudget.objects.filter(user=user, start_date__year=current_date.year)
 
     # Initialize forms
     if request.method == 'POST':
@@ -35,54 +35,41 @@ def manage_budgets(request):
         monthly_form = MonthlyBudgetForm()
         yearly_form = YearlyBudgetForm()
 
+    # Create or update weekly budget
+    if 'create_weekly' in request.POST and weekly_form.is_valid():
+        weekly_budget = weekly_form.save(commit=False)
+        weekly_budget.user = user
+        weekly_budget.save()
+        messages.success(request, 'Weekly budget created successfully!')
+        return redirect('manage_budgets')
+
+    # Create or update monthly budget
+    if 'create_monthly' in request.POST and monthly_form.is_valid():
+        monthly_budget = monthly_form.save(commit=False)
+        monthly_budget.user = user
+        monthly_budget.save()
+        messages.success(request, 'Monthly budget created successfully!')
+        return redirect('manage_budgets')
+
+    # Create or update yearly budget
+    if 'create_yearly' in request.POST and yearly_form.is_valid():
+        yearly_budget = yearly_form.save(commit=False)
+        yearly_budget.user = user
+        yearly_budget.save()
+        messages.success(request, 'Yearly budget created successfully!')
+        return redirect('manage_budgets')
+
+    # Handle update and delete for weekly, monthly, and yearly budgets
     if request.method == 'POST':
-        if 'create_weekly' in request.POST and weekly_form.is_valid():
-            weekly_budget = weekly_form.save(commit=False)
-            weekly_budget.user = user
-            weekly_budget.start_date = calculate_start_date()
-            weekly_budget.end_date = weekly_budget.start_date + timedelta(days=6)
-            weekly_budget.save()
-            messages.success(request, 'Weekly budget created successfully!')
-            return redirect('manage_budgets')
-
-        if 'create_monthly' in request.POST and monthly_form.is_valid():
-            monthly_budget = monthly_form.save(commit=False)
-            monthly_budget.user = user
-            # Ensure the 'month' field is processed to extract date components
-            monthly_budget.month = monthly_form.cleaned_data['month']
-            monthly_budget.save()
-            messages.success(request, 'Monthly budget created successfully!')
-            return redirect('manage_budgets')
-
-        if 'create_yearly' in request.POST and yearly_form.is_valid():
-            yearly_budget = yearly_form.save(commit=False)
-            yearly_budget.user = user
-            # Ensure the 'year' field is processed to extract the year component
-            yearly_budget.year = yearly_form.cleaned_data['year']
-            yearly_budget.save()
-            messages.success(request, 'Yearly budget created successfully!')
-            return redirect('manage_budgets')
-
-
-        # Update budget logic
-        # (Similar for 'update_monthly' and 'update_yearly')
-        if 'update_weekly' in request.POST:
+        if 'update_weekly' in request.POST or 'delete_weekly' in request.POST:
             budget_id = request.POST.get('budget_id')
-            budget_instance = get_object_or_404(WeeklyBudget, id=budget_id, user=user)
-            weekly_form = WeeklyBudgetForm(request.POST, instance=budget_instance)
-            if weekly_form.is_valid():
-                weekly_form.save()
-                messages.success(request, 'Weekly budget updated successfully!')
-                return redirect('manage_budgets')
-
-        # Delete budget logic
-        # (Similar for 'delete_monthly' and 'delete_yearly')
-        if 'delete_weekly' in request.POST:
+            handle_budget_update_delete(request, budget_id, WeeklyBudget, weekly_form, 'weekly')
+        elif 'update_monthly' in request.POST or 'delete_monthly' in request.POST:
             budget_id = request.POST.get('budget_id')
-            budget_instance = get_object_or_404(WeeklyBudget, id=budget_id, user=user)
-            budget_instance.delete()
-            messages.success(request, 'Weekly budget deleted successfully!')
-            return redirect('manage_budgets')
+            handle_budget_update_delete(request, budget_id, MonthlyBudget, monthly_form, 'monthly')
+        elif 'update_yearly' in request.POST or 'delete_yearly' in request.POST:
+            budget_id = request.POST.get('budget_id')
+            handle_budget_update_delete(request, budget_id, YearlyBudget, yearly_form, 'yearly')
 
     # Render the template with forms and existing budgets
     context = {
@@ -97,9 +84,21 @@ def manage_budgets(request):
 
 def calculate_start_date():
     # Calculate the start date (Thursday of the current week)
-    current_date = date.today()
+    current_date = now().date()
     start_date = current_date + timedelta((3 - current_date.weekday() + 7) % 7)
     return start_date
+
+def handle_budget_update_delete(request, budget_id, BudgetModel, budget_form, budget_type):
+    budget_instance = get_object_or_404(BudgetModel, id=budget_id, user=request.user)
+    if 'update_' + budget_type in request.POST:
+        budget_form = budget_form.__class__(request.POST, instance=budget_instance)
+        if budget_form.is_valid():
+            budget_form.save()
+            messages.success(request, f'{budget_type.capitalize()} budget updated successfully!')
+    elif 'delete_' + budget_type in request.POST:
+        budget_instance.delete()
+        messages.success(request, f'{budget_type.capitalize()} budget deleted successfully!')
+    return redirect('manage_budgets')
 @login_required
 def income_view(request):
     if request.method == 'POST':
