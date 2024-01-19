@@ -29,6 +29,18 @@ class MonthlyBudgetAdmin(admin.ModelAdmin):
 
     ordering = ('-month',)
 
+class YearlyBudgetAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'amount',
+        'year',
+    )
+
+    list_filter = ('year', )
+    search_fields = ['user', 'amount',]
+
+    ordering = ('-year',)
+
 class ExpenseAdmin(SummernoteModelAdmin):
     list_display = (
         'user',
@@ -65,5 +77,6 @@ class IncomeAdmin(SummernoteModelAdmin):
 
 admin.site.register(WeeklyBudget, WeeklyBudgetAdmin)
 admin.site.register(MonthlyBudget, MonthlyBudgetAdmin)
+admin.site.register(YearlyBudget, YearlyBudgetAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Income, IncomeAdmin)
