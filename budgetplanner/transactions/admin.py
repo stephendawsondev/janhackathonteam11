@@ -1,19 +1,19 @@
 # transactions/admin.py
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import Budget, Expense, Income
+from .models import WeeklyBudget, Expense, Income
 
 
 class BudgetAdmin(admin.ModelAdmin):
     list_display = (
         'user',
-        'total_budget',
+        'amount',
         'start_date',
         'end_date',
     )
 
     list_filter = ('start_date', 'end_date')
-    search_fields = ['user', 'total_budget',]
+    search_fields = ['user', 'amount',]
 
     ordering = ('start_date',)
 
@@ -52,6 +52,6 @@ class IncomeAdmin(SummernoteModelAdmin):
     ordering = ('-date',)
 
 
-admin.site.register(Budget, BudgetAdmin)
+admin.site.register(WeeklyBudget, BudgetAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Income, IncomeAdmin)
