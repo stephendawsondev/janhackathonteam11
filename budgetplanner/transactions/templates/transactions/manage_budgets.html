@@ -3,13 +3,23 @@
 <div class="container">
     <h2>Manage Your Budgets</h2>
 
-    <!-- Weekly Budget Form -->
-    <h3>Weekly Budget</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ weekly_form.as_p }}
-        <button type="submit" name="create_weekly">Create/Update Weekly Budget</button>
-    </form>
+<!-- Weekly Budget Form -->
+<h3>Weekly Budget</h3>
+<form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="id_amount">Amount:</label>
+        {{ weekly_form.amount }}
+        {% if weekly_form.amount.help_text %}
+            <p class="help">{{ weekly_form.amount.help_text }}</p>
+        {% endif %}
+    </div>
+    <!-- Since start and end dates are fixed, you can display them directly -->
+    <p>Budget Period: {{ weekly_form.instance.start_date }} to {{ weekly_form.instance.end_date }}</p>
+    <input type="hidden" name="start_date" value="{{ weekly_form.instance.start_date }}" />
+    <input type="hidden" name="end_date" value="{{ weekly_form.instance.end_date }}" />
+    <button type="submit" name="create_weekly">Create/Update Weekly Budget</button>
+</form>
 
     <!-- Monthly Budget Form -->
     <h3>Monthly Budget</h3>
