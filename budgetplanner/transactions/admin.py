@@ -55,5 +55,3 @@ class IncomeAdmin(SummernoteModelAdmin):
 admin.site.register(Budget, BudgetAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Income, IncomeAdmin)
-
-# Register your models here.

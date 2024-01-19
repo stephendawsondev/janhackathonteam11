@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'accounts',  # Your accounts app
     'transactions',  # Your transactions app
-    'support', # Support features
+    'support',  # Support features
     # Third party apps
     'crispy_forms',
 ]
