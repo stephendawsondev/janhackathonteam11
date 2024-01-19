@@ -1,10 +1,10 @@
 # transactions/admin.py
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import WeeklyBudget, Expense, Income
+from .models import WeeklyBudget, MonthlyBudget, YearlyBudget, Expense, Income
 
 
-class BudgetAdmin(admin.ModelAdmin):
+class WeeklyBudgetAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'amount',
@@ -17,6 +17,17 @@ class BudgetAdmin(admin.ModelAdmin):
 
     ordering = ('start_date',)
 
+class MonthlyBudgetAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'amount',
+        'month',
+    )
+
+    list_filter = ('month', )
+    search_fields = ['user', 'amount',]
+
+    ordering = ('-month',)
 
 class ExpenseAdmin(SummernoteModelAdmin):
     list_display = (
@@ -52,6 +63,6 @@ class IncomeAdmin(SummernoteModelAdmin):
     ordering = ('-date',)
 
 
-admin.site.register(WeeklyBudget, BudgetAdmin)
+admin.site.register(WeeklyBudget, WeeklyBudgetAdmin)
 admin.site.register(Expense, ExpenseAdmin)
 admin.site.register(Income, IncomeAdmin)
