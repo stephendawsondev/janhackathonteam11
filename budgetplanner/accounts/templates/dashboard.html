@@ -5,21 +5,7 @@
 <header class="container pt-5 my-5 text-center">
     <div class="user-section mb-4">
         {% if user.is_authenticated %}
-        <div class="text-right">
-            <form action="{% url 'logout' %}" method="post" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
-        </div>
         <h1 class="display-4">Welcome, {{ user.username }}!</h1>
-        {% if user_profile %}
-            <p class="lead">Indebt: ${{ user_profile.indebt }}</p>
-            <p class="lead">Savings: ${{ user_profile.savings }}</p>
-            <p class="lead">Invested: ${{ user_profile.invested }}</p>
-            <p class="lead">Current Balance: ${{ current_balance }}</p>
-        {% else %}
-            <p class="lead">No profile data available.</p>
-        {% endif %}
         {% else %}
             <p class="lead">Please log in to view this page.</p>
         {% endif %}

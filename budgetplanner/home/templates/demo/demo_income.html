@@ -1,0 +1,68 @@
+{% extends 'dashboard-base/base.html' %}
+{% load static %}
+{% block content %}
+<section class="position-relative">
+    <div class="container section-content mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="page-title">Income</h1>
+            <button class="btn btn-primary" id="add-income">Add income</button>
+        </div>
+        <div class="content-container row position-relative">
+            <div class="income-cards col col-12 col-lg-4">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="card-title">Monthly Income Total</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="cart-text lead">This month's total income: {{ monthly_income_total }}</p>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="card-title">Yearly Income Total</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="cart-text lead">This year's total income: {{ yearly_income_total }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="recent-incomes-table col col-lg-8 mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Incomes</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if incomes %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Source</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">{{ date }}</th>
+                                    <td>{{ amount }}</td>
+                                    <td>{{ source }}</td>
+                                    <td>
+                                        <a class="link link-success"
+                                            href="#">Update</a>
+                                        <a class="link link-success"
+                                            href="#">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p class='lead'>No incomes recorded.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
