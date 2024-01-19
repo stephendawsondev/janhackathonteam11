@@ -30,19 +30,19 @@
                     <div class="card-header">
                         <h2 class="card-title">Recent Expenses</h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body overflow-auto">
                         {% if expenses %}
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Date</th>
                                     <th scope="col">Amount</th>
-                                    <th scope="col">Source</th>
+                                    <th scope="col">Description</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            {% for expense in expenses %}
                             <tbody>
+                                {% for expense in expenses %}
                                 <tr>
                                     <th scope="row">{{ expense.date }}</th>
                                     <td>{{ expense.amount }}</td>
@@ -54,8 +54,8 @@
                                             href="{% url 'delete_expense' expense.id %}">Delete</a>
                                     </td>
                                 </tr>
+                                {% endfor %}
                             </tbody>
-                            {% endfor %}
                         </table>
                         {% else %}
                         <p class='lead'>No expenses recorded.</p>
