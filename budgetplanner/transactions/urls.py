@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import income_view, expenditure_view, reports_view,manage_budgets
+from .views import income_view, expenditure_view, reports_view,manage_budgets,update_budget
 from . import views
 urlpatterns = [
     path('income/', income_view, name='income'),

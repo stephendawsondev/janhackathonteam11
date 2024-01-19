@@ -91,6 +91,7 @@ class WeeklyBudget(Budget):
 
     def __str__(self):
         return super().__str__() + f" to {self.end_date}"
+   
 
 class MonthlyBudget(Budget):
     def save(self, *args, **kwargs):

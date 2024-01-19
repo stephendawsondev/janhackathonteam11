@@ -48,70 +48,75 @@ def update_budget(request, budget_id, budget_type):
 @login_required
 def manage_budgets(request):
     user = request.user
-    current_date = now().date()
 
-    # Fetch existing budgets
     weekly_budgets = WeeklyBudget.objects.filter(user=user)
-    monthly_budgets = MonthlyBudget.objects.filter(user=user, start_date__year=current_date.year)
-    yearly_budgets = YearlyBudget.objects.filter(user=user, start_date__year=current_date.year)
+    monthly_budgets = MonthlyBudget.objects.filter(user=user)
+    yearly_budgets = YearlyBudget.objects.filter(user=user)
 
-    # Initialize forms
     if request.method == 'POST':
-        weekly_form = WeeklyBudgetForm(request.POST)
-        monthly_form = MonthlyBudgetForm(request.POST)
-        yearly_form = YearlyBudgetForm(request.POST)
+        # Handling Weekly Budget Form
+        if 'weekly_budget' in request.POST:
+            weekly_form = WeeklyBudgetForm(request.POST)
+            if weekly_form.is_valid():
+                start_date = weekly_form.cleaned_data['start_date']
+                # Ensure there's no overlapping weekly budget
+                if not WeeklyBudget.objects.filter(user=user, start_date=start_date).exists():
+                    weekly_budget = weekly_form.save(commit=False)
+                    weekly_budget.user = user
+                    weekly_budget.save()
+                    messages.success(request, 'Weekly budget created successfully!')
+                else:
+                    messages.error(request, 'A weekly budget for this period already exists.')
+            else:
+                messages.error(request, 'Please correct the errors in the weekly budget form.')
+
+        # Handling Monthly Budget Form
+        if 'monthly_budget' in request.POST:
+            monthly_form = MonthlyBudgetForm(request.POST)
+            if monthly_form.is_valid():
+                start_date = monthly_form.cleaned_data['start_date']
+                # Ensure there's no overlapping monthly budget
+                if not MonthlyBudget.objects.filter(user=user, start_date=start_date).exists():
+                    monthly_budget = monthly_form.save(commit=False)
+                    monthly_budget.user = user
+                    monthly_budget.save()
+                    messages.success(request, 'Monthly budget created successfully!')
+                else:
+                    messages.error(request, 'A monthly budget for this period already exists.')
+            else:
+                messages.error(request, 'Please correct the errors in the monthly budget form.')
+
+        # Handling Yearly Budget Form
+        if 'yearly_budget' in request.POST:
+            yearly_form = YearlyBudgetForm(request.POST)
+            if yearly_form.is_valid():
+                start_date = yearly_form.cleaned_data['start_date']
+                # Ensure there's no overlapping yearly budget
+                if not YearlyBudget.objects.filter(user=user, start_date=start_date).exists():
+                    yearly_budget = yearly_form.save(commit=False)
+                    yearly_budget.user = user
+                    yearly_budget.save()
+                    messages.success(request, 'Yearly budget created successfully!')
+                else:
+                    messages.error(request, 'A yearly budget for this period already exists.')
+            else:
+                messages.error(request, 'Please correct the errors in the yearly budget form.')
+        return redirect('manage_budgets')
+
     else:
-        weekly_form = WeeklyBudgetForm(initial={'start_date': calculate_start_date()})
+        weekly_form = WeeklyBudgetForm()
         monthly_form = MonthlyBudgetForm()
         yearly_form = YearlyBudgetForm()
 
-    # Create or update weekly budget
-    if 'create_weekly' in request.POST and weekly_form.is_valid():
-        weekly_budget = weekly_form.save(commit=False)
-        weekly_budget.user = user
-        weekly_budget.save()
-        messages.success(request, 'Weekly budget created successfully!')
-        return redirect('manage_budgets')
-
-    # Create or update monthly budget
-    if 'create_monthly' in request.POST and monthly_form.is_valid():
-        monthly_budget = monthly_form.save(commit=False)
-        monthly_budget.user = user
-        monthly_budget.save()
-        messages.success(request, 'Monthly budget created successfully!')
-        return redirect('manage_budgets')
-
-    # Create or update yearly budget
-    if 'create_yearly' in request.POST and yearly_form.is_valid():
-        yearly_budget = yearly_form.save(commit=False)
-        yearly_budget.user = user
-        yearly_budget.save()
-        messages.success(request, 'Yearly budget created successfully!')
-        return redirect('manage_budgets')
-
-    # Handle update and delete for weekly, monthly, and yearly budgets
-    if request.method == 'POST':
-        if 'update_weekly' in request.POST or 'delete_weekly' in request.POST:
-            budget_id = request.POST.get('budget_id')
-            handle_budget_update_delete(request, budget_id, WeeklyBudget, weekly_form, 'weekly')
-        elif 'update_monthly' in request.POST or 'delete_monthly' in request.POST:
-            budget_id = request.POST.get('budget_id')
-            handle_budget_update_delete(request, budget_id, MonthlyBudget, monthly_form, 'monthly')
-        elif 'update_yearly' in request.POST or 'delete_yearly' in request.POST:
-            budget_id = request.POST.get('budget_id')
-            handle_budget_update_delete(request, budget_id, YearlyBudget, yearly_form, 'yearly')
-
-    # Render the template with forms and existing budgets
     context = {
         'weekly_budgets': weekly_budgets,
         'monthly_budgets': monthly_budgets,
         'yearly_budgets': yearly_budgets,
         'weekly_form': weekly_form,
         'monthly_form': monthly_form,
-        'yearly_form': yearly_form
+        'yearly_form': yearly_form,
     }
     return render(request, 'transactions/manage_budgets.html', context)
-
 def calculate_start_date():
     # Calculate the start date (Thursday of the current week)
     current_date = now().date()

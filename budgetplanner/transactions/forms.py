@@ -89,6 +89,7 @@ class WeeklyBudgetForm(forms.ModelForm):
         widgets = {
             'start_date': SelectDateWidget()
         }
+
 class MonthlyBudgetForm(forms.ModelForm):
     class Meta:
         model = MonthlyBudget
