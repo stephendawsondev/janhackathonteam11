@@ -1,6 +1,6 @@
 from django import forms
 
-
+from .models import MonthlyBudget,WeeklyBudget,YearlyBudget
 from .models import Expense, TypicalExpense, Income, TypicalIncome
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
@@ -66,3 +66,19 @@ class IncomeForm(forms.ModelForm):
         if amount < 0:
             raise forms.ValidationError("The amount cannot be negative.")
         return amount
+
+
+class WeeklyBudgetForm(forms.ModelForm):
+    class Meta:
+        model = WeeklyBudget
+        fields = ['amount', 'start_date', 'end_date']
+
+class MonthlyBudgetForm(forms.ModelForm):
+    class Meta:
+        model = MonthlyBudget
+        fields = ['amount', 'month']
+
+class YearlyBudgetForm(forms.ModelForm):
+    class Meta:
+        model = YearlyBudget
+        fields = ['amount', 'year']

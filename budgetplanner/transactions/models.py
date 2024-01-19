@@ -63,14 +63,30 @@ class Income(models.Model):
 
 
 
-class Budget(models.Model):
+class WeeklyBudget(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    total_budget = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     start_date = models.DateField()
     end_date = models.DateField()
 
     def __str__(self):
-        return f"{self.user.username}'s budget from {self.start_date} to {self.end_date}"
+        return f"{self.user.username}'s weekly budget from {self.start_date} to {self.end_date}"
+
+class MonthlyBudget(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    month = models.DateField()  # Represents the first day of the month
+
+    def __str__(self):
+        return f"{self.user.username}'s monthly budget for {self.month.strftime('%B %Y')}"
+
+class YearlyBudget(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    year = models.DateField()  # Represents the first day of the year
+
+    def __str__(self):
+        return f"{self.user.username}'s yearly budget for {self.year.year}"
 
 # Create your models here.
 class Expense(models.Model):

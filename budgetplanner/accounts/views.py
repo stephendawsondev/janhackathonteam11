@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from .forms import UserRegistrationForm
 from .models import UserProfile
-from transactions.models import Budget,Income,Expense
+from transactions.models import Income,Expense
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
@@ -72,25 +73,56 @@ def password_reset_view(request):
     return render(request, 'password_reset.html', {'form': form})
 
 
+@login_required
 def dashboard_view(request):
-    context = {}
-    if request.user.is_authenticated:
-        try:
-            user_profile = UserProfile.objects.get(user=request.user)
-            context['user_profile'] = user_profile
-            context['current_balance'] = user_profile.current_balance()
-            context.update(get_income_totals(request.user))
-            context.update(get_expense_totals(request.user))
-            context = {
+    current_date = now().date()
+    start_of_week = current_date - timedelta(days=current_date.weekday())
+    start_of_month = current_date.replace(day=1)
+    start_of_year = current_date.replace(month=1, day=1)
+
+    # Income totals
+    weekly_income_total = Income.objects.filter(
+        user=request.user, 
+        date__gte=start_of_week
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    monthly_income_total = Income.objects.filter(
+        user=request.user, 
+        date__gte=start_of_month
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    yearly_income_total = Income.objects.filter(
+        user=request.user, 
+        date__gte=start_of_year
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    # Expenditure totals
+    weekly_expenditure_total = Expense.objects.filter(
+        user=request.user, 
+        date__gte=start_of_week
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    monthly_expenditure_total = Expense.objects.filter(
+        user=request.user, 
+        date__gte=start_of_month
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    yearly_expenditure_total = Expense.objects.filter(
+        user=request.user, 
+        date__gte=start_of_year
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+    user_profile = UserProfile.objects.get(user=request.user) if request.user.is_authenticated else None
+
+    context = {
+        'user_profile': user_profile,
+        'current_balance': user_profile.current_balance() if user_profile else 0,
         'weekly_income_total': weekly_income_total,
         'monthly_income_total': monthly_income_total,
         'yearly_income_total': yearly_income_total,
         'weekly_expenditure_total': weekly_expenditure_total,
         'monthly_expenditure_total': monthly_expenditure_total,
         'yearly_expenditure_total': yearly_expenditure_total,
-        # ... other context variables
-        }
-        except UserProfile.DoesNotExist:
-            context['user_profile'] = None
-        
+    }
+
     return render(request, 'dashboard.html', context)
