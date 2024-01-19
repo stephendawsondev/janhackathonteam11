@@ -1,47 +1,86 @@
 {% extends 'dashboard-base/base.html' %}
+{% load static %}
 {% block content %}
-<div class="card-body">
-    {% if messages %}
-        {% for message in messages %}
-            <div>{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+<section class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="page-title">Add Income</h1>
+        <button class="btn btn-primary" id="add-income-button">Add income</button>
+    </div>
+    <div class="content-container d-flex flex-column">
+        <div class="income-cards d-flex flex-column">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Monthly Income Total</h2>
+                </div>
+                <div class="card-body">
+                    <p class="cart-text lead">This month's total income: {{ monthly_income_total }}</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Yearly Income Total</h2>
+                </div>
+                <div class="card-body">
+                    <p class="cart-text lead">This year's total income: {{ yearly_income_total }}</p>
+                </div>
+            </div>
+        </div>
 
-    <form method="post" action="{% url 'income' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Record Income</button>
-    </form>
+        <div class="recent-incomes-table card">
+            <div class="card-header">
+                <h2 class="card-title">Recent Incomes</h2>
+            </div>
+            <div class="card-body">
+                {% if incomes %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Source</th>
+                        </tr>
+                    </thead>
+                    {% for income in incomes %}
+                    <tbody>
+                        <tr>
+                            <th scope="row">{{ income.date }}</th>
+                            <td>{{ income.amount }}</td>
+                            <td>{{ income.source }}</td>
+                            <td> <a href="{% url 'update_income' income.id %}">Update</a>
+                                <a href="{% url 'delete_income' income.id %}">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+                {% else %}
+                <p class='lead'>No incomes recorded.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <dialog id="add-income-form" class="form-dialog">
+        <button id="add-income-close-button" class="btn btn-danger close-button">X</button>
+        <form method="post" action="{% url 'income' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Record Income</button>
+        </form>
+    </dialog>
 
-    <h2>Monthly Income Total</h2>
-    <p>This month's total income: {{ monthly_income_total }}</p>
+</section>
 
-    <h2>Yearly Income Total</h2>
-    <p>This year's total income: {{ yearly_income_total }}</p>
+<script>
+    const addIncomeForm = document.getElementById('add-income-form');
+    const addIncomeButton = document.getElementById('add-income-button');
+    const closeButton = document.getElementById('add-income-close-button');
 
-    <h2>Recent Incomes</h2>
-    {% if incomes %}
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Source</th>
-            </tr>
-            {% for income in incomes %}
-            <tr>
-                <td>{{ income.date }}</td>
-                <td>{{ income.amount }}</td>
-                <td>{{ income.source }}</td>
-                <td> <a href="{% url 'update_income' income.id %}">Update</a>
-                    <a href="{% url 'delete_income' income.id %}">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No incomes recorded.</p>
-    {% endif %}
-</div>
+    addIncomeButton.addEventListener('click', () => {
+        addIncomeForm.showModal();
+    });
 
-
+    closeButton.addEventListener('click', () => {
+        addIncomeForm.close();
+    });
+</script>
 {% endblock %}
