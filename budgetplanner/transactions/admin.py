@@ -1,9 +1,59 @@
 # transactions/admin.py
 from django.contrib import admin
+from django_summernote.admin import SummernoteModelAdmin
 from .models import Budget, Expense, Income
 
-admin.site.register(Budget)
-admin.site.register(Expense)
-admin.site.register(Income)
+
+class BudgetAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'total_budget',
+        'start_date',
+        'end_date',
+    )
+
+    list_filter = ('start_date', 'end_date')
+    search_fields = ['user', 'total_budget',]
+
+    ordering = ('start_date',)
+
+
+class ExpenseAdmin(SummernoteModelAdmin):
+    list_display = (
+        'user',
+        'amount',
+        'description',
+        'date',
+        'typical_expense',
+    )
+
+    list_filter = ('date', 'typical_expense', )
+    search_fields = ['user', 'typical_expense', 'amount', 'description', ]
+
+    summernote_fields = ('description')
+
+    ordering = ('-date',)
+
+
+class IncomeAdmin(SummernoteModelAdmin):
+    list_display = (
+        'user',
+        'amount',
+        'source',
+        'date',
+        'typical_income',
+    )
+
+    list_filter = ('date', 'typical_income', )
+    search_fields = ['user', 'typical_income', 'amount', 'source', ]
+
+    summernote_fields = ('source')
+
+    ordering = ('-date',)
+
+
+admin.site.register(Budget, BudgetAdmin)
+admin.site.register(Expense, ExpenseAdmin)
+admin.site.register(Income, IncomeAdmin)
 
 # Register your models here.

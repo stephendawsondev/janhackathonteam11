@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from .forms import UserRegistrationForm
 from .models import UserProfile
-from transactions.models import Budget,Income,Expense
+from transactions.models import Income, Expense
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
@@ -82,15 +82,15 @@ def dashboard_view(request):
             context.update(get_income_totals(request.user))
             context.update(get_expense_totals(request.user))
             context = {
-        'weekly_income_total': weekly_income_total,
-        'monthly_income_total': monthly_income_total,
-        'yearly_income_total': yearly_income_total,
-        'weekly_expenditure_total': weekly_expenditure_total,
-        'monthly_expenditure_total': monthly_expenditure_total,
-        'yearly_expenditure_total': yearly_expenditure_total,
-        # ... other context variables
-        }
+                'weekly_income_total': weekly_income_total,
+                'monthly_income_total': monthly_income_total,
+                'yearly_income_total': yearly_income_total,
+                'weekly_expenditure_total': weekly_expenditure_total,
+                'monthly_expenditure_total': monthly_expenditure_total,
+                'yearly_expenditure_total': yearly_expenditure_total,
+                # ... other context variables
+            }
         except UserProfile.DoesNotExist:
             context['user_profile'] = None
-        
+
     return render(request, 'dashboard.html', context)
