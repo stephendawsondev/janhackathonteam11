@@ -38,4 +38,4 @@ def demo_dashboard_view(request):
         'monthly_expenditure_total': monthly_expenditure_total,
         'yearly_expenditure_total': yearly_expenditure_total,
     }
-    return render(request, 'demo_dashboard.html', context)
+    return render(request, 'demo/demo_dashboard.html', context)
