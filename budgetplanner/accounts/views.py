@@ -12,8 +12,6 @@ from datetime import timedelta
 from transactions.models import get_income_totals, get_expense_totals
 
 from django.contrib.auth import authenticate, login
-
-
 def register_view(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
