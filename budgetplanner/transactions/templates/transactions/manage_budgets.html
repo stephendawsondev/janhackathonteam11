@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Manage Your Budgets</h2>
+
+    <!-- Weekly Budget Form -->
+    <h3>Weekly Budget</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ weekly_form.as_p }}
+        <button type="submit" name="create_weekly">Create/Update Weekly Budget</button>
+    </form>
+
+    <!-- Monthly Budget Form -->
+    <h3>Monthly Budget</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ monthly_form.as_p }}
+        <button type="submit" name="create_monthly">Create/Update Monthly Budget</button>
+    </form>
+
+    <!-- Yearly Budget Form -->
+    <h3>Yearly Budget</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ yearly_form.as_p }}
+        <button type="submit" name="create_yearly">Create/Update Yearly Budget</button>
+    </form>
+
+    <!-- Display Existing Budgets -->
+    <div>
+        <h3>Existing Weekly Budgets</h3>
+        {% for budget in weekly_budgets %}
+            <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
+            <!-- Add Update/Delete buttons here -->
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Existing Monthly Budgets</h3>
+        {% for budget in monthly_budgets %}
+            <p>Budget for {{ budget.month }}: {{ budget.amount }}</p>
+            <!-- Add Update/Delete buttons here -->
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Existing Yearly Budgets</h3>
+        {% for budget in yearly_budgets %}
+            <p>Budget for {{ budget.year }}: {{ budget.amount }}</p>
+            <!-- Add Update/Delete buttons here -->
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
