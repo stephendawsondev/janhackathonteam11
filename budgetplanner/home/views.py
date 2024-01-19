@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from accounts.utils import anonymous_required
 from django.contrib import messages
+from datetime import datetime
 import random
 
 
@@ -39,3 +40,23 @@ def demo_dashboard_view(request):
         'yearly_expenditure_total': yearly_expenditure_total,
     }
     return render(request, 'demo/demo_dashboard.html', context)
+
+@anonymous_required('income')
+def demo_income_view(request):
+    date = datetime.today()
+    source = 'Salary'
+    amount = random.randint(1000, 2000)
+    monthly_income_total = random.randint(1000, 2000)
+    yearly_income_total = random.randint(10000, 24000)
+    incomes = random.randint(1, 100)
+    
+    context = {
+        'date': date,
+        'source': source,
+        'amount': amount,
+        'incomes': incomes,
+        'monthly_income_total': monthly_income_total,
+        'yearly_income_total': yearly_income_total,
+    }
+
+    return render(request, 'demo/demo_income.html', context)
