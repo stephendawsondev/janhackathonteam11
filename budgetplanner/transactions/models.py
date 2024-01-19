@@ -99,7 +99,6 @@ class Expense(models.Model):
     def __str__(self):
         return f"{self.user.username}'s expense on {self.date}"
 
-
 def get_income_totals(user):
     today = datetime.today()
     start_of_month = today.replace(day=1)

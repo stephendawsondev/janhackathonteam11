@@ -12,6 +12,11 @@ from datetime import timedelta
 from transactions.models import get_income_totals, get_expense_totals
 
 from django.contrib.auth import authenticate, login
+
+def homepage_view(request):
+    return render(request,'homepage.html')
+
+
 def register_view(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -38,7 +43,7 @@ def login_view(request):
             # Log the user in
             login(request, user)
             # Redirect to the dashboard view
-            return redirect(reverse('dashboard'))
+            return redirect(reverse('homepage'))
         else:
             # Return an 'invalid login' error message
             return render(request, 'login.html', {'error': 'Invalid username or password.'})
