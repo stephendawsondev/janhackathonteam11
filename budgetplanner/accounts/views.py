@@ -1,20 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+import random
+from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from .forms import UserRegistrationForm
 from .models import UserProfile
-from transactions.models import Income,Expense
+from transactions.models import Income, Expense
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
 from transactions.models import get_income_totals, get_expense_totals
-
 from django.contrib.auth import authenticate, login
-
-def homepage_view(request):
-    return render(request,'homepage.html')
 
 
 def register_view(request):
@@ -75,6 +73,41 @@ def password_reset_view(request):
 
     return render(request, 'password_reset.html', {'form': form})
 
+# Allow Unauthenticated users
+
+
+def anonymous_required(redirect_url):
+    """
+    Decorator for views that allows only unauthenticated users to access the view.
+    Redirects authenticated users to the specified URL.
+    """
+    def decorator(view_func):
+        def _wrapped_view(request, *args, **kwargs):
+            if request.user.is_authenticated:
+                return HttpResponseRedirect(reverse(redirect_url))
+            return view_func(request, *args, **kwargs)
+        return _wrapped_view
+    return decorator
+
+# DEMO: User Dashboard
+
+
+@anonymous_required('dashboard')
+def demo_dashboard_view(request):
+    messages.info(
+    request, 'This is just a demo version of the User Dashboard. Please log in to utilize the app.')
+
+    indebt =  random.randint(1, 100)
+    savings = random.randint(100, 500)
+    invested = random.randint(100, 500)
+    current_balance = invested + savings - indebt
+    context = {
+        'indebt': indebt,
+        'savings': savings,
+        'invested': invested,
+        'current_balance': current_balance,
+    }
+    return render(request, 'demo_dashboard.html', context)
 
 @login_required
 def dashboard_view(request):
@@ -85,37 +118,38 @@ def dashboard_view(request):
 
     # Income totals
     weekly_income_total = Income.objects.filter(
-        user=request.user, 
+        user=request.user,
         date__gte=start_of_week
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     monthly_income_total = Income.objects.filter(
-        user=request.user, 
+        user=request.user,
         date__gte=start_of_month
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     yearly_income_total = Income.objects.filter(
-        user=request.user, 
+        user=request.user,
         date__gte=start_of_year
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     # Expenditure totals
     weekly_expenditure_total = Expense.objects.filter(
-        user=request.user, 
+        user=request.user,
         date__gte=start_of_week
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     monthly_expenditure_total = Expense.objects.filter(
-        user=request.user, 
+        user=request.user,
         date__gte=start_of_month
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     yearly_expenditure_total = Expense.objects.filter(
-        user=request.user, 
+        user=request.user,
         date__gte=start_of_year
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
-    user_profile = UserProfile.objects.get(user=request.user) if request.user.is_authenticated else None
+    user_profile = UserProfile.objects.get(
+        user=request.user) if request.user.is_authenticated else None
 
     context = {
         'user_profile': user_profile,
