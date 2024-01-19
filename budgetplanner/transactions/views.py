@@ -14,6 +14,7 @@ from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
+
 from django.forms.widgets import SelectDateWidget
 @login_required
 def update_budget(request, budget_id, budget_type):
@@ -23,9 +24,11 @@ def update_budget(request, budget_id, budget_type):
         'yearly': YearlyBudget
     }.get(budget_type)
 
+
     budget = get_object_or_404(BudgetModel, id=budget_id, user=request.user)
 
     if request.method == 'POST':
+
         form = {
             'weekly': WeeklyBudgetForm,
             'monthly': MonthlyBudgetForm,
@@ -72,6 +75,7 @@ def manage_budgets(request):
          # Handling delete request
         if 'delete_weekly' in request.POST:
             budget_id = request.POST.get('budget_id')
+
             WeeklyBudget.objects.filter(id=budget_id, user=request.user).delete()
             messages.success(request, 'Weekly budget deleted successfully!')
             return redirect('manage_budgets')
@@ -134,6 +138,7 @@ def manage_budgets(request):
         'yearly_form': yearly_form,
     }
     return render(request, 'transactions/manage_budgets.html', context)
+
 def calculate_start_date():
     # Calculate the start date (Thursday of the current week)
     current_date = now().date()
@@ -149,6 +154,7 @@ def handle_budget_update_delete(request, budget_id, BudgetModel, budget_form, bu
             messages.success(request, f'{budget_type.capitalize()} budget updated successfully!')
 
     return redirect('manage_budgets')
+
 @login_required
 def income_view(request):
     if request.method == 'POST':
@@ -252,6 +258,8 @@ def expenditure_view(request):
     return render(request, 'transactions/expenditure.html', context)
 
 # views.py
+
+
 @login_required
 def update_expense(request, expense_id):
     expense = get_object_or_404(Expense, id=expense_id, user=request.user)
@@ -265,6 +273,7 @@ def update_expense(request, expense_id):
         form = ExpenseForm(instance=expense)
     return render(request, 'transactions/update_expense.html', {'form': form})
 
+
 @login_required
 def delete_expense(request, expense_id):
     expense = get_object_or_404(Expense, id=expense_id, user=request.user)
@@ -274,10 +283,13 @@ def delete_expense(request, expense_id):
         return redirect('expenditure')
     return render(request, 'transactions/delete_expense.html', {'expense': expense})
 
+
 def reports_view(request):
     return render(request, 'transactions/reports.html')
 
 # Create your views here.
+
+
 @login_required
 def update_income(request, income_id):
     income = get_object_or_404(Income, id=income_id, user=request.user)
@@ -289,7 +301,8 @@ def update_income(request, income_id):
             return redirect('income')  # Replace with your view name
     else:
         form = IncomeForm(instance=income)
-    return render(request, 'transactions/update_income.html', {'form': form})
+    return render(request, 'transactions/update_income.html', {'form': form, 'income': income})
+
 
 @login_required
 def delete_income(request, income_id):
