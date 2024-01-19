@@ -336,17 +336,3 @@ i {
 .team1 .pro-pic:hover .card-img-overlay {
   display: block;
 }
-
-/* dialog popups */
-.form-dialog {
-  position: relative;
-  background: red;
-}
-
-.form-dialog .close-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px;
-  cursor: pointer;
-}

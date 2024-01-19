@@ -1,73 +1,89 @@
 {% extends 'dashboard-base/base.html' %}
 {% load static %}
 {% block content %}
-<section class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center">
-        <h1 class="page-title">Add Income</h1>
-        <button class="btn btn-primary" id="add-income-button">Add income</button>
-    </div>
-    <div class="content-container d-flex flex-column">
-        <div class="income-cards d-flex flex-column">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Monthly Income Total</h2>
+<section class="position-relative">
+    <div class="container section-content mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="page-title">Income</h1>
+            <button class="btn btn-primary" id="add-income-button">Add income</button>
+        </div>
+        <div class="content-container row position-relative">
+            <div class="income-cards col col-12 col-lg-4">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="card-title">Monthly Income Total</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="cart-text lead">This month's total income: {{ monthly_income_total }}</p>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p class="cart-text lead">This month's total income: {{ monthly_income_total }}</p>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="card-title">Yearly Income Total</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="cart-text lead">This year's total income: {{ yearly_income_total }}</p>
+                    </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Yearly Income Total</h2>
-                </div>
-                <div class="card-body">
-                    <p class="cart-text lead">This year's total income: {{ yearly_income_total }}</p>
+            <div class="recent-incomes-table col col-lg-8 mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Incomes</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if incomes %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Source</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            {% for income in incomes %}
+                            <tbody>
+                                <tr>
+                                    <th scope="row">{{ income.date }}</th>
+                                    <td>{{ income.amount }}</td>
+                                    <td>{{ income.source }}</td>
+                                    <td>
+                                        <a class="link link-success"
+                                            href="{% url 'update_income' income.id %}">Update</a>
+                                        <a class="link link-success"
+                                            href="{% url 'delete_income' income.id %}">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                        {% else %}
+                        <p class='lead'>No incomes recorded.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="recent-incomes-table card">
-            <div class="card-header">
-                <h2 class="card-title">Recent Incomes</h2>
-            </div>
-            <div class="card-body">
-                {% if incomes %}
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Source</th>
-                        </tr>
-                    </thead>
-                    {% for income in incomes %}
-                    <tbody>
-                        <tr>
-                            <th scope="row">{{ income.date }}</th>
-                            <td>{{ income.amount }}</td>
-                            <td>{{ income.source }}</td>
-                            <td> <a href="{% url 'update_income' income.id %}">Update</a>
-                                <a href="{% url 'delete_income' income.id %}">Delete</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                    {% endfor %}
-                </table>
-                {% else %}
-                <p class='lead'>No incomes recorded.</p>
-                {% endif %}
-            </div>
-        </div>
     </div>
-    <dialog id="add-income-form" class="form-dialog">
+    <dialog id="add-income-form" class="form-dialog p-4">
+        <h3 class="card-title mb-2">Add income</h3>
         <button id="add-income-close-button" class="btn btn-danger close-button">X</button>
         <form method="post" action="{% url 'income' %}">
             {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-primary">Record Income</button>
+            {% for field in form %}
+            <div class="form-group mt-3">
+                {{ field|as_crispy_field }}
+            </div>
+            {% endfor %}
+            <div class="row mt-3 justify-content-end">
+                <div class="col col-12 col-lg-3"><button type="submit" class="btn btn-primary w-100">Record
+                        Income</button>
+                </div>
+            </div>
+
         </form>
     </dialog>
-
 </section>
 
 <script>
@@ -76,7 +92,7 @@
     const closeButton = document.getElementById('add-income-close-button');
 
     addIncomeButton.addEventListener('click', () => {
-        addIncomeForm.showModal();
+        addIncomeForm.show();
     });
 
     closeButton.addEventListener('click', () => {
