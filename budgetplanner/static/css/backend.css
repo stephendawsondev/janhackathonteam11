@@ -1,0 +1,27 @@
+/* User & Admin Dashboard Colors */
+i {
+    color: #2980b9;
+}
+
+.footer-bg {
+    background-color: #2980b9;
+}
+
+.navbar-light {
+    background-color: #2980B9 !important;
+    color: #ffffff !important;
+}
+
+.navbar-brand,
+.fa-bars,
+.fa-user,
+.dropdown-toggle::after {
+    color: #ffffff !important;
+    transition: 0.3s;
+}
+
+.fa-bars:hover,
+.fa-user:hover,
+.dropdown-toggle:hover::after {
+    color: #dadada !important;
+}
