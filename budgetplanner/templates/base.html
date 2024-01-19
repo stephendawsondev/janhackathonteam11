@@ -45,10 +45,10 @@
     <script defer src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}"/>
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
 
     <!-- Bootstrap ICONS-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
 
     <!-- Small Business TEMPLATE CSS: https://startbootstrap.com/template/small-business#google_vignette  -->
     <link rel="stylesheet" href="{% static 'css/small_business.css' %}">
@@ -63,11 +63,9 @@
     {% block extra_corecss %}
     {% endblock extra_corecss %}
 
-    <meta name="description"
-        content=""/>
-    <meta name="keywords"
-        content=""/>
-    <meta name="author" content=""/>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
     <title>BudgetBuddy {% block title %}- Home{% endblock %}</title>
 
 </head>
@@ -126,10 +124,10 @@
                                 Support
                             </button>
                             <ul class="dropdown-menu dropdown-menu-light mt-2">
-                              <li><a class="dropdown-item" href="{% url 'about' %}">About</a></li>
+                                <li><a class="dropdown-item" href="{% url 'about' %}">About</a></li>
                                 <li><a class="dropdown-item" href="{% url 'contact' %}">Contact</a></li>
                                 <li><a class="dropdown-item" href="{% url 'faq' %}">FAQ</a></li>
-                                
+
                             </ul>
                         </li>
                     </ul>
@@ -145,7 +143,7 @@
             <form class="modal-content" method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
                 <div class="modal-header">
                     <span class="modal-title fs-5" id="popupModalLabel">Logout</span>
@@ -190,18 +188,18 @@
     </div>
 
     <!-- Footer -->
-    <footer class="text-center text-lg-start bg-light text-muted mt-5 footer-sticky">
+    <footer class="text-center text-lg-start bg-light text-muted mt-auto bottom-0 position-relative">
 
         <!-- About  -->
         <section class="pt-1">
-            <div class="container text-center text-md-start mt-5">
+            <div class="container text-center text-md-start mt-5 ">
                 <div class="row mt-3">
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                         <h6 class="text-uppercase fw-bold mb-4">
                             <i class="fa-brands fa-connectdevelop"></i> About Us
                         </h6>
                         <p class="text-justify">
-                          Placeholder
+                            Placeholder
                         </p>
                     </div>
 
@@ -211,7 +209,8 @@
                             Useful links
                         </h6>
                         <p>
-                            <a href="#" class="text-reset">Contact</a>
+                            <a href="{% url 'contact' %}" class="text-reset">Contact</a><br>
+                            <a href="{% url 'team' %}" class="text-reset">Meet the team</a><br>
                         </p>
                     </div>
 
@@ -247,8 +246,9 @@
 
                                                             <!-- Send Button -->
                                                             <span class="input-group-btn">
-                                                                <button type="submit" aria-label="Subscribe to Newsletter" name="subscribe"
-                                                                    id="mc-embedded-subscribe"
+                                                                <button type="submit"
+                                                                    aria-label="Subscribe to Newsletter"
+                                                                    name="subscribe" id="mc-embedded-subscribe"
                                                                     class="newsletter-btn px-3 mb-0"><i
                                                                         class="fa-regular fa-paper-plane"></i></button>
                                                             </span>
@@ -292,12 +292,10 @@
                         <section class="d-flex justify-content-center pt-2 pb-2">
                             <div>
                                 <ul class="list-unstyled d-flex mb-0">
-                                    <li class="me-4"><a href="#" target="_blank"
-                                            rel="noopener noreferrer" aria-label="GitHub"><i
-                                                class="fab fa-github"></i></a></li>
-                                    <li class="me-4"><a href="#" target="_blank"
-                                            rel="noopener noreferrer" aria-label="Facebook"><i
-                                                class="fab fa-facebook-f"></i></a></li>
+                                    <li class="me-4"><a href="#" target="_blank" rel="noopener noreferrer"
+                                            aria-label="GitHub"><i class="fab fa-github"></i></a></li>
+                                    <li class="me-4"><a href="#" target="_blank" rel="noopener noreferrer"
+                                            aria-label="Facebook"><i class="fab fa-facebook-f"></i></a></li>
                                     <li class="me-4"><a href="https://x.com/" target="_blank" rel="noopener noreferrer"
                                             aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
                                     <li class="me-4"><a href="https://google.com/" target="_blank"
@@ -330,7 +328,7 @@
 
     <!-- Newsletter MailChimp-->
     <script type="text/javascript">
-       
+
     </script>
 </body>
 
