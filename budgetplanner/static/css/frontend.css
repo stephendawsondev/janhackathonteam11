@@ -301,8 +301,12 @@ i {
   color: var(--primary-color);
 }
 
-.footer-bg {
+footer{
   background-color: var(--primary-color);
+}
+
+.footer-bg {
+  background-color: var(--secondary-color);
 }
 
 .navbar-light {
