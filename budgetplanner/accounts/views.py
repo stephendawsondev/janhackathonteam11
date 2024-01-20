@@ -23,7 +23,7 @@ def register_view(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'You have been registered in!')
+            messages.success(request, 'You have been registered!')
             return redirect(reverse('login'))
     else:
         form = UserRegistrationForm()
@@ -31,12 +31,18 @@ def register_view(request):
 
 # Custom Login
 
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            messages.success(request, 'You have logged in!')
-            return redirect(reverse('dashboard'))
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'You have logged in!')
+                return redirect('dashboard')
         else:
             messages.error(request, 'Invalid username or password.')
             return redirect(reverse('login'))
