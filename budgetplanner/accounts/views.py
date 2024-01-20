@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from .forms import UserRegistrationForm
 from .models import UserProfile
-from transactions.models import Income, Expense
+from transactions.models import Income, Expense,WeeklyBudget, MonthlyBudget, YearlyBudget
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
@@ -129,7 +129,10 @@ def dashboard_view(request):
         user=request.user,
         date__gte=start_of_year
     ).aggregate(Sum('amount'))['amount__sum'] or 0
-
+    # Fetching the latest weekly, monthly, and yearly budgets
+    latest_weekly_budget = WeeklyBudget.objects.filter(user=request.user).order_by('-start_date').first()
+    latest_monthly_budget = MonthlyBudget.objects.filter(user=request.user).order_by('-start_date').first()
+    latest_yearly_budget = YearlyBudget.objects.filter(user=request.user).order_by('-start_date').first()
     user_profile = UserProfile.objects.get(
         user=request.user) if request.user.is_authenticated else None
 
@@ -142,6 +145,9 @@ def dashboard_view(request):
         'weekly_expenditure_total': weekly_expenditure_total,
         'monthly_expenditure_total': monthly_expenditure_total,
         'yearly_expenditure_total': yearly_expenditure_total,
-    }
+        'latest_weekly_budget': latest_weekly_budget,
+        'latest_monthly_budget': latest_monthly_budget,
+        'latest_yearly_budget': latest_yearly_budget,
+    }   
 
     return render(request, 'dashboard.html', context)
