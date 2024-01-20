@@ -1,7 +1,7 @@
 from django import forms
 from datetime import date, timedelta
-from .models import MonthlyBudget,WeeklyBudget,YearlyBudget
-from .models import Expense, typicalExpense, Income, typicalIncome
+from .models import MonthlyBudget, WeeklyBudget, YearlyBudget
+from .models import Expense, ExpenseCategory, Income, IncomeCategory
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from decimal import Decimal
@@ -10,11 +10,13 @@ from django.forms import SelectDateWidget
 from django.utils.timezone import now
 from datetime import datetime
 
+
 def calculate_start_date():
     # Calculate the start date (Thursday of the current week)
     current_date = date.today()
     start_date = current_date + timedelta((3 - current_date.weekday() + 7) % 7)
     return start_date
+
 
 class ExpenseForm(forms.ModelForm):
     amount = forms.DecimalField(
@@ -32,15 +34,15 @@ class ExpenseForm(forms.ModelForm):
 
     class Meta:
         model = Expense
-        fields = ['amount', 'description', 'date', 'typical_expense']
+        fields = ['amount', 'description', 'date', 'category']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['typical_expense'].queryset = typicalExpense.objects.all()
-        self.fields['typical_expense'].empty_label = "Select a typical expense"
+        self.fields['category'].queryset = ExpenseCategory.objects.all()
+        self.fields['category'].empty_label = "Select a category"
 
     def clean_amount(self):
         amount = self.cleaned_data['amount']
@@ -66,15 +68,15 @@ class IncomeForm(forms.ModelForm):
 
     class Meta:
         model = Income
-        fields = ['amount', 'source', 'date', 'typical_income']
+        fields = ['amount', 'source', 'date', 'category']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['typical_income'].queryset = typicalIncome.objects.all()
-        self.fields['typical_income'].empty_label = "Select a typical income"
+        self.fields['category'].queryset = IncomeCategory.objects.all()
+        self.fields['category'].empty_label = "Select a category"
 
     def clean_amount(self):
         amount = self.cleaned_data['amount']
@@ -82,10 +84,11 @@ class IncomeForm(forms.ModelForm):
             raise forms.ValidationError("The amount cannot be negative.")
         return amount
 
+
 class WeeklyBudgetForm(forms.ModelForm):
     class Meta:
         model = WeeklyBudget
-        fields = ['amount', 'start_date', 'description'] 
+        fields = ['amount', 'start_date', 'description']
         widgets = {
             'start_date': SelectDateWidget()
         }
@@ -99,10 +102,11 @@ class WeeklyBudgetForm(forms.ModelForm):
             cleaned_data['end_date'] = end_date
         return cleaned_data
 
+
 class MonthlyBudgetForm(forms.ModelForm):
     class Meta:
         model = MonthlyBudget
-        fields = ['amount', 'start_date', 'description'] 
+        fields = ['amount', 'start_date', 'description']
         widgets = {
             'start_date': SelectDateWidget()
         }
@@ -116,10 +120,11 @@ class MonthlyBudgetForm(forms.ModelForm):
             cleaned_data['end_date'] = end_date
         return cleaned_data
 
+
 class YearlyBudgetForm(forms.ModelForm):
     class Meta:
         model = YearlyBudget
-        fields = ['amount', 'start_date', 'description'] 
+        fields = ['amount', 'start_date', 'description']
         widgets = {
             'start_date': SelectDateWidget(years=range(now().year-10, now().year+10))
         }
