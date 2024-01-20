@@ -3,6 +3,8 @@
 html,
 body {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Fonts */
@@ -50,6 +52,9 @@ a {
 }
 
 /* Homepage CTA */
+main{
+  flex:1
+}
 
 .bg-main {
   background-color: #2980b9;
