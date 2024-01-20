@@ -6,14 +6,14 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from .forms import UserRegistrationForm
 from .models import UserProfile
-from transactions.models import Income, Expense,WeeklyBudget, MonthlyBudget, YearlyBudget
+from transactions.models import Income, Expense, WeeklyBudget, MonthlyBudget, YearlyBudget
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
 from transactions.models import get_income_totals, get_expense_totals
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
 
 # Custom Register
 
@@ -23,30 +23,27 @@ def register_view(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            messages.success(request, 'You have been registered in!')
+            return redirect(reverse('login'))
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
 
+# Custom Login
 
-class LoginView(LoginView):
-    """
-    LoginView is class based and automatically allows
-    the form to be populated in the template.
-    """
-    template_name = 'login.html'
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            messages.success(request, 'You have logged in!')
+            return redirect(reverse('dashboard'))
+        else:
+            messages.error(request, 'Invalid username or password.')
+            return redirect(reverse('login'))
+    else:
+        form = AuthenticationForm()
 
-    def form_valid(self, form):
-        messages.success(self.request, 'You have logged in!')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, 'Invalid username or password.')
-        return super().form_invalid(form)
-
-    def get_success_url(self):
-        return reverse('dashboard')
-
+    return render(request, 'login.html', {'form': form})
 
 # Custom Logout
 
@@ -55,7 +52,7 @@ def logout_view(request):
     messages.info(request,
                   'You have successfully logged out!')
     logout(request)
-    return redirect('home')
+    return redirect(reverse('home'))
 
 # Custom Password Reset
 
@@ -125,9 +122,12 @@ def dashboard_view(request):
         date__gte=start_of_year
     ).aggregate(Sum('amount'))['amount__sum'] or 0
     # Fetching the latest weekly, monthly, and yearly budgets
-    latest_weekly_budget = WeeklyBudget.objects.filter(user=request.user).order_by('-start_date').first()
-    latest_monthly_budget = MonthlyBudget.objects.filter(user=request.user).order_by('-start_date').first()
-    latest_yearly_budget = YearlyBudget.objects.filter(user=request.user).order_by('-start_date').first()
+    latest_weekly_budget = WeeklyBudget.objects.filter(
+        user=request.user).order_by('-start_date').first()
+    latest_monthly_budget = MonthlyBudget.objects.filter(
+        user=request.user).order_by('-start_date').first()
+    latest_yearly_budget = YearlyBudget.objects.filter(
+        user=request.user).order_by('-start_date').first()
     user_profile = UserProfile.objects.get(
         user=request.user) if request.user.is_authenticated else None
 
@@ -143,6 +143,6 @@ def dashboard_view(request):
         'latest_weekly_budget': latest_weekly_budget,
         'latest_monthly_budget': latest_monthly_budget,
         'latest_yearly_budget': latest_yearly_budget,
-    }   
+    }
 
     return render(request, 'dashboard.html', context)

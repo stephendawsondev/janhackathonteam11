@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'transactions',  # Your transactions app
     'support',  # Support features
     'home',
+    'demo',
 
     # Third party apps
     'crispy_forms',
