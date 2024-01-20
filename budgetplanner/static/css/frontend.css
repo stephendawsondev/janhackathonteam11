@@ -133,7 +133,7 @@ main{
 .card-header,
 .card-header-hover {
   border-radius: 0px;
-  background-color: #2980B9;
+  background-color: #1f5180;
   color: #fff;
   border-bottom: 1px solid #dadada;
 }
@@ -163,20 +163,21 @@ main{
 }
 
 .read-more:hover {
-  color: #2980B9;
+  color: #1f5180;
   transition: 0.3s;
 }
 
 .card-footer {
   border-radius: 0px;
-  background-color: #2980B9;
+  background-color: #1f5180;
   color: #fff;
   transition: 0.3s;
 }
 
 .card-footer:hover {
-  border-top: 1px solid #dadada;
+  border-top: 1px solid #fff;
   transition: 0.3s;
+  color: #fff;
 }
 
 .card-margin-footer {
