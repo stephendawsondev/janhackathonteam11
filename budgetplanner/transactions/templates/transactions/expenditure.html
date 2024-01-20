@@ -1,57 +1,101 @@
 {% extends 'dashboard-base/base.html' %}
 {% block content %}
-<div class="card-body">
-    {% if messages %}
-        {% for message in messages %}
-            <div>{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-
-    <form method="post" action="{% url 'expenditure' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit Expense</button>
-    </form>
-
-    <h2>Weekly Total</h2>
-    <p>This week's total: {{ weekly_totals.weekly_total|default:"0.00" }}</p>
-
-    <h2>Monthly Total</h2>
-    <p>This month's total: {{ monthly_totals.monthly_total|default:"0.00" }}</p>
-
-    <h2>Yearly Total</h2>
-    <p>This year's total: {{ yearly_totals.yearly_total|default:"0.00" }}</p>
-
-    <h2>Daily Totals This Week</h2>
-    {% for day_total in daily_totals %}
-        <p>{{ day_total.day }}: {{ day_total.total|default:"0.00" }}</p>
-    {% endfor %}
-
-    <h2>Recent Expenses</h2>
-    {% if expenses %}
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Typical Expense</th>
-            </tr>
-            {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.date }}</td>
-                <td>{{ expense.amount }}</td>
-                <td>{{ expense.description }}</td>
-                <td>{{ expense.typical_expense }}</td>
-                <td>
-                    <a href="{% url 'update_expense' expense.id %}">Update</a>
-                    <a href="{% url 'delete_expense' expense.id %}">Delete</a>
-                </td>
-            </tr>
+<section class="position-relative">
+    <div class="container section-content mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="page-title">Expense</h1>
+            <button class="btn btn-primary" id="add-expense-button">Add expense</button>
+        </div>
+        <div class="content-container row position-relative">
+            <div class="expense-cards col col-12 col-lg-4">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="card-title">Monthly Expense Total</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="cart-text lead">This month's total expense: {{ monthly_totals.monthly_total }}</p>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h2 class="card-title">Yearly Expense Total</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="cart-text lead">This year's total expense: {{ yearly_totals.yearly_total }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="recent-expenses-table col col-lg-8 mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Expenses</h2>
+                    </div>
+                    <div class="card-body overflow-auto">
+                        {% if expenses %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for expense in expenses %}
+                                <tr>
+                                    <th scope="row">{{ expense.date }}</th>
+                                    <td>{{ expense.amount }}</td>
+                                    <td>{{ expense.description }}</td>
+                                    <td>
+                                        <a class="link link-success"
+                                            href="{% url 'update_expense' expense.id %}">Update</a>
+                                        <a class="link link-success"
+                                            href="{% url 'delete_expense' expense.id %}">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p class='lead'>No expenses recorded.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <dialog id="add-expense-form" class="form-dialog p-4">
+        <h3 class="card-title mb-2">Add expense</h3>
+        <button id="add-expense-close-button" class="btn btn-danger close-button">X</button>
+        <form method="post" action="{% url 'expenditure' %}">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group mt-3">
+                {{ field|as_crispy_field }}
+            </div>
             {% endfor %}
-        </table>
-    {% else %}
-        <p>No expenses recorded.</p>
-    {% endif %}
-</div>
+            <div class="row mt-3 justify-content-end">
+                <div class="col col-12 col-lg-3"><button type="submit" class="btn btn-primary w-100">Record
+                        Expense</button>
+                </div>
+            </div>
 
+        </form>
+    </dialog>
+</section>
+
+<script>
+    const addExpenseForm = document.getElementById('add-expense-form');
+    const addExpenseButton = document.getElementById('add-expense-button');
+    const closeButton = document.getElementById('add-expense-close-button');
+
+    addExpenseButton.addEventListener('click', () => {
+        addExpenseForm.show();
+    });
+
+    closeButton.addEventListener('click', () => {
+        addExpenseForm.close();
+    });
+</script>
 {% endblock %}
