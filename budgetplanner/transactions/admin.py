@@ -1,7 +1,7 @@
 # transactions/admin.py
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import WeeklyBudget, MonthlyBudget, YearlyBudget, Expense, Income, ExpenseCategory, IncomeCategory
+from .models import Expense, Income, ExpenseCategory, IncomeCategory
 
 
 class ExpenseCategoryAdmin(admin.ModelAdmin):
@@ -10,9 +10,6 @@ class ExpenseCategoryAdmin(admin.ModelAdmin):
     )
 
     search_fields = ['name', ]
-
-    class Meta:
-        verbose_name_plural = 'Expense Categories'
 
     def __str__(self):
         return self.name
@@ -24,9 +21,6 @@ class IncomeCategoryAdmin(admin.ModelAdmin):
     )
 
     search_fields = ['name', ]
-
-    class Meta:
-        verbose_name_plural = 'Income Categories'
 
     def __str__(self):
         return self.name

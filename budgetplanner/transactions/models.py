@@ -13,12 +13,18 @@ class ExpenseCategory(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = 'Expense Categories'
+
 
 class IncomeCategory(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = 'Income Categories'
 
 
 class Income(models.Model):
