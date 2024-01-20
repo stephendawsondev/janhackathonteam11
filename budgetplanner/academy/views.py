@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import textwrap
 from .models import ArticleAcademy
 from django.core.paginator import Paginator
+from datetime import datetime
 
 # RSS
 
@@ -46,12 +47,10 @@ def rss_news(urls):
             if 'image' in news:
                 image = news.image["href"]
 
-            # parse time
-
-            from datetime import datetime
-
+            # Parse time
             date_str = news.published
-            formatted_date = datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %z")
+            formatted_date = datetime.strptime(
+                date_str, "%a, %d %b %Y %H:%M:%S %z")
             clean_date = formatted_date.strftime("%a, %d %b %Y %H:%M")
 
             # Process and format the news item
