@@ -574,3 +574,8 @@ footer{
   }
 }
 
+/* Academy */
+
+#iframe-preview{
+  cursor: pointer;
+}
