@@ -69,6 +69,50 @@ main{
   background-color: #132D46;
 }
 
+.data-row {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  
+
+}
+
+.data-row  span {
+  display: block;
+}
+
+.data-row p {
+  margin-bottom: 0;
+}
+.badge-money{
+  border: 1px solid black;
+  border-radius: 20px ;
+  padding: 0.2rem;
+  align-self: center;
+}
+
+.circle {
+  width: 25px; /* or any size */
+  height: 25px; /* same as width */
+  background-color: #696E79; /* or any color */
+  border-radius: 50%; /* this makes it a circle */
+}
+.half-circle {
+  width: 25px; /* or any size */
+  height: 25px; /* half of the width */
+  background-color: hsl(221, 7%, 44%); /* background for the filled part */
+  border-radius: 50px; /* round the top */
+  background: linear-gradient(to right, #696E79 50%, transparent 50%);
+  border: 1px solid #696E79;
+}
+.empty-circle {
+  width: 25px; /* or any size */
+  height: 25px; /* same as width */
+  border: 3px solid #696E79; /* border color and width */
+  border-radius: 50%; /* this makes it a circle */
+  background-color: transparent;
+  border: 1px solid #696E79;
+}
 /* Cards */
 
 .cta-card {
