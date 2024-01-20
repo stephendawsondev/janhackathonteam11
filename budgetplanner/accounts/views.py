@@ -52,7 +52,7 @@ def logout_view(request):
     messages.info(request,
                   'You have successfully logged out!')
     logout(request)
-    return redirect('home')
+    return redirect(reverse('home'))
 
 # Custom Password Reset
 
