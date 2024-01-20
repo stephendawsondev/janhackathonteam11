@@ -48,6 +48,7 @@ def update_budget(request, budget_id, budget_type):
 
     return render(request, 'transactions/update_budget.html', {'form': form, 'budget_type': budget_type})
 
+
 @login_required
 def manage_budgets(request):
     user = request.user
@@ -61,45 +62,30 @@ def manage_budgets(request):
         if 'weekly_budget' in request.POST:
             weekly_form = WeeklyBudgetForm(request.POST)
             if weekly_form.is_valid():
-                start_date = weekly_form.cleaned_data['start_date']
-                # Ensure there's no overlapping weekly budget
-                if not WeeklyBudget.objects.filter(user=user, start_date=start_date).exists():
-                    weekly_budget = weekly_form.save(commit=False)
-                    weekly_budget.user = user
+                weekly_budget = weekly_form.save(commit=False)
+                weekly_budget.user = user
+                # Check for overlapping budgets
+                if not WeeklyBudget.objects.filter(user=user, start_date=weekly_budget.start_date).exists():
                     weekly_budget.save()
                     messages.success(request, 'Weekly budget created successfully!')
                 else:
                     messages.error(request, 'A weekly budget for this period already exists.')
             else:
                 messages.error(request, 'Please correct the errors in the weekly budget form.')
-         # Handling delete request
-        if 'delete_weekly' in request.POST:
-            budget_id = request.POST.get('budget_id')
 
-            WeeklyBudget.objects.filter(id=budget_id, user=request.user).delete()
+        # Handling delete request for Weekly Budget
+        elif 'delete_weekly' in request.POST:
+            budget_id = request.POST.get('budget_id')
+            WeeklyBudget.objects.filter(id=budget_id, user=user).delete()
             messages.success(request, 'Weekly budget deleted successfully!')
-            return redirect('manage_budgets')
-        if 'delete_monthly' in request.POST:
-            budget_id = request.POST.get('budget_id')
-            MonthlyBudget.objects.filter(id=budget_id, user=request.user).delete()
-            messages.success(request, 'Monthly budget deleted successfully!')
-            return redirect('manage_budgets')
 
-        # Handling Yearly Budget Delete
-        if 'delete_yearly' in request.POST:
-            budget_id = request.POST.get('budget_id')
-            YearlyBudget.objects.filter(id=budget_id, user=request.user).delete()
-            messages.success(request, 'Yearly budget deleted successfully!')
-            return redirect('manage_budgets')
         # Handling Monthly Budget Form
-        if 'monthly_budget' in request.POST:
+        elif 'monthly_budget' in request.POST:
             monthly_form = MonthlyBudgetForm(request.POST)
             if monthly_form.is_valid():
-                start_date = monthly_form.cleaned_data['start_date']
-                # Ensure there's no overlapping monthly budget
-                if not MonthlyBudget.objects.filter(user=user, start_date=start_date).exists():
-                    monthly_budget = monthly_form.save(commit=False)
-                    monthly_budget.user = user
+                monthly_budget = monthly_form.save(commit=False)
+                monthly_budget.user = user
+                if not MonthlyBudget.objects.filter(user=user, start_date=monthly_budget.start_date).exists():
                     monthly_budget.save()
                     messages.success(request, 'Monthly budget created successfully!')
                 else:
@@ -107,21 +93,32 @@ def manage_budgets(request):
             else:
                 messages.error(request, 'Please correct the errors in the monthly budget form.')
 
+        # Handling delete request for Monthly Budget
+        elif 'delete_monthly' in request.POST:
+            budget_id = request.POST.get('budget_id')
+            MonthlyBudget.objects.filter(id=budget_id, user=user).delete()
+            messages.success(request, 'Monthly budget deleted successfully!')
+
         # Handling Yearly Budget Form
-        if 'yearly_budget' in request.POST:
+        elif 'yearly_budget' in request.POST:
             yearly_form = YearlyBudgetForm(request.POST)
             if yearly_form.is_valid():
-                start_date = yearly_form.cleaned_data['start_date']
-                # Ensure there's no overlapping yearly budget
-                if not YearlyBudget.objects.filter(user=user, start_date=start_date).exists():
-                    yearly_budget = yearly_form.save(commit=False)
-                    yearly_budget.user = user
+                yearly_budget = yearly_form.save(commit=False)
+                yearly_budget.user = user
+                if not YearlyBudget.objects.filter(user=user, start_date=yearly_budget.start_date).exists():
                     yearly_budget.save()
                     messages.success(request, 'Yearly budget created successfully!')
                 else:
                     messages.error(request, 'A yearly budget for this period already exists.')
             else:
                 messages.error(request, 'Please correct the errors in the yearly budget form.')
+
+        # Handling delete request for Yearly Budget
+        elif 'delete_yearly' in request.POST:
+            budget_id = request.POST.get('budget_id')
+            YearlyBudget.objects.filter(id=budget_id, user=user).delete()
+            messages.success(request, 'Yearly budget deleted successfully!')
+
         return redirect('manage_budgets')
 
     else:
