@@ -1,1 +1,24 @@
-<p> Details about reports </p>
+{% extends 'dashboard-base/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Budget Report</h1>
+    {% for budget in budget_data %}
+    <div class="budget-section">
+        <h2>{{ budget.type }} Budget: ${{ budget.amount|floatformat:2 }}</h2>
+        <div>From {{ budget.start_date }} to {{ budget.end_date }}</div>
+        <p>Total Income for {{ budget.type }}: ${{ budget.income_total|floatformat:2 }}</p>
+        <p>Total Expenses for {{ budget.type }}: ${{ budget.expense_total|floatformat:2 }}</p>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ budget.progress|default_if_none:"0"|floatformat:2 }}%;" aria-valuenow="{{ budget.progress|default_if_none:"0" }}" aria-valuemin="0" aria-valuemax="100">
+                {{ budget.progress|default_if_none:"0"|floatformat:2 }}%
+            </div>
+        </div>
+        <p>Budget Health: <span class="{{ budget.health }}">{{ budget.comment }}</span></p>
+        <p>Surplus/Deficit: ${{ budget.surplus_deficit|floatformat:2 }}</p>
+    </div>
+    {% empty %}
+    <p>No budgets available.</p>
+    {% endfor %}
+</div>
+{% endblock %}
