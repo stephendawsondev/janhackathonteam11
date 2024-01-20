@@ -1,4 +1,7 @@
 asgiref==3.7.2
+bleach==6.1.0
+certifi==2023.11.17
+charset-normalizer==3.3.2
 cloudinary==1.38.0
 dj-database-url==2.1.0
 Django==3.2
@@ -8,8 +11,15 @@ django-heroku==0.3.1
 django-summernote==0.8.20.0
 feedparser==6.0.11
 gunicorn==21.2.0
+idna==3.6
+packaging==23.2
 psycopg2==2.9.9
 pytz==2023.3.post1
+requests==2.31.0
 sgmllib3k==1.0.0
+six==1.16.0
 sqlparse==0.4.4
+typing_extensions==4.9.0
+urllib3==2.1.0
+webencodings==0.5.1
 whitenoise==6.6.0
