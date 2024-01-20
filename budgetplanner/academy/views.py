@@ -1,36 +1,38 @@
 from django.shortcuts import render
 import feedparser
 import textwrap
-
-def academy_articles_view(request):
-    return render(request, 'academy_articles.html')
-
+from .models import ArticleAcademy
 # RSS
 
 
-def my_rss_news(self, url):
+def rss_news(urls):
     '''
     Deal with the fetching and processing of RSS data
     '''
-    # RSS local variables
-    feed = feedparser.parse(url)
-    top = feed.entries[:3]
-    x = 0
+    all_news = []
 
-    for news in top:
-        x += 1
-        print(f'\n{BOLD}Coindesk RSS News {x}{RESET}\n')
+    for url in urls:
+        # Parse URL
+        feed = feedparser.parse(url)
+        top = feed.entries[:3]
+        for news in top:
+            # Process and format the news item
+            news_item = {
+                'title': news.title,
+                'summary': news.summary[:200],
+                'link': news.link
+            }
+            all_news.append(news_item)
 
-        # Title
-        title_lines = textwrap.wrap(news.title, width=70)
-        full_title = '\n'.join(title_lines)
-        print(f'{bullet_point} {full_title}:\n')
+    return all_news
 
-        # Summary
-        text_lines = textwrap.wrap(news.summary[:200], width=70)
-        # get rid of brackets and add space in between
-        full_text = '\n'.join(text_lines)
-        print(f'{BOLD}{full_text}...{RESET}\n')
+# Article's page
 
-        # Link
-        print(f'{bullet_point}', news.link)
+
+def academy_articles_view(request):
+    sources = ArticleAcademy.objects.filter(status=2).order_by('-created_on')
+
+    urls = [source.url for source in sources]
+    news_items = rss_news(urls)
+
+    return render(request, 'academy_articles.html', {'news_items': news_items})
