@@ -311,7 +311,7 @@ i {
 
 .team1 .pro-pic {
   min-height: 200px;
-  position: relative; 
+  position: relative;
 }
 
 .team1 .pro-pic .card-img-overlay {
@@ -336,4 +336,14 @@ i {
 
 .team1 .pro-pic:hover .card-img-overlay {
   display: block;
+}
+
+#forgot-password-link {
+  text-align: center;
+}
+
+@media screen and (min-width: 749px) {
+  #forgot-password-link {
+    text-align: initial;
+  }
 }

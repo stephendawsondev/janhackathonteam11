@@ -1,38 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container my-5 pt-5 ">
-    <div class="row">
+<section>
+    <div class="container section-content py-5">
         <div class="col-md-8 offset-md-2">
-            <form method="post" action="{% url 'login' %}" class="form-3d">
+            <h1 class="page-title">Login</h1>
+            <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username" required><br>
-
-                <label for="password">Password:</label>
-                <input type="password" name="password" id="password" required><br>
-
-                <button type="submit">Login</button>
-                <a href="{% url 'password_reset' %}" id="forgot-password-link" class="link d-block mt-5">Forgot
-                    Password?</a>
+                {% for field in form %}
+                <div class="form-group mt-3">
+                    {{ field|as_crispy_field }}
+                </div>
+                {% endfor %}
+                <div class="row mt-3">
+                    <div class="col col-12 col-lg-3">
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <a href="{% url 'password_reset' %}" id="forgot-password-link" class="link d-block mt-2">Forgot
+                            Password?</a>
+                    </div>
+                </div>
             </form>
+        </div>
+    </div>
+</section>
 
-        </div>
-    </div>
-</div>
-<div class="container pb-5 my-4">
-    <div class="row">
-        <div class="col-lg-8 offset-lg-2 bg-transparent bg-glass-3d p-2">
-            <p class="text-center p-2 m-2 text-dark bg-white border-0 rounded">
-                "Budgeting is the first step towards financial freedom." - Warren Buffett
-                <br>
-                "A budget tells us what we can't afford, but it doesn't keep us from buying it." - William Feather
-                <br>
-                "Do not save what is left after spending, but spend what is left after saving." - Warren Buffett
-                <br>
-                "Budgeting has only one rule: Do not go over budget." - Leslie Tayne
-            </p>
-        </div>
-    </div>
-</div>
+{% include 'includes/financial-quotes.html' %}
 {% endblock %}
