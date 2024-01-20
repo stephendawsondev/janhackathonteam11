@@ -13,6 +13,7 @@ from datetime import timedelta
 from transactions.models import get_income_totals, get_expense_totals
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.views import LoginView
 
 # Custom Register
 
@@ -27,38 +28,32 @@ def register_view(request):
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
 
-# Custom Login
 
+class LoginView(LoginView):
+    """
+    LoginView is class based and automatically allows
+    the form to be populated in the template.
+    """
+    template_name = 'login.html'
 
-def login_view(request):
-    # Check if the request is a POST request
-    if request.method == 'POST':
-        # Get username and password from the POST request
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    def form_valid(self, form):
+        messages.success(self.request, 'You have logged in!')
+        return super().form_valid(form)
 
-        # Authenticate the user
-        user = authenticate(request, username=username, password=password)
+    def form_invalid(self, form):
+        messages.error(self.request, 'Invalid username or password.')
+        return super().form_invalid(form)
 
-        # Check if authentication was successful
-        if user is not None:
-            # Log the user in
-            login(request, user)
-            # Redirect to the dashboard view
-            return redirect(reverse('dashboard'))
-        else:
-            # Return an 'invalid login' error message
-            return render(request, 'login.html', {'error': 'Invalid username or password.'})
-    else:
-        # Render the login form template if not a POST request
-        return render(request, 'login.html')
+    def get_success_url(self):
+        return reverse('dashboard')
+
 
 # Custom Logout
 
 
 def logout_view(request):
     messages.info(request,
-                         'You have successfully logged out!')
+                  'You have successfully logged out!')
     logout(request)
     return redirect('home')
 
