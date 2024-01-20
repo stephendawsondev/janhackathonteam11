@@ -7,7 +7,7 @@
         {% if user.is_authenticated %}
         <h1 class="display-4">Welcome, {{ user.username }}!</h1>
         {% else %}
-            <p class="lead">Please log in to view this page.</p>
+        <p class="lead">Please log in to view this page.</p>
         {% endif %}
     </div>
 </header>
@@ -50,7 +50,7 @@
                     <h3 class="card-title">Reports</h3>
                 </div>
                 <div class="card-body">
-                    <a href="{% url 'reports' %}" class="btn btn-primary">View Expenditure Details</a>
+                    <a href="{% url 'reports' %}" class="btn btn-primary">View reports</a>
                 </div>
             </div>
         </div>
@@ -61,27 +61,27 @@
                 </div>
                 <div class="card-body">
                     {% if latest_weekly_budget %}
-    <div>
-        <h4>Latest Weekly Budget</h4>
-        <p>Amount: {{ latest_weekly_budget.amount }}</p>
-        <p>Start Date: {{ latest_weekly_budget.start_date }}</p>
-    </div>
-{% endif %}
-{% if latest_monthly_budget %}
-    <div>
-        <h4>Latest Monthly Budget</h4>
-        <p>Amount: {{ latest_monthly_budget.amount }}</p>
-        <p>Start Date: {{ latest_monthly_budget.start_date }}</p>
-    </div>
-{% endif %}
-{% if latest_yearly_budget %}
-    <div>
-        <h4>Latest Yearly Budget</h4>
-        <p>Amount: {{ latest_yearly_budget.amount }}</p>
-        <p>Start Date: {{ latest_yearly_budget.start_date }}</p>
-    </div>
-{% endif %}
-                    <a href="{% url 'manage_budgets' %}" class="btn btn-primary">View Expenditure Details</a>
+                    <div>
+                        <h4>Latest Weekly Budget</h4>
+                        <p>Amount: {{ latest_weekly_budget.amount }}</p>
+                        <p>Start Date: {{ latest_weekly_budget.start_date }}</p>
+                    </div>
+                    {% endif %}
+                    {% if latest_monthly_budget %}
+                    <div>
+                        <h4>Latest Monthly Budget</h4>
+                        <p>Amount: {{ latest_monthly_budget.amount }}</p>
+                        <p>Start Date: {{ latest_monthly_budget.start_date }}</p>
+                    </div>
+                    {% endif %}
+                    {% if latest_yearly_budget %}
+                    <div>
+                        <h4>Latest Yearly Budget</h4>
+                        <p>Amount: {{ latest_yearly_budget.amount }}</p>
+                        <p>Start Date: {{ latest_yearly_budget.start_date }}</p>
+                    </div>
+                    {% endif %}
+                    <a href="{% url 'manage_budgets' %}" class="btn btn-primary">Manage your budgets</a>
                 </div>
             </div>
         </div>

@@ -298,22 +298,24 @@ def delete_expense(request, expense_id):
     return render(request, 'transactions/delete_expense.html', {'expense': expense})
 
 
-
 @login_required
 def reports_view(request):
     user = request.user
     today = datetime.today().date()  # Ensure today is a date object
 
     budget_data = []
+    print(MonthlyBudget.objects.filter(user=user))
     for budget_model in [WeeklyBudget, MonthlyBudget, YearlyBudget]:
         budgets = budget_model.objects.filter(user=user)
 
         for budget in budgets:
-            elapsed_days, total_days, progress_percentage = calculate_budget_progress(budget, today)
+            elapsed_days, total_days, progress_percentage = calculate_budget_progress(
+                budget, today)
             income_total = get_period_total(budget, Income)
             expense_total = get_period_total(budget, Expense)
             surplus_deficit = income_total - expense_total
-            budget_health, budget_comment = calculate_budget_health(budget, elapsed_days, total_days, income_total, expense_total)
+            budget_health, budget_comment = calculate_budget_health(
+                budget, elapsed_days, total_days, income_total, expense_total)
 
             budget_data.append({
                 'type': budget_model.__name__.replace('Budget', ''),
@@ -336,16 +338,22 @@ def reports_view(request):
 
 # Helper functions below
 
+
 def calculate_budget_progress(budget, today_date):
     start_date = budget.start_date
     end_date = budget.end_date or today_date
     total_days = (end_date - start_date).days
-    elapsed_days = (today_date - start_date).days if today_date >= start_date else 0
-    progress_percentage = min((elapsed_days / total_days * 100), 100) if total_days > 0 else 0
+    elapsed_days = (
+        today_date - start_date).days if today_date >= start_date else 0
+    progress_percentage = min(
+        (elapsed_days / total_days * 100), 100) if total_days > 0 else 0
     return elapsed_days, total_days, progress_percentage
+
+
 def calculate_budget_health(budget, elapsed_days, total_days, income_for_period, expense_for_period):
     budget_amount = budget.amount or Decimal('0.00')
-    progress_percentage = calculate_budget_progress(budget, datetime.today().date())[2]
+    progress_percentage = calculate_budget_progress(
+        budget, datetime.today().date())[2]
 
     if income_for_period == Decimal('0.00'):
         budget_health = 'bad'
@@ -365,6 +373,8 @@ def calculate_budget_health(budget, elapsed_days, total_days, income_for_period,
         budget_comment = 'Over budget'
 
     return budget_health, budget_comment
+
+
 def get_period_total(budget, model):
     """
     Calculate the total amount of a given model (Income or Expense) for the budget's period.
@@ -377,8 +387,8 @@ def get_period_total(budget, model):
 
     # Aggregate the total amount for the specified period.
     total = model.objects.filter(
-        user=budget.user, 
-        date__gte=budget.start_date, 
+        user=budget.user,
+        date__gte=budget.start_date,
         date__lte=end_date
     ).aggregate(total_amount=Sum('amount'))['total_amount']
 
