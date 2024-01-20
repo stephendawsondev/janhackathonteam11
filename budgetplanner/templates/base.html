@@ -78,9 +78,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-5">
-                {% comment %} <a class="navbar-brand" href="#">
-                    <img src="{% static 'assets/logo.png' %}" alt="BudgetBuddy Logo" height="36">
-                </a> {% endcomment %}
+               
                 <a class="navbar-brand" href="#">
                     <img src="{% static 'assets/logo.png' %}" width="46" height="46"  alt="BudgetBuddy Logo">
                     <strong>BudgetBuddy</strong>
@@ -98,10 +96,10 @@
                         <!-- Home -->
                         <li class="nav-item m-1"><a class="nav-link" aria-current="page" href="/">Home</a></li>
 
-                        <!-- Demo -->
+                        <!-- Dashboard -->
                         {% if not user.is_authenticated %}
                         <li class="nav-item m-1"><a class="nav-link" aria-current="page"
-                                href="{% url 'demo_dashboard' %}">Demo</a></li>
+                                href="{% url 'demo_dashboard' %}">Dashboard</a></li>
                         {% endif %}
 
                         <!-- Account -->

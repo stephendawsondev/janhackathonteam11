@@ -1,5 +1,14 @@
 /* All code here is also custom code */
 
+:root {
+  /* our theme Colors adding here  */
+  --primary-color: #132D46;
+  --secondary-color: #191E29;
+  --accent-color: #01C38D;
+  --text-color-grey: #696E79;
+  --background-color: #ffffff;
+}
+
 html,
 body {
   height: 100%;
@@ -57,7 +66,7 @@ main{
 }
 
 .bg-main {
-  background-color: #2980b9;
+  background-color: #132D46;
 }
 
 /* Cards */
@@ -66,7 +75,7 @@ main{
   border: 1px solid #dadada;
   padding: 15px 5px;
   border-radius: 5px;
-  background-color: #297fb918;
+  background-color: #132d465c;
 }
 
 .card {
@@ -179,8 +188,8 @@ main{
 .btn-readmore{
   padding: 5px 10px;
   color: #e7f3fe;
-  border: 1px solid #2980b9;
-  background-color: #297fb9;
+  border: 1px solid #122d46;
+  background-color: #191E29;
   border-radius: 5px;
   transition: 0.3s;
 }
@@ -188,7 +197,7 @@ main{
 .btn-readmore:hover{
   transition: 0.3s;
   background-color: white;
-  color:#297fb9;
+  color:#191E29;
 }
 
 .btn-scroll {
@@ -208,7 +217,7 @@ main{
   --bs-btn-bg: #2980b9;
   --bs-btn-border-color: #2980b9;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #4f8eb8;
+  --bs-btn-hover-bg: var(--primary-color);
   --bs-btn-hover-border-color: #2980b9;
   --bs-btn-focus-shadow-rgb: 49, 132, 253;
   --bs-btn-active-color: #fff;
@@ -251,7 +260,7 @@ main{
 }
 
 .btn-light-blue {
-  background-color: #4f8eb8;
+  background-color: var(--primary-color);
 }
 
 .btn-outline-dark {
@@ -261,19 +270,19 @@ main{
 }
 
 .btn-outline-dark:hover {
-  background-color: #4f8eb8;
-  border-color: #4f8eb8;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   color: #fff;
 }
 
 .btn:first-child:active {
-  background-color: #4f8eb8;
+  background-color: var(--primary-color);
   border-color: #fff;
   transition: 0.3s;
 }
 
 .newsletter-btn {
-  background-color: #2980b9;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 0 5px 5px 0;
   padding: 10px;
@@ -282,22 +291,22 @@ main{
 }
 
 .newsletter-btn:hover {
-  background-color: #4f8eb8;
+  background-color: var(--primary-color);
   color: white;
   transition: 0.3s;
 }
 
 /* Template Base */
 i {
-  color: #2980b9;
+  color: var(--primary-color);
 }
 
 .footer-bg {
-  background-color: #2980b9;
+  background-color: var(--primary-color);
 }
 
 .navbar-light {
-  background-color: #2980b9 !important;
+  background-color: var(--primary-color) !important;
   color: #ffffff !important;
 }
 
@@ -323,7 +332,7 @@ i {
 
 .navbar-toggler {
   background-color: #fff;
-  border-color: #4f8eb8;
+  border-color: var(--primary-color);
   color: white;
 }
 
@@ -348,9 +357,9 @@ i {
   transition: 0.3s;
 }
 
-.nav-link:hover {
+/* .nav-link:hover {
   background-color: #297fb9 !important;
-}
+} */
 
 .sb-nav-link-icon,
 .sb-sidenav-collapse-arrow {
@@ -472,6 +481,32 @@ i {
   display: block;
 }
 
+
+
+/* testimonial section  */
+/* Custom styles for vertical carousel */
+.carousel-inner {
+  min-height: 80px; /* Adjust based on content */
+}
+.carousel-item {
+  height: 33.333%; /* Each item takes up one-third of the space */
+}
+.carousel.vertical .carousel-item-next.carousel-item-left,
+.carousel.vertical .carousel-item-prev.carousel-item-right {
+  transform: translateY(0);
+}
+.carousel.vertical .carousel-item-left.active,
+.carousel.vertical .carousel-item-right.active {
+  transform: translateY(-33.333%);
+}
+.carousel.vertical .carousel-item-left,
+.carousel.vertical .carousel-item-right {
+  transform: translateY(33.333%);
+}
+.testimonial{
+  padding: 0 3em;
+}
+
 #forgot-password-link {
   text-align: center;
 }
@@ -481,3 +516,4 @@ i {
     text-align: initial;
   }
 }
+

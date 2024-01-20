@@ -26,12 +26,46 @@
     </aside>
 
     <!-- Call to Action-->
-    <aside class="card text-white quote my-4 py-2 text-center bg-main">
-        <div class="card-body">
-            <p class="text-white m-0">"A budget is telling your money where to go instead of wondering where it
-                went."—Dave Ramsey</p>
+    {% comment %} Testimonial Section {% endcomment %}
+    <div id="testimonialCarousel" class="carousel slide vertical" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <aside class="card text-white quote my-4 py-2 text-center bg-main">
+                    <div class="card-body">
+                        <p class="text-white m-0 testimonial">"A budget is telling your money where to go instead of wondering where it
+                            went."—Dave Ramsey</p
+                    </div>
+                </aside>
+                {% comment %} <div class="testimonial">Testimonial 1 Content</div> {% endcomment %}
+            </div>
+            <div class="carousel-item">
+                {% comment %} <div class="testimonial">Testimonial 2 Content</div> {% endcomment %}
+                <aside class="card text-white quote my-4 py-2 text-center bg-main">
+                    <div class="card-body">
+                        <p class="text-white m-0 testimonial">"Thanks to BudgetBuddy, I achieved my financial goals quicker than I ever thought possible!."—John David</p
+                    </div>
+                </aside>
+            </div>
+            <div class="carousel-item">
+                {% comment %} <div class="testimonial">Testimonial 3 Content</div> {% endcomment %}
+                <aside class="card text-white quote my-4 py-2 text-center bg-main">
+                    <div class="card-body">
+                        <p class="text-white m-0 testimonial">"BudgetBuddy is a game-changer: simple, powerful, and perfect for managing my expenses and savings!."—Clementina Regorer</p
+                    </div>
+                </aside>
+            </div>
+            <!-- Add more items as needed -->
         </div>
-    </aside>
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    
 
     <!-- Demo Row-->
     <article class="row gx-4 gx-lg-5 mt-5">

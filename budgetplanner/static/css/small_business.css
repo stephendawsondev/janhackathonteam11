@@ -10,7 +10,17 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+
 :root {
+  /* our theme Colors adding here  */
+  --primary-color: #132D46;
+  --secondary-color: #191E29;
+  --accent-color: #01C38D;
+  --text-color-grey: #696E79;
+  --background-color: #ffffff;
+
+  /* end of adding our theme colors  */
   --bs-blue: #0d6efd;
   --bs-indigo: #030303;
   --bs-purple: #6f42c1;
@@ -34,14 +44,16 @@
   --bs-gray-700: #495057;
   --bs-gray-800: #343a40;
   --bs-gray-900: #212529;
-  --bs-primary: #0d6efd;
-  --bs-secondary: #6c757d;
-  --bs-success: #198754;
-  --bs-info: #0dcaf0;
-  --bs-warning: #ffc107;
+  /* --bs-primary: #0d6efd; */
+  /* adding our colors */
+  --bs-primary: #132D46;
+  --bs-secondary: #191E29;
+  --bs-success: #01C38D;
+  --bs-info: #132D46;
+  --bs-warning: #696E79;
   --bs-danger: #dc3545;
-  --bs-light: #f8f9fa;
-  --bs-dark: #212529;
+  --bs-light: #ffffff;
+  --bs-dark: #191E29;
   --bs-primary-rgb: 13, 110, 253;
   --bs-secondary-rgb: 108, 117, 125;
   --bs-success-rgb: 25, 135, 84;
