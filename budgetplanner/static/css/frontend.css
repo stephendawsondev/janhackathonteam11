@@ -3,6 +3,8 @@
 html,
 body {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Fonts */
@@ -50,12 +52,144 @@ a {
 }
 
 /* Homepage CTA */
+main{
+  flex:1
+}
 
 .bg-main {
   background-color: #2980b9;
 }
 
+/* Cards */
+
+.cta-card {
+  border: 1px solid #dadada;
+  padding: 15px 5px;
+  border-radius: 5px;
+  background-color: #297fb918;
+}
+
+.card {
+  overflow: hidden;
+}
+
+.bg-thumbnail {
+  margin: 0;
+}
+
+.bg-thumbnail-image {
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+  padding: 0;
+  border-bottom: 1px solid #dadada;
+}
+
+.thumbnail-tags-left {
+  background-color: white;
+  padding: 5px;
+  border-radius: 0 0 5px 0;
+  margin: 0;
+  border-right: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+}
+
+.thumbnail-tags-right {
+  background-color: white;
+  padding: 5px;
+  border-radius: 0 0 0 5px;
+  margin: 0;
+  border-left: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+}
+
+.likes-tags-left {
+  background-color: white;
+  padding: 5px 5px 5px 15px;
+  border-radius: 0 5px 0 0;
+  margin: 0;
+  /* border-right: 1px solid #dadada;
+  border-top: 1px solid #dadada; */
+}
+
+.purchases-tags-right {
+  background-color: white;
+  padding: 5px 15px 5px 5px;
+  border-radius: 5px 0 0 0;
+  margin: 0;
+  /* border-left: 1px solid #dadada;
+  border-top: 1px solid #dadada; */
+}
+
+.card-header,
+.card-header-hover {
+  border-radius: 0px;
+  background-color: #2980B9;
+  color: #fff;
+  border-bottom: 1px solid #dadada;
+}
+
+.card-header-hover {
+  transition: 0.3s;
+}
+
+.card-header-hover:hover {
+  border-top: 1px solid #dadada;
+  transition: 0.3s;
+}
+
+.item-tags {
+  border: 1px solid #dadada;
+  border-radius: 15px;
+  background-color: #297fb918;
+  color: #333333;
+  padding-left: 13px;
+  padding-right: 13px;
+}
+
+.read-more {
+  color: #333333;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.read-more:hover {
+  color: #2980B9;
+  transition: 0.3s;
+}
+
+.card-footer {
+  border-radius: 0px;
+  background-color: #2980B9;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.card-footer:hover {
+  border-top: 1px solid #dadada;
+  transition: 0.3s;
+}
+
+.card-margin-footer {
+  margin: 10px -16px -16px;
+}
+
 /* Buttons */
+
+.btn-readmore{
+  padding: 5px 10px;
+  color: #e7f3fe;
+  border: 1px solid #2980b9;
+  background-color: #297fb9;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.btn-readmore:hover{
+  transition: 0.3s;
+  background-color: white;
+  color:#297fb9;
+}
 
 .btn-scroll {
   position: fixed;
