@@ -66,7 +66,7 @@ main{
 }
 
 .bg-main {
-  background-color: #2980b9;
+  background-color: #132D46;
 }
 
 /* Cards */
@@ -75,7 +75,7 @@ main{
   border: 1px solid #dadada;
   padding: 15px 5px;
   border-radius: 5px;
-  background-color: #297fb918;
+  background-color: #132d465c;
 }
 
 .card {
@@ -188,8 +188,8 @@ main{
 .btn-readmore{
   padding: 5px 10px;
   color: #e7f3fe;
-  border: 1px solid #2980b9;
-  background-color: #297fb9;
+  border: 1px solid #122d46;
+  background-color: #191E29;
   border-radius: 5px;
   transition: 0.3s;
 }
@@ -197,7 +197,7 @@ main{
 .btn-readmore:hover{
   transition: 0.3s;
   background-color: white;
-  color:#297fb9;
+  color:#191E29;
 }
 
 .btn-scroll {
@@ -479,4 +479,29 @@ i {
 
 .team1 .pro-pic:hover .card-img-overlay {
   display: block;
+}
+
+
+/* testimonial section  */
+/* Custom styles for vertical carousel */
+.carousel-inner {
+  min-height: 80px; /* Adjust based on content */
+}
+.carousel-item {
+  height: 33.333%; /* Each item takes up one-third of the space */
+}
+.carousel.vertical .carousel-item-next.carousel-item-left,
+.carousel.vertical .carousel-item-prev.carousel-item-right {
+  transform: translateY(0);
+}
+.carousel.vertical .carousel-item-left.active,
+.carousel.vertical .carousel-item-right.active {
+  transform: translateY(-33.333%);
+}
+.carousel.vertical .carousel-item-left,
+.carousel.vertical .carousel-item-right {
+  transform: translateY(33.333%);
+}
+.testimonial{
+  padding: 0 3em;
 }
