@@ -14,45 +14,45 @@
 
             <!-- Article  -->
             {% for item in news_items %}
-            <article class="col-lg-6 mb-4 d-flex">
+            <article class="col-lg-4 mb-4 d-flex">
                 <div class="card card-shadow border-0 flex-fill">
-                    <!-- Row -->
+
+                    <!-- Card Header -->
+                    <div class="card-header">
+                        <p class="text-center m-0 p-0">
+                            <a href="{{ item.link }}" class="text-decoration-none text-white" target="_blank"
+                                rel="noopener noreferrer"><strong>{{ item.domain_name }}</strong></a>
+                        </p>
+                    </div>
+
                     <div class="row no-gutters h-100">
-                        <!-- Image Column -->
-                        <div class="col-md-5 pro-pic"
-                            style="">
-                            <div class="card-img-overlay">
-                                <ul class="list-inline position-relative text-center">
-                                    <li class="list-inline-item">
-                                        <a href="#" class="text-decoration-none d-block text-white px-1" target="_blank"
-                                            rel="noopener noreferrer" aria-label="NAME">
-                                            <i class="fa-solid fa-book fa-2x"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- Text Content Column -->
-                        <div class="col-md-7 bg-white d-flex flex-column">
+                        <!-- Card Body -->
+                        <div class="card-body col-md-12 bg-white d-flex flex-column">
                             <div class="p-4 flex-fill">
                                 <h6 class="mb-3 font-weight-medium">
-                                    <a href="{{ item.link }}" class="text-decoration-none" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
-                                </h6>                                
+                                    <a href="{{ item.link }}" class="text-decoration-none" target="_blank"
+                                        rel="noopener noreferrer">{{ item.title }}</a>
+                                </h6>
                                 <p class="">{{ item.summary }}</p>
                                 <p class="m-0 p-0"><small>{{ item.published }}</small></p>
                             </div>
-                            <!-- Links -->
-                            <div class="mt-auto p-4">
+                            <!-- Icons -->
+                            <div class="mt-auto">
                                 <ul class="list-unstyled d-flex justify-content-center align-items-center p-0 m-0">
                                     <li class="px-2">
-                                        <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-link"></i></a>
+                                        <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer"><i
+                                                class="fa-solid fa-link"></i></a>
                                     </li>
                                     <li class="px-2">
-                                        <a href="{{ item.base }}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-rss"></i></a>
+                                        <a href="{{ item.base }}" target="_blank" rel="noopener noreferrer"><i
+                                                class="fa-solid fa-rss"></i></a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-footer" id="iframe-preview">
+                        <p class="text-center m-0 p-0"><strong>Preview</strong></p>
                     </div>
                 </div>
             </article>

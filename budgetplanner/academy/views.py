@@ -5,6 +5,7 @@ import textwrap
 from .models import ArticleAcademy
 from django.core.paginator import Paginator
 from datetime import datetime
+from urllib.parse import urlparse
 
 # RSS
 
@@ -17,6 +18,15 @@ def rss_news(urls):
 
     for url in urls:
         # Parse URL
+        parsed_uri = urlparse(url)
+        domain = '{uri.netloc}'.format(
+            uri=parsed_uri).replace('www.', '').capitalize()
+
+        if domain.endswith('.com'):
+            domain = domain[:-4].capitalize()
+        else:
+            domain = domain.capitalize()
+
         feed = feedparser.parse(url)
         top = feed.entries[:4]
         image = ''
@@ -61,6 +71,7 @@ def rss_news(urls):
                 'base': news.title_detail.base,
                 'image': image,
                 'published': clean_date,
+                'domain_name': domain,
             }
             all_news.append(news_item)
 
