@@ -16,6 +16,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 
 from django.forms.widgets import SelectDateWidget
+
+
 @login_required
 def update_budget(request, budget_id, budget_type):
     BudgetModel = {
@@ -23,7 +25,6 @@ def update_budget(request, budget_id, budget_type):
         'monthly': MonthlyBudget,
         'yearly': YearlyBudget
     }.get(budget_type)
-
 
     budget = get_object_or_404(BudgetModel, id=budget_id, user=request.user)
 
@@ -37,7 +38,8 @@ def update_budget(request, budget_id, budget_type):
 
         if form.is_valid():
             form.save()
-            messages.success(request, f'{budget_type.capitalize()} budget updated successfully!')
+            messages.success(
+                request, f'{budget_type.capitalize()} budget updated successfully!')
             return redirect('manage_budgets')
     else:
         form = {
@@ -67,11 +69,14 @@ def manage_budgets(request):
                 # Check for overlapping budgets
                 if not WeeklyBudget.objects.filter(user=user, start_date=weekly_budget.start_date).exists():
                     weekly_budget.save()
-                    messages.success(request, 'Weekly budget created successfully!')
+                    messages.success(
+                        request, 'Weekly budget created successfully!')
                 else:
-                    messages.error(request, 'A weekly budget for this period already exists.')
+                    messages.error(
+                        request, 'A weekly budget for this period already exists.')
             else:
-                messages.error(request, 'Please correct the errors in the weekly budget form.')
+                messages.error(
+                    request, 'Please correct the errors in the weekly budget form.')
 
         # Handling delete request for Weekly Budget
         elif 'delete_weekly' in request.POST:
@@ -87,11 +92,14 @@ def manage_budgets(request):
                 monthly_budget.user = user
                 if not MonthlyBudget.objects.filter(user=user, start_date=monthly_budget.start_date).exists():
                     monthly_budget.save()
-                    messages.success(request, 'Monthly budget created successfully!')
+                    messages.success(
+                        request, 'Monthly budget created successfully!')
                 else:
-                    messages.error(request, 'A monthly budget for this period already exists.')
+                    messages.error(
+                        request, 'A monthly budget for this period already exists.')
             else:
-                messages.error(request, 'Please correct the errors in the monthly budget form.')
+                messages.error(
+                    request, 'Please correct the errors in the monthly budget form.')
 
         # Handling delete request for Monthly Budget
         elif 'delete_monthly' in request.POST:
@@ -107,11 +115,14 @@ def manage_budgets(request):
                 yearly_budget.user = user
                 if not YearlyBudget.objects.filter(user=user, start_date=yearly_budget.start_date).exists():
                     yearly_budget.save()
-                    messages.success(request, 'Yearly budget created successfully!')
+                    messages.success(
+                        request, 'Yearly budget created successfully!')
                 else:
-                    messages.error(request, 'A yearly budget for this period already exists.')
+                    messages.error(
+                        request, 'A yearly budget for this period already exists.')
             else:
-                messages.error(request, 'Please correct the errors in the yearly budget form.')
+                messages.error(
+                    request, 'Please correct the errors in the yearly budget form.')
 
         # Handling delete request for Yearly Budget
         elif 'delete_yearly' in request.POST:
@@ -136,21 +147,27 @@ def manage_budgets(request):
     }
     return render(request, 'transactions/manage_budgets.html', context)
 
+
 def calculate_start_date():
     # Calculate the start date (Thursday of the current week)
     current_date = now().date()
     start_date = current_date + timedelta((3 - current_date.weekday() + 7) % 7)
     return start_date
 
+
 def handle_budget_update_delete(request, budget_id, BudgetModel, budget_form, budget_type):
-    budget_instance = get_object_or_404(BudgetModel, id=budget_id, user=request.user)
+    budget_instance = get_object_or_404(
+        BudgetModel, id=budget_id, user=request.user)
     if 'update_' + budget_type in request.POST:
-        budget_form = budget_form.__class__(request.POST, instance=budget_instance)
+        budget_form = budget_form.__class__(
+            request.POST, instance=budget_instance)
         if budget_form.is_valid():
             budget_form.save()
-            messages.success(request, f'{budget_type.capitalize()} budget updated successfully!')
+            messages.success(
+                request, f'{budget_type.capitalize()} budget updated successfully!')
 
     return redirect('manage_budgets')
+
 
 @login_required
 def income_view(request):
