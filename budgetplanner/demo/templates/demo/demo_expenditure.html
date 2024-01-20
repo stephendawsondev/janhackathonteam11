@@ -2,9 +2,9 @@
 {% block content %}
 <div class="card-body">
     {% if messages %}
-        {% for message in messages %}
-            <div>{{ message }}</div>
-        {% endfor %}
+    {% for message in messages %}
+    <div>{{ message }}</div>
+    {% endfor %}
     {% endif %}
 
     <form method="post" action="{% url 'expenditure' %}">
@@ -24,33 +24,33 @@
 
     <h2>Daily Totals This Week</h2>
     {% for day_total in daily_totals %}
-        <p>{{ day_total.day }}: {{ day_total.total|default:"0.00" }}</p>
+    <p>{{ day_total.day }}: {{ day_total.total|default:"0.00" }}</p>
     {% endfor %}
 
     <h2>Recent Expenses</h2>
     {% if expenses %}
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Typical Expense</th>
-            </tr>
-            {% for expense in expenses %}
-            <tr>
-                <td>{{ expense.date }}</td>
-                <td>{{ expense.amount }}</td>
-                <td>{{ expense.description }}</td>
-                <td>{{ expense.typical_expense }}</td>
-                <td>
-                    <a href="{% url 'update_expense' expense.id %}">Update</a>
-                    <a href="{% url 'delete_expense' expense.id %}">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Typical Expense</th>
+        </tr>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.date }}</td>
+            <td>{{ expense.amount }}</td>
+            <td>{{ expense.description }}</td>
+            <td>{{ expense.category }}</td>
+            <td>
+                <a href="{% url 'update_expense' expense.id %}">Update</a>
+                <a href="{% url 'delete_expense' expense.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
     {% else %}
-        <p>No expenses recorded.</p>
+    <p>No expenses recorded.</p>
     {% endif %}
 </div>
 

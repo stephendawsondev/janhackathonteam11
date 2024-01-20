@@ -7,56 +7,24 @@ from django.utils.timezone import now
 from decimal import Decimal
 
 
-class typicalExpense(models.Model):
+class ExpenseCategory(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
-# Function to create typical expenses
+    class Meta:
+        verbose_name_plural = 'Expense Categories'
 
 
-def create_typical_expenses():
-    typicalExpense.objects.create(name='Rent')
-    typicalExpense.objects.create(name='Car Insurance')
-    typicalExpense.objects.create(name='Groceries')
-    typicalExpense.objects.create(name='Utilities')
-    typicalExpense.objects.create(name='Health Insurance')
-    typicalExpense.objects.create(name='Internet Bill')
-    TypicalExpense.objects.create(name='Dining Out')
-    TypicalExpense.objects.create(name='Electricity Bill')
-    TypicalExpense.objects.create(name='Gas Bill')
-    TypicalExpense.objects.create(name='Water Bill')
-    TypicalExpense.objects.create(name='Phone Bill')
-    TypicalExpense.objects.create(name='Transportation')
-    TypicalExpense.objects.create(name='Clothing')
-    TypicalExpense.objects.create(name='Entertainment')
-    TypicalExpense.objects.create(name='Gym Membership')
-    TypicalExpense.objects.create(name='Childcare')
-    TypicalExpense.objects.create(name='Education')
-    TypicalExpense.objects.create(name='Healthcare')
-    TypicalExpense.objects.create(name='Home Repairs')
-    TypicalExpense.objects.create(name='Travel')
-    TypicalExpense.objects.create(name='Gifts')
-    TypicalExpense.objects.create(name='Pet Expenses')
-    TypicalExpense.objects.create(name='Charity Donations')
-    TypicalExpense.objects.create(name='Hobbies')
-    TypicalExpense.objects.create(name='Taxes')
-    TypicalExpense.objects.create(name='Insurance Premiums')
-    TypicalExpense.objects.create(name='Subscription Services')
-    TypicalExpense.objects.create(name='Home Maintenance')
-
-
-class typicalIncome(models.Model):
+class IncomeCategory(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
-
-def create_typical_incomes():
-    TypicalIncome.objects.create(name='Salary')
-    TypicalIncome.objects.create(name='Bonus')
+    class Meta:
+        verbose_name_plural = 'Income Categories'
 
 
 class Income(models.Model):
@@ -64,13 +32,11 @@ class Income(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     source = models.CharField(max_length=100)
     date = models.DateField()
-    typical_income = models.ForeignKey(
-        'transactions.TypicalIncome', on_delete=models.SET_NULL, null=True, blank=True
-    )
+    category = models.ForeignKey(
+        IncomeCategory, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"{self.user.username}'s income from {self.source} on {self.date}"
-
 
 
 class Budget(models.Model):
@@ -86,6 +52,7 @@ class Budget(models.Model):
     def __str__(self):
         return f"{self.user.username}'s budget from {self.start_date}"
 
+
 class WeeklyBudget(Budget):
     def save(self, *args, **kwargs):
         self.end_date = self.start_date + timedelta(days=6)
@@ -93,7 +60,7 @@ class WeeklyBudget(Budget):
 
     def __str__(self):
         return super().__str__() + f" to {self.end_date}"
-   
+
 
 class MonthlyBudget(Budget):
     def save(self, *args, **kwargs):
@@ -102,6 +69,7 @@ class MonthlyBudget(Budget):
 
     def __str__(self):
         return super().__str__() + f" to {self.end_date}"
+
 
 class YearlyBudget(Budget):
     def save(self, *args, **kwargs):
@@ -117,11 +85,12 @@ class Expense(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=50)
     date = models.DateField()
-    typical_expense = models.ForeignKey(
-        typicalExpense, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(
+        ExpenseCategory, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"{self.user.username}'s expense on {self.date}"
+
 
 def get_income_totals(user):
     today = datetime.today()
