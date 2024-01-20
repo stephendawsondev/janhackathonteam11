@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'support',  # Support features
     'home',
     'demo',
+    'academy',
 
     # Third party apps
     'crispy_forms',
