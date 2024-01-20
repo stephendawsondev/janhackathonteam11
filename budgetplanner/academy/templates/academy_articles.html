@@ -11,7 +11,8 @@
             </div>
         </div>
         <div class="row">
-            <!-- column  -->
+
+            <!-- Article  -->
             {% for item in news_items %}
             <article class="col-lg-6">
                 <div class="card card-shadow border-0 mb-4">
@@ -21,22 +22,21 @@
                             style="background:url(https://images.unsplash.com/photo-1601814933824-fd0b574dd592?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmFieSUyMHlvZGF8ZW58MHx8MHx8fDA%3D) no-repeat center center / cover">
                             <div class="card-img-overlay">
                                 <ul class="list-inline position-relative text-center">
-                                    <li class="list-inline-item"><a href="https://github.com/stephendawsondev"
-                                            class="text-decoration-none d-block text-white px-1" target="_blank"
-                                            rel="noopener noreferrer" aria-label="Github"><i
-                                                class="fa-brands fa-github fa-2x"></i></a></li>
-                                    <li class="list-inline-item"><a href="https://www.linkedin.com/in/sdstephendawson/"
-                                            class="text-decoration-none d-block text-white px-1" target="_blank"
-                                            rel="noopener noreferrer" aria-label="Linkedin"><i
-                                                class="fa-brands fa-linkedin fa-2x"></i></a></li>
+                                    <li class="list-inline-item">
+                                        <a href="#" class="text-decoration-none d-block text-white px-1" target="_blank"
+                                            rel="noopener noreferrer" aria-label="NAME">
+                                            <i class="fa-solid fa-book fa-2x">
+                                            </i>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
+                            <i class="fa-solid fa-book"></i>
                         </div>
                         <div class="col-md-7 bg-white">
                             <div class="p-4">
-                                <h6 class="mb-3 font-weight-medium">Stephen Dawson</h6>
-                                <p>You can relay on our amazing features list and also our customer services will be
-                                    great experience.
+                                <h6 class="mb-3 font-weight-medium">Title</h6>
+                                <p>Excerpt
                                 </p>
                             </div>
                         </div>
@@ -47,41 +47,44 @@
         </div>
 
         <!-- Pagination -->
-        <section>
-
+        <section class="mt-5">
             <!-- NEXT -->
             {% if page_obj.has_next %}
-            <ul class="pagination justify-content-center">
-                <li><a href="?page={{ page_obj.next_page_number }}" class="page-link m"> NEXT &raquo;</a></li>
-            </ul>
+            <div class="d-flex justify-content-center align-items-center">
 
-            <div class="current text-center">
-                <p> {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                </p>
+                <ul class="pagination">
+                    <li><a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-primary">NEXT</a></li>
+                </ul>
+
+                <div class="current text-center mx-3">
+                    <p>{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+                </div>
+
+                <ul class="pagination">
+                    <li><a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">LAST</a></li>
+                </ul>
             </div>
-
-            <ul class="pagination justify-content-center">
-                <li><a href="?page={{ page_obj.paginator.num_pages }}" class="page-link"> LAST &raquo;</a></li>
-            </ul>
 
             {% endif %}
 
             <!-- PREVIOUS -->
             {% if page_obj.has_previous %}
+            <div class="d-flex justify-content-center align-items-center">
 
-            <ul class="pagination justify-content-center">
-                <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV </a></li>
-            </ul>
+                <ul class="pagination">
+                    <li><a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary">PREV</a>
+                    </li>
+                </ul>
 
-            <div class="current text-center">
-                {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                <div class="current text-center mx-3">
+                    <p>{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</p>
+                </div>
+
+                <ul class="pagination">
+                    <li><a href="?page=1" class="btn btn-primary">FIRST</a></li>
+                </ul>
             </div>
-            
-            <ul class="pagination justify-content-center">
-                <li><a href="?page=1" class="page-link">&laquo; FIRST</a></li>
-            </ul>
             {% endif %}
-
         </section>
 
     </div>
