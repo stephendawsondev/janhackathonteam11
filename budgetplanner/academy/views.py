@@ -1,6 +1,6 @@
 from django.shortcuts import render
 import feedparser
-import textwra
+import textwrap
 # RSS
 
 
@@ -35,14 +35,4 @@ def rss_news(self, url):
 
 def academy_articles_view(request):
 
-    sources = 
-
-    context = [
-        'origin' = origin,
-        'description' = description,
-        'url' = url,
-        'title' = title,
-        'content' = content,
-        'image_url' = image_url,
-    ]
-    return render(request, 'academy_articles.html', context)
+    return render(request, 'academy_articles.html',)
