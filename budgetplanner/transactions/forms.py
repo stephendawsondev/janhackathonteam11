@@ -85,7 +85,7 @@ class IncomeForm(forms.ModelForm):
 class WeeklyBudgetForm(forms.ModelForm):
     class Meta:
         model = WeeklyBudget
-        fields = ['amount', 'start_date']
+        fields = ['amount', 'start_date', 'description'] 
         widgets = {
             'start_date': SelectDateWidget()
         }
@@ -102,7 +102,7 @@ class WeeklyBudgetForm(forms.ModelForm):
 class MonthlyBudgetForm(forms.ModelForm):
     class Meta:
         model = MonthlyBudget
-        fields = ['amount', 'start_date']
+        fields = ['amount', 'start_date', 'description'] 
         widgets = {
             'start_date': SelectDateWidget()
         }
@@ -119,7 +119,7 @@ class MonthlyBudgetForm(forms.ModelForm):
 class YearlyBudgetForm(forms.ModelForm):
     class Meta:
         model = YearlyBudget
-        fields = ['amount', 'start_date']
+        fields = ['amount', 'start_date', 'description'] 
         widgets = {
             'start_date': SelectDateWidget(years=range(now().year-10, now().year+10))
         }
