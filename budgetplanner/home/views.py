@@ -16,16 +16,12 @@ def demo_dashboard_view(request):
 
     # Income totals
     weekly_income_total = random.randint(1, 100)
-
     monthly_income_total = random.randint(100, 1000)
-
     yearly_income_total = random.randint(1000, 10000)
 
     # Expenditure totals
     weekly_expenditure_total = random.randint(1, 50)
-
     monthly_expenditure_total = random.randint(50, 500)
-
     yearly_expenditure_total = random.randint(500, 5000)
 
     messages.info(
@@ -46,10 +42,10 @@ def demo_income_view(request):
     date = datetime.today()
     source = 'Salary'
     amount = random.randint(1000, 2000)
-    monthly_income_total = random.randint(1000, 2000)
+    monthly_income_total = amount
     yearly_income_total = random.randint(10000, 24000)
     incomes = random.randint(1, 100)
-    
+
     context = {
         'date': date,
         'source': source,
