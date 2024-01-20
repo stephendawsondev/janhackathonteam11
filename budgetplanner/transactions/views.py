@@ -14,7 +14,7 @@ from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-
+from django.db.models import Min
 from django.forms.widgets import SelectDateWidget
 
 
@@ -298,10 +298,91 @@ def delete_expense(request, expense_id):
     return render(request, 'transactions/delete_expense.html', {'expense': expense})
 
 
-def reports_view(request):
-    return render(request, 'transactions/reports.html')
 
-# Create your views here.
+@login_required
+def reports_view(request):
+    user = request.user
+    today = datetime.today().date()  # Ensure today is a date object
+
+    budget_data = []
+    for budget_model in [WeeklyBudget, MonthlyBudget, YearlyBudget]:
+        budgets = budget_model.objects.filter(user=user)
+
+        for budget in budgets:
+            elapsed_days, total_days, progress_percentage = calculate_budget_progress(budget, today)
+            income_total = get_period_total(budget, Income)
+            expense_total = get_period_total(budget, Expense)
+            surplus_deficit = income_total - expense_total
+            budget_health, budget_comment = calculate_budget_health(budget, elapsed_days, total_days, income_total, expense_total)
+
+            budget_data.append({
+                'type': budget_model.__name__.replace('Budget', ''),
+                'amount': budget.amount,
+                'start_date': budget.start_date,
+                'end_date': budget.end_date,
+                'progress': progress_percentage,
+                'health': budget_health,
+                'comment': budget_comment,
+                'income_total': income_total,
+                'expense_total': expense_total,
+                'surplus_deficit': surplus_deficit,
+            })
+
+    context = {
+        'budget_data': budget_data,
+    }
+
+    return render(request, 'transactions/reports.html', context)
+
+# Helper functions below
+
+def calculate_budget_progress(budget, today_date):
+    start_date = budget.start_date
+    end_date = budget.end_date or today_date
+    total_days = (end_date - start_date).days
+    elapsed_days = (today_date - start_date).days if today_date >= start_date else 0
+    progress_percentage = min((elapsed_days / total_days * 100), 100) if total_days > 0 else 0
+    return elapsed_days, total_days, progress_percentage
+def calculate_budget_health(budget, elapsed_days, total_days, income_for_period, expense_for_period):
+    budget_amount = budget.amount or Decimal('0.00')
+    progress_percentage = calculate_budget_progress(budget, datetime.today().date())[2]
+
+    if income_for_period == Decimal('0.00'):
+        budget_health = 'bad'
+        budget_comment = 'Income not updated'
+    elif progress_percentage >= 100:
+        if expense_for_period <= budget_amount:
+            budget_health = 'completed-success'
+            budget_comment = 'Budget period completed successfully'
+        else:
+            budget_health = 'completed-failure'
+            budget_comment = 'Budget period completed, over budget'
+    elif expense_for_period <= budget_amount:
+        budget_health = 'good'
+        budget_comment = 'On track'
+    else:
+        budget_health = 'poor'
+        budget_comment = 'Over budget'
+
+    return budget_health, budget_comment
+def get_period_total(budget, model):
+    """
+    Calculate the total amount of a given model (Income or Expense) for the budget's period.
+    """
+    if model not in [Income, Expense]:
+        raise ValueError("Model must be either Income or Expense")
+
+    # Check if the budget has an end date, use today's date if not.
+    end_date = budget.end_date if budget.end_date else datetime.today().date()
+
+    # Aggregate the total amount for the specified period.
+    total = model.objects.filter(
+        user=budget.user, 
+        date__gte=budget.start_date, 
+        date__lte=end_date
+    ).aggregate(total_amount=Sum('amount'))['total_amount']
+
+    return total if total else Decimal('0.00')
 
 
 @login_required
