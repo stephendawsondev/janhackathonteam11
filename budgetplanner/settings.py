@@ -1,20 +1,11 @@
 import os
 from pathlib import Path
+import dj_database_url
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-import dj_database_url
 if os.path.isfile('env.py'):
     import env
-
-# Initialize Cloudinary
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET')
-)
-
-X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +18,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 DEBUG_MODE = os.environ.get('DEBUG_MODE', 'False').lower() == 'true'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = DEBUG_MODE
 
 if DEBUG:
     ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
