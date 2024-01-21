@@ -1,90 +1,125 @@
+<!-- dashboard.html -->
 {% extends 'dashboard-base/base.html' %}
+
 {% block content %}
-<section class="position-relative">
-    <div class="container section-content mt-5">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="page-title">Income</h1>
-            <button class="btn btn-primary" id="add-income-button">Add income</button>
-        </div>
-        <div class="content-container row position-relative">
-            <div class="income-cards col col-12 col-lg-4">
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h2 class="card-title">Monthly Income Total</h2>
-                    </div>
-                    <div class="card-body">
-                        <p class="cart-text lead">This month's total income: {{ monthly_income_total }}</p>
-                    </div>
-                </div>
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h2 class="card-title">Yearly Income Total</h2>
-                    </div>
-                    <div class="card-body">
-                        <p class="cart-text lead">This year's total income: {{ yearly_income_total }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="recent-incomes-table col col-lg-8 mt-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Recent Incomes</h2>
-                    </div>
-                    <div class="card-body overflow-auto">
-                        {% if incomes %}
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Source</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for income in incomes %}
-                                <tr>
-                                    <th scope="row">{{ income.date }}</th>
-                                    <td>{{ income.amount }}</td>
-                                    <td>{{ income.source }}</td>
-                                    <td>
-                                        <a class="link link-success"
-                                            href="{% url 'update_income' income.id %}">Update</a>
-                                        <a class="link link-success"
-                                            href="{% url 'delete_income' income.id %}">Delete</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% else %}
-                        <p class='lead'>No incomes recorded.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+<header class="container text-center">
+    <div class="user-section">
+        {% if not user.is_authenticated %}
+        <p class="lead">Please log in to view this page.</p>
+        {% endif %}
     </div>
-    <dialog id="add-income-form" class="form-dialog p-4">
-        <h3 class="card-title mb-2">Add income</h3>
-        <button id="add-income-close-button" class="btn btn-danger close-button">X</button>
-        <form method="post" action="{% url 'income' %}">
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="form-group mt-3">
-                {{ field|as_crispy_field }}
-            </div>
-            {% endfor %}
-            <div class="row mt-3 justify-content-end">
-                <div class="col col-12 col-lg-3"><button type="submit" class="btn btn-primary w-100">Record
-                        Income</button>
-                </div>
-            </div>
+</header>
+<div class="container mt-5">
+    <article class="row d-flex align-items-center justify-content-center">
 
-        </form>
-    </dialog>
-</section>
+        <!-- INCOMES -->
+        <div class="col-lg-4 col-md-12 mb-5 col-sm-12">
+            <div class="card shadow h-100">
+                <!-- Card Header -->
+                <header>
+                    <h2 class="card-header text-center">INCOME</h2>
+                </header>
 
+                <!-- Card Thumbnail -->
+                <a href="" class="row bg-thumbnail d-block">
+                    <div class="col-12 bg-thumbnail-image"
+                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                    </div>
+                </a>
+                <!-- Card Body -->
+                <!-- Weekly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Weekly</h4>
+                                    <h4 class="p-0 m-0">${{ weekly_income_total }}</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Monthly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Monthly</h4>
+                                    <h4 class="p-0 m-0">${{ monthly_income_total }}</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Yearly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Yearly</h4>
+                                    <h4 class="p-0 m-0">${{ yearly_income_total }}</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Income Records -->
+                {% for income in incomes %}
+                <section class="card-body pt-1 px-2 pb-1">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="data-row">
+                                <p>{{ income.source }}<span>{{ income.date }}</span></p>
+                                <p class="badge-money border bg-success text-white">+${{ income.amount }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% endfor %}
+
+                <!-- Card Footer -->
+                <footer id="add-income-button">
+                    <p class="card-footer text-center fs-5 btn w-100 m-0">
+                        ADD
+                    </p>
+                </footer>
+            </div>
+        </div>
+    </article>
+</div>
+
+<!-- Model -->
+<dialog id="add-income-form" class="form-dialog p-4">
+    <h3 class="card-title mb-2">Add income</h3>
+    <button id="add-income-close-button" class="btn btn-danger close-button">X</button>
+    <form method="post" action="{% url 'income' %}">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group mt-3">
+            {{ field|as_crispy_field }}
+        </div>
+        {% endfor %}
+        <div class="row mt-3 justify-content-end">
+            <div class="col col-12 col-lg-3"><button type="submit" class="btn btn-primary w-100">Record
+                    Income</button>
+            </div>
+        </div>
+
+    </form>
+</dialog>
+
+<!-- Custom JavaScript-->
+{% block postloadjs %}
 <script>
     const addIncomeForm = document.getElementById('add-income-form');
     const addIncomeButton = document.getElementById('add-income-button');
@@ -98,4 +133,6 @@
         addIncomeForm.close();
     });
 </script>
+{% endblock postloadjs %}
+
 {% endblock %}
