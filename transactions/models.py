@@ -5,6 +5,51 @@ from django.db.models import Sum
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from decimal import Decimal
+from datetime import date
+#Premuim Features 
+
+
+class DebtDetail(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    debt_name = models.CharField(max_length=100)  # Changed from category to debt_name
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Annual percentage rate
+    interest_type = models.CharField(max_length=10, choices=(('monthly', 'Monthly'), ('yearly', 'Yearly')))
+    last_updated = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s debt: {self.debt_name}"
+
+    def calculate_interest(self, current_date=date.today()):
+        # Calculate the number of periods (months or years) since last update
+        if self.interest_type == 'monthly':
+            periods = (current_date.year - self.last_updated.year) * 12 + current_date.month - self.last_updated.month
+            monthly_rate = Decimal(self.interest_rate) / Decimal(100) / Decimal(12)  # Convert annual rate to monthly
+            return self.amount * (1 + monthly_rate) ** periods
+        else:
+            years = current_date.year - self.last_updated.year
+            annual_rate = Decimal(self.interest_rate) / Decimal(100)
+            return self.amount * (1 + annual_rate) ** years
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class ExpenseCategory(models.Model):
