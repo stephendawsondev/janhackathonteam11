@@ -66,8 +66,6 @@ main{
   list-style-type: none;
   display: flex;
   justify-content: space-between;
-  
-
 }
 
 .data-row  span {
@@ -106,6 +104,7 @@ main{
   background-color: transparent;
   border: 1px solid #696E79;
 }
+
 /* Cards */
 
 .cta-card {
@@ -341,6 +340,8 @@ main{
   color: white;
   transition: 0.3s;
 }
+
+
 
 /* Template Base */
 i {
