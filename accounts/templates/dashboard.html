@@ -180,9 +180,9 @@
                             <div class="p-1">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="p-0 m-0">Weekly</h4>
+                                    <span class="p-0 m-0"><small>{{ latest_weekly_budget.start_date }}</small></span>
                                     <h5 class="p-0 m-0">{{ latest_weekly_budget.amount }}</h5>
                                 </div>
-                                <p class="p-0 m-0">{{ latest_weekly_budget.start_date }}</p>
                             </div>
                         </div>
                     </div>
@@ -197,15 +197,14 @@
                             <div class="p-1">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="p-0 m-0">Monthly</h4>
+                                    <span class="p-0 m-0"><small>{{ latest_monthly_budget.start_date }}</small></span>
                                     <h5 class="p-0 m-0">{{ latest_monthly_budget.amount }}</h5>
                                 </div>
-                                <p class="p-0 m-0">{{ latest_monthly_budget.start_date }}</p>
                             </div>
                         </div>
                     </div>
                 </section>
                 {% endif %}
-
 
                 <!-- Yearly -->
                 {% if latest_yearly_budget %}
@@ -215,9 +214,9 @@
                             <div class="p-1">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="p-0 m-0">Yearly</h4>
+                                    <span class="p-0 m-0"><small>{{ latest_yearly_budget.start_date }}</small></span>
                                     <h5 class="p-0 m-0">{{ latest_yearly_budget.amount }}</h5>
                                 </div>
-                                <p class="p-0 m-0">{{ latest_yearly_budget.start_date }}</p>
                             </div>
                         </div>
                     </div>
