@@ -4,29 +4,8 @@ import dj_database_url
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-
-from dotenv import load_dotenv
-load_dotenv()
-
 if os.path.isfile('env.py'):
     import env
-# Just before the Cloudinary configuration
-print("Cloudinary Config:")
-print("CLOUDINARY_CLOUD_NAME:", os.getenv('CLOUDINARY_CLOUD_NAME'))
-print("CLOUDINARY_API_KEY:", os.getenv('CLOUDINARY_API_KEY'))
-print("CLOUDINARY_API_SECRET:", os.getenv('CLOUDINARY_API_SECRET'))
-
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET')
-)
-# Initialize Cloudinary
-cloudinary.config(
-    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.getenv('CLOUDINARY_API_KEY'),
-    api_secret=os.getenv('CLOUDINARY_API_SECRET')
-)
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -36,15 +15,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
+DEBUG_MODE = os.environ.get('DEBUG_MODE', 'False').lower() == 'true'
+DEBUG = DEBUG_MODE
 
-
-ALLOWED_HOSTS = [
-    '8000-jesseross00-janhackatho-bmuqgk59xea.ws-eu107.gitpod.io',
-    'budgetbuddy1-b77fae5525b5.herokuapp.com',
-    os.environ.get('GITPOD_WORKSPACE_URL'),
-    os.environ.get('HEROKU_HOSTNAME'),
-]
+if DEBUG:
+    ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
+else:
+    ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME'),]
 
 # Application definition
 INSTALLED_APPS = [
