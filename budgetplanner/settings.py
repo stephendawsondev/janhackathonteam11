@@ -6,7 +6,10 @@ import cloudinary.uploader
 import cloudinary.api
 
 from dotenv import load_dotenv
-load_dotenv() 
+load_dotenv()
+
+if os.path.isfile('env.py'):
+    import env
 # Just before the Cloudinary configuration
 print("Cloudinary Config:")
 print("CLOUDINARY_CLOUD_NAME:", os.getenv('CLOUDINARY_CLOUD_NAME'))
@@ -37,7 +40,7 @@ DEBUG = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
 
 
 ALLOWED_HOSTS = [
-    '8000-jesseross00-janhackatho-bmuqgk59xea.ws-eu107.gitpod.io', 
+    '8000-jesseross00-janhackatho-bmuqgk59xea.ws-eu107.gitpod.io',
     'budgetbuddy1-b77fae5525b5.herokuapp.com',
     os.environ.get('GITPOD_WORKSPACE_URL'),
     os.environ.get('HEROKU_HOSTNAME'),
@@ -78,6 +81,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'budgetplanner.urls'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 TEMPLATES = [
     {
