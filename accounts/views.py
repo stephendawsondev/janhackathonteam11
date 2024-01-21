@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from .forms import UserRegistrationForm
@@ -10,9 +9,7 @@ from transactions.models import Income, Expense, WeeklyBudget, MonthlyBudget, Ye
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
-from transactions.models import get_income_totals, get_expense_totals
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
 # Custom Register
@@ -152,3 +149,31 @@ def dashboard_view(request):
     }
 
     return render(request, 'dashboard.html', context)
+
+
+@login_required
+def manage_settings_view(request):
+    return render(request, 'manage_settings.html')
+
+
+@login_required
+def update_user_view(request):
+    form = UserRegistrationForm(instance=request.user)
+    if request.method == 'POST':
+        user = request.user
+        user.username = request.POST['username']
+        user.email = request.POST['email']
+        user.save()
+        messages.success(
+            request, 'You have successfully updated your profile!')
+        return redirect(reverse('manage_settings'))
+
+    return render(request, 'update_user.html', {'form': form})
+
+
+def delete_user(request):
+    user = request.user
+    user.delete()
+    messages.success(
+        request, 'You have successfully deleted your account!')
+    return redirect(reverse('home'))
