@@ -15,3 +15,7 @@ def about_view(request):
 
 def team_view(request):
     return render(request, 'support/team.html')
+
+
+def privacy_policy_view(request):
+    return render(request, 'support/privacy_policy.html')

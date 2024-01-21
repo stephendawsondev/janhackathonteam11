@@ -304,7 +304,6 @@ def reports_view(request):
     today = datetime.today().date()  # Ensure today is a date object
 
     budget_data = []
-    print(MonthlyBudget.objects.filter(user=user))
     for budget_model in [WeeklyBudget, MonthlyBudget, YearlyBudget]:
         budgets = budget_model.objects.filter(user=user)
 
