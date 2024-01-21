@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
-from django.db.models import Sum, F
+from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import ExpenseForm, IncomeForm
 from .models import Expense, Income
 from datetime import datetime, timedelta
-from datetime import date
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import WeeklyBudget, MonthlyBudget, YearlyBudget
@@ -13,8 +12,6 @@ from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-from django.db.models import Min
-from django.forms.widgets import SelectDateWidget
 
 
 @login_required
