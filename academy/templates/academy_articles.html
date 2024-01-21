@@ -15,7 +15,7 @@
             <!-- Article  -->
             {% for item in news_items %}
             <article class="col-lg-4 mb-4 d-flex">
-                <div class="card card-shadow border-0 flex-fill">
+                <div class="card card-shadow border flex-fill">
 
                     <!-- Card Header -->
                     <div class="card-header">
@@ -33,7 +33,7 @@
                                     <a href="{{ item.link }}" class="text-decoration-none" target="_blank"
                                         rel="noopener noreferrer">{{ item.title }}</a>
                                 </h6>
-                                <p class="">{{ item.summary }}</p>
+                                <p class="">{{ item.summary }} <a href="{{ item.link }}">Read More</a></p>
                                 <p class="m-0 p-0"><small>{{ item.published }}</small></p>
                             </div>
                             <!-- Icons -->
