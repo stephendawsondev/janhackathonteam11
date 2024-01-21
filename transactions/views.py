@@ -215,6 +215,7 @@ def handle_budget_update_delete(request, budget_id, BudgetModel, budget_form, bu
     return redirect('manage_budgets')
 
 
+
 @login_required
 def income_view(request):
     if request.method == 'POST':
@@ -230,28 +231,33 @@ def income_view(request):
     else:
         form = IncomeForm()
 
-    # Calculate totals similarly as we did for expenses
     today = datetime.today()
+    start_of_week = today - timedelta(days=today.weekday())
     start_of_month = today.replace(day=1)
     start_of_year = today.replace(month=1, day=1)
+
+    weekly_income_total = Income.objects.filter(
+        user=request.user,
+        date__gte=start_of_week
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     monthly_income_total = Income.objects.filter(
         user=request.user,
         date__gte=start_of_month
-    ).aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     yearly_income_total = Income.objects.filter(
         user=request.user,
         date__gte=start_of_year
-    ).aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     incomes = Income.objects.filter(user=request.user).order_by('-date')
-    datewise_totals = incomes.values('date').annotate(
-        total=Sum('amount')).order_by('-date')
+    datewise_totals = incomes.values('date').annotate(total=Sum('amount')).order_by('-date')
 
     context = {
         'form': form,
         'incomes': incomes,
+        'weekly_income_total': weekly_income_total,
         'monthly_income_total': monthly_income_total,
         'yearly_income_total': yearly_income_total,
     }

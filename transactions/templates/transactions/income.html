@@ -2,6 +2,117 @@
 {% extends 'dashboard-base/base.html' %}
 
 {% block content %}
+<style>
+/* Keyframe animations for attention-grabbing effects */
+
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+    70% {
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+/* Triggering animations in sequence */
+.bar.animate {
+    animation: 
+        slideUp 1s ease-out forwards, /* Slide-up effect */
+        popIn 1s ease-out 1s forwards, /* Pop-in effect */
+        pulse 2s infinite 2s; /* Pulse effect */
+}
+
+/* Style for the graph container */
+.graph-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    height: 400px;
+    margin: 20px auto;
+    background: none;
+    overflow: hidden;
+}
+
+/* Style for the bars */
+.bar {
+    width: 10%;
+    background: linear-gradient(to top, #2980b9, #6dd5fa);
+    margin: 0 2%;
+    border-radius: 5px;
+    transform-origin: bottom;
+    animation: popIn 1s ease-out forwards, pulse 1.5s infinite 2s;
+    max-height: 90%;
+}
+
+/* Style for the labels and values */
+.bar-label {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    font-size: 0.8em;
+    color: #333;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.bar-value {
+    display: block;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    font-size: 1.2em;
+    top:15px;
+    z-index: 2;
+}
+
+/* 3D effect with shadows */
+.bar:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -5px;
+    right: 0px;
+    bottom: 0;
+    z-index: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .graph-container {
+        height: 300px; /* Adjust height for smaller devices */
+    }
+    .bar {
+        width: 20%; /* Adjust bar width for smaller devices */
+    }
+    .bar-label,
+    .bar-value {
+        font-size: 0.9em; /* Adjust font size for smaller devices */
+    }
+}
+</style>
 <header class="container text-center">
     <div class="user-section">
         {% if not user.is_authenticated %}
@@ -13,7 +124,7 @@
     <article class="row d-flex align-items-center justify-content-center">
 
         <!-- INCOMES -->
-        <div class="col-lg-4 col-md-12 mb-5 col-sm-12">
+        <div class="col-lg-5 col-md-6 mb-5 col-sm-12">
             <div class="card shadow h-100">
                 <!-- Card Header -->
                 <header>
@@ -21,11 +132,11 @@
                 </header>
 
                 <!-- Card Thumbnail -->
-                <a href="" class="row bg-thumbnail d-block">
-                    <div class="col-12 bg-thumbnail-image"
-                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                <div class="card-body p-0 mt-2">
+                    <div class="graph-container" id="incomeGraph">
+                        <!-- Bars will be inserted here by JavaScript -->
                     </div>
-                </a>
+                </div>
                 <!-- Card Body -->
                 <!-- Weekly -->
                 <section class="card-body pt-1 px-2 pb-1 border">
@@ -80,7 +191,12 @@
                         <div class="col-12 d-inline-block">
                             <div class="data-row">
                                 <p>{{ income.source }}<span>{{ income.date }}</span></p>
+                                <div class="mt-2">
+                                    <a href="{% url 'update_income' income_id=income.id %}" class="btn btn-warning btn-sm">Update</a>
+                                    <a href="{% url 'delete_income' income_id=income.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                </div>
                                 <p class="badge-money border bg-success text-white">+${{ income.amount }}</p>
+
                             </div>
                         </div>
                     </div>
@@ -136,6 +252,39 @@
 
 <!-- Custom JavaScript-->
 {% block postloadjs %}
+<script>
+// Values from Django context
+const weeklyIncome = {{ weekly_income_total }};
+const monthlyIncome = {{ monthly_income_total }};
+const yearlyIncome = {{ yearly_income_total }};
+const maxIncome = Math.max(weeklyIncome, monthlyIncome / 4, yearlyIncome / 52);
+
+// Function to create a bar for the graph
+// Function to create and animate a bar for the graph
+function createBar(value, label, index) {
+    const graphContainer = document.getElementById('incomeGraph');
+    const bar = document.createElement('div');
+    const normalizedValue = label === 'Weekly' ? value : label === 'Monthly' ? value / 4 : value / 52;
+    bar.className = 'bar';
+    bar.style.height = `${(normalizedValue / maxIncome) * 100}%`;
+    // Adding label and value
+    bar.innerHTML = `
+        <span class="bar-label">${label}</span>
+        <span class="bar-value">$${value.toFixed(2)}</span>
+    `;
+    graphContainer.appendChild(bar);
+
+    // Delay the start of the animation based on the index of the bar
+    setTimeout(() => {
+        bar.classList.add('animate');
+    }, index * 500); // Delay each bar's animation by 0.5 seconds incrementally
+}
+
+// Create and animate bars for weekly, monthly, yearly
+createBar(weeklyIncome, 'Weekly', 0);
+createBar(monthlyIncome, 'Monthly', 1);
+createBar(yearlyIncome, 'Yearly', 2);
+    </script>
 <script>
     const addIncomeForm = document.getElementById('add-income-form');
     const addIncomeButton = document.getElementById('add-income-button');
