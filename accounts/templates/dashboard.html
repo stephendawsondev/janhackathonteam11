@@ -2,7 +2,7 @@
 {% extends 'dashboard-base/base.html' %}
 
 {% block content %}
-<header class="container pt-5 my-5 text-center">
+<header class="container my-5 text-center">
     <div class="user-section mb-4">
         {% if user.is_authenticated %}
         <h1 class="display-4">Welcome, {{ user.username }}!</h1>
@@ -11,9 +11,8 @@
         {% endif %}
     </div>
 </header>
-<div class="container mt-4">
+<div class="container">
     <article class="row">
-        <h1 class="fairplay-font text-center mb-5">Demo</h1>
 
         <!-- INCOMES -->
         <div class="col-lg-4 col-md-12 mb-5 col-sm-12">
