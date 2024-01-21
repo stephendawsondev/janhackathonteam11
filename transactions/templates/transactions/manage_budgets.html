@@ -192,19 +192,22 @@
                                     <td>${{ budget.amount }}</td>
                                     <td>{{ budget.description }}</td>
                                     <td>
-                                        <form method="post" action="{% url 'update_budget' budget.id 'weekly' %}"
-                                            class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" name="update_weekly"
-                                                class="btn btn-warning btn-sm mx-1">Update</button>
-                                        </form>
-                                        <form method="post" class="d-inline">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="budget_id" value="{{ budget.id }}">
-                                            <button type="submit" name="delete_weekly"
-                                                class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
+                                        <div style="display: flex; gap: 10px;">
+                                            <form method="post" action="{% url 'update_budget' budget.id 'weekly' %}"
+                                                class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" name="update_weekly"
+                                                    class="btn btn-warning btn-sm">Update</button>
+                                            </form>
+                                            <form method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                                                <button type="submit" name="delete_weekly"
+                                                    class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
+
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -251,21 +254,23 @@
                                     <td>${{ budget.amount }}</td>
                                     <td>{{ budget.description }}</td>
                                     <td>
-                                        <form method="post" action="{% url 'update_budget' budget.id 'monthly' %}"
-                                            class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" name="update_monthly"
-                                                class="btn btn-warning btn-sm mx-1">Update</button>
-                                        </form>
-                                        <form method="post" class="d-inline">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="budget_id" value="{{ budget.id }}">
-                                            <button type="submit" name="delete_monthly"
-                                                class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
+                                        <div style="display: flex; gap: 10px;">
+                                            <form method="post" action="{% url 'update_budget' budget.id 'monthly' %}"
+                                                class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" name="update_monthly"
+                                                    class="btn btn-warning btn-sm">Update</button>
+                                            </form>
+                                            <form method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                                                <button type="submit" name="delete_monthly"
+                                                    class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
-                                </tr>
-                                {% endfor %}
+
+                                    {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -310,18 +315,20 @@
                                     <td>${{ budget.amount }}</td>
                                     <td>{{ budget.description }}</td>
                                     <td>
-                                        <form method="post" action="{% url 'update_budget' budget.id 'yearly' %}"
-                                            class="d-inline">
-                                            {% csrf_token %}
-                                            <button type="submit" name="update_yearly"
-                                                class="btn btn-warning btn-sm mx-1">Update</button>
-                                        </form>
-                                        <form method="post" class="d-inline">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="budget_id" value="{{ budget.id }}">
-                                            <button type="submit" name="delete_yearly"
-                                                class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
+                                        <div style="display: flex; gap: 10px;">
+                                            <form method="post" action="{% url 'update_budget' budget.id 'yearly' %}"
+                                                class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" name="update_yearly"
+                                                    class="btn btn-warning btn-sm">Update</button>
+                                            </form>
+                                            <form method="post" class="d-inline">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                                                <button type="submit" name="delete_yearly"
+                                                    class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
