@@ -23,3 +23,17 @@ function backToTop() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+
+// Academy Modal
+
+$(document).ready(function () {
+  $('.iframe-preview').click(function () {
+
+    var attributeDomain = $(this).data('attributedomain');
+    console.log(attributeDomain)
+    var attributeLink = $(this).data('attributelink');
+
+    $('#sourceName').text(attributeDomain + ' Preview');
+    $('#iframeUrl').attr('src', attributeLink);
+  });
+});
