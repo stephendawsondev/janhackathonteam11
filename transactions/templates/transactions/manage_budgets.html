@@ -25,6 +25,7 @@
                         Budget</button>
                 </form>
                 <!-- Existing Weekly Budgets -->
+                {% if weekly_budgets %}
                 <div class="list-group my-2">
                     <h3>Existing Weekly Budgets</h3>
                     {% for budget in weekly_budgets %}
@@ -43,6 +44,7 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
             <hr class="hr my-5">
             <div class="monthly-budget-container">
@@ -66,6 +68,7 @@
                 </form>
 
                 <!-- Existing Monthly Budgets -->
+                {% if monthly_budgets %}
                 <div class="list-group my-2">
                     <h3>Existing Monthly Budgets</h3>
                     {% for budget in monthly_budgets %}
@@ -84,6 +87,7 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
             <hr class="hr my-5">
             <div class="yearly-budget-contain">
@@ -108,6 +112,7 @@
                 </form>
 
                 <!-- Existing Yearly Budgets -->
+                {% if yearly_budgets %}
                 <div class="list-group">
                     <h3>Existing Yearly Budgets</h3>
                     {% for budget in yearly_budgets %}
@@ -126,6 +131,7 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% endif %}
             </div>
 
         </div>
