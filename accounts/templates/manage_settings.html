@@ -1,0 +1,55 @@
+{% extends 'dashboard-base/base.html' %}
+
+{% block content %}
+<section>
+  <div class="container section-content py-5">
+    <h1 class="page-title">Manage settings</h1>
+    <div class="cards-wrapper row mt-5">
+      <div class="col col-lg-4">
+        <div class="card shadow-sm border-0 flex-fill">
+          <div class="card-header navbar-light">
+            <strong>Edit account details</strong>
+          </div>
+
+          <!-- Card Body -->
+          <div class="card-body">
+            <p class="lead">Manage your account settings such as updating your email and username.</p>
+            <div class="button-wrapper row justify-content-end mt-5">
+              <div class="col-12 col-lg-4">
+                <a href="{% url 'update_user' %}" class="btn navbar-light w-100">Edit</a>
+              </div>
+              <div class="col-12 col-lg-4">
+                <a class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-account-modal">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+  <!-- Delete profile Modal -->
+  <div class="modal fade" id="delete-account-modal" tabindex="-1" aria-label="delete user modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <form class="modal-content" method="post" action="{% url 'delete_user' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="delete-account">Delete account</h1>
+          <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete your account?
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+          <button type="button" class="btn  ml-2" data-bs-dismiss="modal" aria-label="Close">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

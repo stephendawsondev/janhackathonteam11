@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
-from django.db.models import Sum, F
+from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from .forms import ExpenseForm, IncomeForm
 from .models import Expense, Income
 from datetime import datetime, timedelta
-from datetime import date
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import WeeklyBudget, MonthlyBudget, YearlyBudget,DebtDetail
@@ -26,6 +25,7 @@ def manage_debts(request):
     starting_debt = UserProfile.objects.get(user=user).indebt  # Replace with actual field name
     debts = DebtDetail.objects.filter(user=user)
     total_current_debts = sum(debt.amount for debt in debts)
+
 
     context = {
         'debts': debts,
