@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 DEBUG_MODE = os.environ.get('DEBUG_MODE', 'False').lower() == 'true'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG_MODE
+DEBUG = False
 
 if DEBUG:
     ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
