@@ -33,7 +33,6 @@
     {% endblock corejs %}
 
     {% block extra_corejs %}
-    <script src="{% static 'js/script.js' %}"></script>
     {% endblock extra_corejs %}
 
     {% block corecss %}
@@ -45,14 +44,6 @@
     <!-- Fontawesome -->
     <script defer src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'assets/favicons/apple-icon-152x152.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/favicons/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/favicons/favicon-16x16.png' %}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'assets/favicons/favicon-96x96.png' %}">
-
-
-
     <!-- Small Business TEMPLATE CSS: https://startbootstrap.com/template/small-business#google_vignette  -->
     <link rel="stylesheet" href="{% static 'css/small_business.css' %}">
 
@@ -61,6 +52,8 @@
 
     <!-- Custom STYLE -->
     <link rel="stylesheet" href="{% static 'css/frontend.css' %}">
+    <link rel="icon" href="{% static 'assets/favicon.ico' %}" type="image/x-icon">
+
     {% endblock corecss %}
 
     {% block extra_corecss %}
@@ -410,7 +403,6 @@
     </script>
 
     <!-- Custom JS  -->
-    <link rel="stylesheet" href="{% static 'css/frontend.css' %}">
     <script src="{% static 'js/frontend/script.js' %}"></script>
 </body>
 

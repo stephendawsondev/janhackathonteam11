@@ -1,6 +1,6 @@
 from django.shortcuts import render
 import feedparser
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 import textwrap
 from .models import ArticleAcademy
 from django.core.paginator import Paginator
@@ -37,22 +37,22 @@ def rss_news(urls):
                     if 'image' in enclosure.type:
                         image = enclosure.url
 
-            if 'description' in news:
-                soup = BeautifulSoup(news.description, 'html.parser')
-                images = soup.find_all('img')
-                for img in images:
-                    image = img['src']
+            # if 'description' in news:
+            #     soup = BeautifulSoup(news.description, 'html.parser')
+            #     images = soup.find_all('img')
+            #     for img in images:
+            #         image = img['src']
 
             if 'media_content' in news:
                 for media in news.media_content:
                     if 'image' in media.get('type', ''):
                         image = media["url"]
 
-            if 'content' in news:
-                soup = BeautifulSoup(news.content[0].value, 'html.parser')
-                images = soup.find_all('img')
-                for img in images:
-                    image = img['src']
+            # if 'content' in news:
+            #     soup = BeautifulSoup(news.content[0].value, 'html.parser')
+            #     images = soup.find_all('img')
+            #     for img in images:
+            #         image = img['src']
 
             if 'image' in news:
                 image = news.image["href"]
