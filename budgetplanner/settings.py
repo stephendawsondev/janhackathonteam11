@@ -18,12 +18,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 DEBUG_MODE = os.environ.get('DEBUG_MODE', 'False').lower() == 'true'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = DEBUG_MODE
 
 if DEBUG:
     ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
 else:
-    ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
+    ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME'),]
 
 
 # Application definition
