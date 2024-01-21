@@ -508,9 +508,10 @@ footer{
 }
 
 .team1 .pro-pic .card-img-overlay {
-  background: rgba(113, 175, 233, 0.87);
+  background-color: rgba(25, 30, 41, 0.87);;
   display: none;
 }
+
 
 .team1 .pro-pic .card-img-overlay ul {
   top: 50%;
