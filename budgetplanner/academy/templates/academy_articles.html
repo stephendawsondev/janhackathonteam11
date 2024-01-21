@@ -51,8 +51,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer" id="iframe-preview">
-                        <p class="text-center m-0 p-0"><strong>Preview</strong></p>
+                    <div class="card-footer iframe-preview" data-bs-toggle="modal" data-bs-target="#rssInstance"
+                        data-attributedomain="{{ item.domain_name }}" data-attributelink="{{ item.link }}">
+                        <p class=" text-center m-0 p-0"><strong>Preview</strong></p>
                     </div>
                 </div>
             </article>
@@ -101,6 +102,25 @@
             {% endif %}
         </section>
 
+    </div>
+</div>
+
+<!-- Instance Modal -->
+<div class="modal fade" id="rssInstance" tabindex="-1" aria-labelledby="popupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <section class="modal-content">
+            <!-- Header -->
+            <div class="modal-header">
+                <span class="fs-5" id="sourceName"></span>
+                <span class="modal-title fs-5" id="popupModalLabel"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Body -->
+            <iframe height="400" id="iframeUrl" class="modal-body">
+
+            </iframe>
+        </section>
     </div>
 </div>
 {% endblock %}
