@@ -7,44 +7,41 @@
     {% endfor %}
     {% endif %}
 
-    <form method="post" action="{% url 'expenditure' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit Expense</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Submit Expense</button>
 
     <h2>Weekly Total</h2>
-    <p>This week's total: {{ weekly_totals.weekly_total|default:"0.00" }}</p>
+    <p>This week's total: {{ demo_weekly_totals|default:"0.00" }}</p>
 
     <h2>Monthly Total</h2>
-    <p>This month's total: {{ monthly_totals.monthly_total|default:"0.00" }}</p>
+    <p>This month's total: {{ demo_monthly_totals|default:"0.00" }}</p>
 
     <h2>Yearly Total</h2>
-    <p>This year's total: {{ yearly_totals.yearly_total|default:"0.00" }}</p>
+    <p>This year's total: {{ demo_yearly_totals|default:"0.00" }}</p>
 
     <h2>Daily Totals This Week</h2>
-    {% for day_total in daily_totals %}
-    <p>{{ day_total.day }}: {{ day_total.total|default:"0.00" }}</p>
+    {% for demo_day_total in demo_daily_totals %}
+    <p>{{ demo_day_total.day }}: {{ demo_day_total.total|default:"0.00" }}</p>
     {% endfor %}
 
     <h2>Recent Expenses</h2>
-    {% if expenses %}
+    {% if demo_expenses %}
     <table>
         <tr>
             <th>Date</th>
             <th>Amount</th>
             <th>Description</th>
-            <th>Typical Expense</th>
+            <th>Expense</th>
+            <th>Action</th>
         </tr>
-        {% for expense in expenses %}
+        {% for demo_day_total in demo_daily_totals %}
         <tr>
-            <td>{{ expense.date }}</td>
-            <td>{{ expense.amount }}</td>
-            <td>{{ expense.description }}</td>
-            <td>{{ expense.category }}</td>
+            <td>{{ demo_day_total.day }}</td>
+            <td>{{ demo_day_total.total|default:"0.00" }}</td>
+            <td>{{ demo_day_total.total|default:"0.00" }}</td>
+            <td>{{ demo_day_total.total|default:"0.00" }}</td>
             <td>
-                <a href="{% url 'update_expense' expense.id %}">Update</a>
-                <a href="{% url 'delete_expense' expense.id %}">Delete</a>
+                <a href="#">Update</a>
+                <a href="#">Delete</a>
             </td>
         </tr>
         {% endfor %}

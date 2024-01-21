@@ -28,7 +28,7 @@ def rss_news(urls):
             domain = domain.capitalize()
 
         feed = feedparser.parse(url)
-        top = feed.entries[:4]
+        top = feed.entries[:3]
         image = ''
 
         for news in top:

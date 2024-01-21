@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from accounts.utils import anonymous_required
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
+from django.utils.timezone import now
 # DEMO: User Dashboard
 
 
@@ -51,3 +52,42 @@ def demo_income_view(request):
     }
 
     return render(request, 'demo/demo_income.html', context)
+
+
+def demo_expenditure_view(request):
+
+    expenses = random.randint(1000, 2000)
+    datewise_totals = expenses
+
+    # Get current date and calculate the start of the week, month, and year
+    current_date = now().date()
+    start_of_week = current_date - \
+        timedelta(days=current_date.weekday()) + timedelta(days=3)
+    start_of_month = current_date.replace(day=1)
+    start_of_year = current_date.replace(month=1, day=1)
+
+    # Adjust the start_of_week if it's in the future
+    if start_of_week > current_date:
+        start_of_week -= timedelta(weeks=1)
+
+    weekly_totals = random.randint(1000, 2000)
+    monthly_totals = random.randint(1000, 2000)
+    yearly_totals = random.randint(1000, 2000)
+
+    # Calculate daily totals for the current week
+    daily_totals = []
+    for i in range(7):
+        day = start_of_week + timedelta(days=i)
+        total = random.randint(1000, 2000)
+        daily_totals.append({'day': day, 'total': total})
+
+    context = {
+        'demo_expenses': expenses,
+        'demo_datewise_totals': datewise_totals,
+        'demo_weekly_totals': weekly_totals,
+        'demo_monthly_totals': monthly_totals,
+        'demo_yearly_totals': yearly_totals,
+        'demo_daily_totals': daily_totals,
+    }
+
+    return render(request, 'demo/demo_expenditure.html', context)

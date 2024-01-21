@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.db.models import Sum, F
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.utils.timezone import now
 from .forms import ExpenseForm, IncomeForm
 from .models import Expense, Income
 from datetime import datetime, timedelta

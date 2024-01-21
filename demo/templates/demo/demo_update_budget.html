@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<section>
+    <div class="container section-content mt-5">
+        <h1>Update {{ budget_type }} Budget</h1>
+        <div class="d-flex flex-column mt-3">
+            <form method="post" class="mb-3">
+                {% csrf_token %}
+                {% for field in form %}
+                {% if field.auto_id != 'id_start_date' %}
+                <div class="form-group mt-3">
+                    {{ field|as_crispy_field }}
+                </div>
+                {% else %}
+                <div class="form-group mt-3 ">
+                    {{ field }}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <button type="submit" class="btn btn-primary mt-3">Update Budget</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
