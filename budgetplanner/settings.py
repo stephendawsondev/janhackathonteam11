@@ -4,10 +4,19 @@ import dj_database_url
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-import dj_database_url
-if os.path.isfile('env.py'):
-    import env
+from dotenv import load_dotenv
+load_dotenv() 
+# Just before the Cloudinary configuration
+print("Cloudinary Config:")
+print("CLOUDINARY_CLOUD_NAME:", os.getenv('CLOUDINARY_CLOUD_NAME'))
+print("CLOUDINARY_API_KEY:", os.getenv('CLOUDINARY_API_KEY'))
+print("CLOUDINARY_API_SECRET:", os.getenv('CLOUDINARY_API_SECRET'))
 
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
+)
 # Initialize Cloudinary
 cloudinary.config(
     cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
@@ -18,21 +27,19 @@ cloudinary.config(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Set up Templates
-TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '')
-DEBUG_MODE = os.environ.get('DEBUG_MODE', 'False').lower() == 'true'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG_MODE
+DEBUG = os.getenv('DEBUG_MODE', 'False').lower() == 'true'
 
-if DEBUG:
-    ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
-else:
-    ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME'),]
 
+ALLOWED_HOSTS = [
+    '8000-jesseross00-janhackatho-bmuqgk59xea.ws-eu107.gitpod.io', 
+    'budgetbuddy1-b77fae5525b5.herokuapp.com',
+    os.environ.get('GITPOD_WORKSPACE_URL'),
+    os.environ.get('HEROKU_HOSTNAME'),
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -124,9 +131,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
-
+# Configure Cloudinary for static files
 STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
