@@ -16,13 +16,6 @@ body {
   flex-direction: column;
 }
 
-/* Fonts */
-@font-face {
-  font-family: "Roboto";
-  src: url("../../font/roboto/Roboto-Regular.ttf");
-  font-display: swap;
-}
-
 /* General Styling */
 
 select,
