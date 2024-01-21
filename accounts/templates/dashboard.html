@@ -17,14 +17,14 @@
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Income</h3>
+                    <h3 class="card-title">Income <i class="fa-solid fa-hand-holding-dollar"></i></h3>
                 </div>
                 <div class="card-body">
                     <h2>Income Summary</h2>
                     <p>Weekly Income Total: ${{ weekly_income_total }}</p>
                     <p>Monthly Income Total: ${{ monthly_income_total }}</p>
                     <p>Yearly Income Total: ${{ yearly_income_total }}</p>
-                    <a href="{% url 'income' %}" class="btn btn-primary">View Income Details</a>
+                    <a href="{% url 'income' %}" class="btn navbar-light">View Income Details</a>
                 </div>
             </div>
         </div>
@@ -33,31 +33,31 @@
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Expenditure</h3>
+                    <h3 class="card-title">Expenditure <i class="fa-solid fa-receipt"></i></h3>
                 </div>
                 <div class="card-body">
                     <h2>Expenditure Summary</h2>
                     <p>Weekly Expenditure Total: ${{ weekly_expenditure_total }}</p>
                     <p>Monthly Expenditure Total: ${{ monthly_expenditure_total }}</p>
                     <p>Yearly Expenditure Total: ${{ yearly_expenditure_total }}</p>
-                    <a href="{% url 'expenditure' %}" class="btn btn-primary">View Expenditure Details</a>
+                    <a href="{% url 'expenditure' %}" class="btn navbar-light">View Expenditure Details</a>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Reports</h3>
+                    <h3 class="card-title">Reports <i class="fa-solid fa-file-invoice"></i></h3>
                 </div>
                 <div class="card-body">
-                    <a href="{% url 'reports' %}" class="btn btn-primary">View reports</a>
+                    <a href="{% url 'reports' %}" class="btn navbar-light">View reports</a>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Budgets</h3>
+                    <h3 class="card-title">Budgets <i class="fa-solid fa-chart-pie"></i></h3>
                 </div>
                 <div class="card-body">
                     {% if latest_weekly_budget %}
@@ -81,7 +81,7 @@
                         <p>Start Date: {{ latest_yearly_budget.start_date }}</p>
                     </div>
                     {% endif %}
-                    <a href="{% url 'manage_budgets' %}" class="btn btn-primary">Manage your budgets</a>
+                    <a href="{% url 'manage_budgets' %}" class="btn navbar-light">Manage your budgets</a>
                 </div>
             </div>
         </div>
