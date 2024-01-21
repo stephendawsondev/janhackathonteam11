@@ -109,7 +109,7 @@
                             <ul class="dropdown-menu dropdown-menu-light mt-2">
                                 {% if user.is_authenticated %}
                                 <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="#">Reports</a></li>
+                                <li><a class="dropdown-item" href="{% url 'reports' %}">Reports</a></li>
                                 <li><a class="dropdown-item" href="#">Settings</a></li>
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#popupModal"
                                         href="{% url 'logout' %}">Logout</a></li>
@@ -261,7 +261,12 @@
                                 <i class="fa-solid fa-coins"></i> Contact</a>
                         </p>
                         <p>
-                            <a href="" class="text-reset">
+                            <a href="{% url 'privacy_policy' %}" class="text-reset"><i
+                                    class="fa-solid fa-fingerprint"></i>
+                                Privacy policy</a>
+                        </p>
+                        <p>
+                            <a href="" class=" text-reset">
                                 <i class="fa-solid fa-coins"></i> Expenses</a>
                         </p>
                         <p>
