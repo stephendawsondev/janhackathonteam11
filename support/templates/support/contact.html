@@ -10,6 +10,7 @@
           <h2>Reach Out To Us</h2>
     
           <form id="contact" class="row g-6 form-3d" method="POST" action="/">
+            {% csrf_token %}
             <div class="col-md-12">
               <input
                 type="text"
