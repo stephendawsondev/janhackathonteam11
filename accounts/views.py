@@ -39,10 +39,15 @@ def login_view(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            if user is not None:
+            if user is not None and not user.is_superuser:
                 login(request, user)
                 messages.success(request, 'You have logged in!')
                 return redirect('dashboard')
+            elif user.is_superuser:
+                login(request, user)
+                messages.success(request, 'You have logged in as SUPERUSER!')
+                return redirect('/admin/')
+
         else:
             messages.error(request, 'Invalid username or password.')
             return redirect(reverse('login'))
