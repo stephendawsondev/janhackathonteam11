@@ -43,7 +43,7 @@
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="{% url 'demo_dashboard' %}">Demo Dashboard</a>
+        <a class="navbar-brand ps-3" href="{% url 'demo_dashboard_view' %}">Demo Dashboard</a>
 
         <!-- Sidebar Toggle-->
         <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
@@ -78,14 +78,14 @@
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">Overview
                         </div>
-                        <a class="nav-link" href="{% url 'demo_dashboard' %}">
+                        <a class="nav-link" href="{% url 'demo_dashboard_view' %}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             App
                         </a>
                         <div class="sb-sidenav-menu-heading">Management</div>
 
                         <!--  Reports -->
-                        <a class="nav-link" href="{% url 'reports' %}">
+                        <a class="nav-link" href="#">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-file"></i></i></div>
                             Reports
                         </a>

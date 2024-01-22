@@ -227,7 +227,7 @@
 
                                 <div class="d-flex justify-content-between">
                                     <h3 class="p-0 m-0">Total Income</h3>
-                                    <h3 class="p-0 m-0">$600</h3>
+                                    <h3 class="p-0 m-0 text-success">$600</h3>
                                 </div>
 
                             </div>
@@ -242,7 +242,7 @@
                             
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
-                                <p class="badge-money">+500$</p>
+                                <p class="badge-money bg-success text-white border-0">+500$</p>
                         
                             </div>
 
@@ -254,7 +254,7 @@
                         <div class="col-12 d-inline-block">
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
-                                <p class="badge-money">+500$</p>
+                                <p class="badge-money bg-success text-white border-0">+500$</p>
                         
                             </div>
                         </div>
@@ -265,7 +265,7 @@
                         <div class="col-12 d-inline-block">
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
-                                <p class="badge-money">+500$</p>
+                                <p class="badge-money bg-success text-white border-0">+500$</p>
                         
                             </div>
                         </div>
@@ -274,7 +274,9 @@
 
                 <!-- Card Footer -->
                 <footer>
+
                     <a class="card-footer text-center fs-5 btn w-100" href="{% url  'demo_income' %}">
+
                         DETAILS
                     </a>
                 </footer>
@@ -304,7 +306,7 @@
 
                                 <div class="d-flex justify-content-between">
                                     <h3 class="p-0 m-0">Total Expenses</h3>
-                                    <h3 class="p-0 m-0">-$100</h3>
+                                    <h3 class="p-0 m-0 text-danger">-$100</h3>
                                 </div>
 
                             </div>
@@ -318,7 +320,7 @@
                         <div class="col-12 d-inline-block">
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
-                                <p class="badge-money text-danger">-500$</p>
+                                <p class="badge-money bg-danger text-white border-0">-500$</p>
                         
                             </div>
                         </div>
@@ -329,7 +331,7 @@
                         <div class="col-12 d-inline-block">
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
-                                <p class="badge-money text-danger">-500$</p>
+                                <p class="badge-money bg-danger text-white border-0">-500$</p>
                         
                             </div>
                         </div>
@@ -340,7 +342,7 @@
                         <div class="col-12 d-inline-block">
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
-                                <p class="badge-money text-danger">-500$</p>
+                                <p class="badge-money bg-danger text-white border-0">-500$</p>
                         
                             </div>
                         </div>
@@ -349,7 +351,9 @@
 
                 <!-- Card Footer -->
                 <footer>
+
                     <a class="card-footer text-center fs-5 btn w-100" href="{% url 'demo_expenditure_view'%}">
+
                         DETAILS
                     </a>
                 </footer>
@@ -380,7 +384,7 @@
 
                                 <div class="d-flex justify-content-between">
                                     <h3 class="p-0 m-0">Current Balance</h3>
-                                    <h3 class="p-0 m-0">$500</h3>
+                                    <h3 class="p-0 m-0 text-success">$500</h3>
                                 </div>
 
                             </div>
@@ -450,7 +454,9 @@
 
                 <!-- Card Footer -->
                 <footer>
+
                     <a class="card-footer text-center fs-5 btn w-100" href="{% url  'demo_manage_budgets' %}">
+
                         DETAILS
                     </a>
                 </footer>
@@ -460,7 +466,7 @@
         <!-- CTA to Learn More -->
 
         <div class="col-12 text-center mb-3">
-            <a href="#" class="btn btn-primary w-auto see-more fs-5">Learn More</a>
+            <a href="{% url 'academy_articles' %}" class="btn btn-primary w-auto see-more fs-5">Learn More</a>
         </div>
     </article>
 
