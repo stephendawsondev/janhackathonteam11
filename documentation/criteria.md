@@ -1,4 +1,4 @@
-# [RETURN](blob/main/README.md?tab=readme-ov-file#-documentation-index-legacy)
+# [RETURN](README.md?tab=readme-ov-file#-documentation-index-legacy)
 ## Criteria
 
 | Criteria                                                                | BudgetBuddy's functionality                                                                                                                                                                                                       |
