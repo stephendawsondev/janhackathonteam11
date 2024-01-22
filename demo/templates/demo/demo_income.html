@@ -2,7 +2,9 @@
 
 {% block content %}
 
+
 <!-- Add Code to the <head> tag -->
+
 {% block extra_corecss %}
 <style>
     /* Keyframe animations for attention-grabbing effects */
@@ -44,6 +46,7 @@
         position: relative;
         width: 100%;
         max-width: 600px;
+
         height: 400px;
         margin: 20px auto;
         background: none;
@@ -117,6 +120,7 @@
     </style>
 {% endblock extra_corecss %}
 
+
 <div class="container mt-5">
     <article class="row d-flex align-items-center justify-content-center">
 
@@ -132,6 +136,7 @@
                 <div class="card-body p-0 mt-2">
                     <div class="graph-container" id="incomeGraph">
                         <!-- Bars will be inserted here by JavaScript -->
+
                     </div>
                 </div>
                 <!-- Card Body -->
@@ -206,6 +211,7 @@
                 </footer>
             </div>
         </div>
+
     </article>
 </div>
 
@@ -213,6 +219,7 @@
 <!-- Custom JavaScript-->
 {% block postloadjs %}
 <script>
+
 // Values from Django context
 const weeklyIncome = {{ weekly_income_total }};
 const monthlyIncome = {{ monthly_income_total }};
@@ -258,6 +265,7 @@ createBar(yearlyIncome, 'Yearly', 2);
         addIncomeForm.close();
     });
 </script>
+
 {% endblock postloadjs %}
 
 {% endblock %}
