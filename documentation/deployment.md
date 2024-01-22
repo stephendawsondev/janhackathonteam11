@@ -119,9 +119,7 @@ To clone the repository, follow these steps:
 6. In your IDE Terminal, type the following command to clone the repository:
 
    ```bash
-   git clone https://github.com/JesseRoss
-
-001/janhackathonteam11.git
+   git clone https://github.com/JesseRoss001/janhackathonteam11.git
    ```
 
 7. Press Enter to create your local clone.
