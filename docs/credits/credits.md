@@ -1,0 +1,6 @@
+- [StartBootstrap Small Business Template](https://startbootstrap.com/theme/small-business) - for the template used to create the foundations of the BudgetBuddy website.
+- [Cooolours](https://coolors.co/) - for the colour palette used in the BudgetBuddy website.
+- [Adobe XD](https://www.adobe.com/au/products/xd.html) - for the wireframes used to design the BudgetBuddy website.
+- [Unsplash](https://unsplash.com/) - for the images used on the About page.
+- [ChatGPT](https://chat.openai.com/) - Logo Design: ChatGPT played a crucial role in conceptualizing and creating the logo for our website.
+- [ChatGPT](https://chat.openai.com/) - The tool also assisted in formalizing and refining the content for our website, ensuring clarity and coherence in our messaging.

@@ -1,7 +1,3 @@
-# [RETURN](../README.md?tab=readme-ov-file#-documentation-index-legacy)
-
-## Deployment
-
 You can find the live deployed application on [Heroku](https://budgetbuddy2-38958568c907.herokuapp.com/). This link will take you to the live version of your project.
 
 ### ElephantSQL Database
