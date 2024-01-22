@@ -2,7 +2,7 @@
 {% extends 'dashboard-base/base.html' %}
 
 {% block content %}
-
+{% load static %}
 <!-- Add Code to the <head> tag -->
 {% block extra_corecss %}
 <style>
@@ -129,7 +129,7 @@
     }
 </style>
 {% endblock extra_corecss %}
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"></script>
 <header class="container text-center">
     <div class="user-section">
         {% if not user.is_authenticated %}
@@ -150,7 +150,7 @@
 
                 <!-- Card Thumbnail -->
                 <div class="card-body p-0 mt-2">
-                    <div class="graph-container" id="expenseGraph">
+                    <div id="lottie-animation"></div>
                         <!-- Bars will be inserted here by JavaScript -->
                     </div>
                 </div>
@@ -466,40 +466,35 @@
 </div>
 
 
+<script>
+    var animation = bodymovin.loadAnimation({
+        container: document.getElementById('lottie-animation'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '{% static "budget.json" %}' // Path to your Lottie file
+    });
+    </script>
 <!-- Custom JavaScript-->
 {% block postloadjs %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Values from Django context
-    const weeklyExpense = {{ weekly_expense_total }};
-    const monthlyExpense = {{ monthly_expense_total }};
-    const yearlyExpense = {{ yearly_expense_total }};
-    const maxExpense = Math.max(weeklyExpense, monthlyExpense / 4, yearlyExpense / 52);
-
-    // Function to create a bar for the graph
-    // Function to create and animate a bar for the graph
-    function createBar(value, label, index) {
-        const graphContainer = document.getElementById('expenseGraph');
-        const bar = document.createElement('div');
-        const normalizedValue = label === 'Weekly' ? value : label === 'Monthly' ? value / 4 : value / 52;
-        bar.className = 'bar';
-        bar.style.height = `${(normalizedValue / maxExpense) * 100}%`;
-        // Adding label and value
-        bar.innerHTML = `
-        <span class="bar-label">${label}</span>
-        <span class="bar-value">$${value.toFixed(2)}</span>
-    `;
-        graphContainer.appendChild(bar);
-
-        // Delay the start of the animation based on the index of the bar
-        setTimeout(() => {
-            bar.classList.add('animate');
-        }, index * 500); // Delay each bar's animation by 0.5 seconds incrementally
-    }
-
-    // Create and animate bars for weekly, monthly, yearly
-    createBar(weeklyExpense, 'Weekly', 0);
-    createBar(monthlyExpense, 'Monthly', 1);
-    createBar(yearlyExpense, 'Yearly', 2);
+    const ctx = document.getElementById('budgetChart').getContext('2d');
+    const chartData = JSON.parse('{{ chart_data|safe }}');
+    const budgetChart = new Chart(ctx, {
+        type: 'bar',  // You can change this to 'line' for a line chart
+        data: chartData,
+        options: {
+            scales: {
+                xAxes: [{
+                    stacked: true  // Set to false for a non-stacked chart
+                }],
+                yAxes: [{
+                    stacked: true  // Set to false for a non-stacked chart
+                }]
+            }
+        }
+    });
 </script>
 {% endblock postloadjs %}
 
