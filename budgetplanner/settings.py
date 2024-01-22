@@ -23,7 +23,7 @@ DEBUG = DEBUG_MODE
 if DEBUG:
     ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
 else:
-    ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME'),]
+    ALLOWED_HOSTS = [os.environ.get('GITPOD_WORKSPACE_URL'),]
 
 # Application definition
 INSTALLED_APPS = [
