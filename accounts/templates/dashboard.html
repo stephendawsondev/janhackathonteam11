@@ -198,6 +198,21 @@
     .premium-card a:hover {
         text-decoration: underline;
     }
+    #lottie-animation2 {
+        width: 100%; /* Adjust the width as necessary */
+        height: 200px; /* Adjust the height as necessary */
+        /* Add more styling as needed */
+    }
+    #lottie-animation3 {
+        width: 100%; /* Adjust the width as necessary */
+        height: 180px; /* Adjust the height as necessary */
+        /* Add more styling as needed */
+    }
+    #lottie-animation4 {
+        width: 100%; /* Adjust the width as necessary */
+        height: 180px; /* Adjust the height as necessary */
+        /* Add more styling as needed */
+    }
 
     /* Additional responsive adjustments and animations can be added here */
 </style>
@@ -448,6 +463,7 @@
                 <div class="col-md-4">
                     <div class="premium-card">
                         <h3>Debts</h3>
+                        <div id="lottie-animation4"></div> 
                         <p>Manage and track your debts efficiently.</p>
                         <a class="btn btn-primary text-light" href="{% url 'manage_debts' %}">View Debts V.1.0</a>
                     </div>
@@ -456,6 +472,7 @@
                 <div class="col-md-4">
                     <div class="premium-card">
                         <h3>Investments</h3>
+                        <div id="lottie-animation3"></div> 
                         <p>Explore your investment options.</p>
                         <a  class="btn btn-primary text-light" href="{% url 'investment_view' %}">View Investments V.1.0 </a>
                     </div>
@@ -464,6 +481,7 @@
                 <div class="col-md-4">
                     <div class="premium-card">
                         <h3>Portfolio Projections</h3>
+                        <div id="lottie-animation2"></div>
                         <p>See future projections of your portfolio.</p>
                         <a href="">Coming Soon </a>
                     </div>
@@ -482,6 +500,28 @@
             autoplay: true,
             path: '{% static "budget.json" %}' // Path to your Lottie file
         });
+          // New animation loading script
+    var animation2 = bodymovin.loadAnimation({
+        container: document.getElementById('lottie-animation2'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '{% static "indevelopment.json" %}' // Path to your new Lottie file
+    });
+    var animation3 = bodymovin.loadAnimation({
+        container: document.getElementById('lottie-animation3'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '{% static "investment.json" %}' // Path to your new Lottie file
+    });
+        var animation4 = bodymovin.loadAnimation({
+        container: document.getElementById('lottie-animation4'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '{% static "debt.json" %}' // Path to your new Lottie file
+    });
     </script>
     <!-- Custom JavaScript-->
     {% block postloadjs %}
