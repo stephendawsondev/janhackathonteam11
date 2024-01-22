@@ -20,19 +20,9 @@
 
 - [Gitpod](https://gitpod.io): Gitpod is used as a cloud-based Integrated Development Environment (IDE) for development convenience.
 
-- [Codeanywhere](https://codeanywhere.com): Codeanywhere is used as another cloud-based IDE for development flexibility.
-
 - [Bootstrap](https://getbootstrap.com): Bootstrap is used as the front-end CSS framework for modern responsiveness and pre-built components, speeding up development.
 
-- [Materialize](https://materializecss.com): Materialize is used as another front-end CSS framework for modern responsiveness and pre-built components.
-
-- [Flask](https://flask.palletsprojects.com): Flask is used as the Python framework for the site, providing tools for web development.
-
 - [Django](https://www.djangoproject.com): Django is used as another Python framework for the site, known for its robustness and features.
-
-- [MongoDB](https://www.mongodb.com): MongoDB is used as the non-relational database management system with Flask, suitable for handling data.
-
-- [SQLAlchemy](https://www.sqlalchemy.org): SQLAlchemy is used as the relational database management system with Flask, offering advanced database capabilities.
 
 - [ElephantSQL](https://www.elephantsql.com/): ElephantSQL is used as a relational database management system, facilitating data storage.
 
