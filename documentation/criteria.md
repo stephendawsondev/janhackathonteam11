@@ -1,4 +1,4 @@
-# [RETURN](/)
+# [RETURN](tree/main?tab=readme-ov-file#-documentation-index-legacy)
 ## Criteria
 
 | Criteria                                                                | BudgetBuddy's functionality                                                                                                                                                                                                       |
