@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (income_view, expenditure_view, reports_view,
                     manage_budgets, update_budget, manage_debts, add_edit_debt, delete_debt)
 from . import views
-
+from .views import download_report
 urlpatterns = [
     path('income/', income_view, name='income'),
     path('expenditure/', expenditure_view, name='expenditure'),
@@ -22,4 +22,5 @@ urlpatterns = [
     path('debts/add/', add_edit_debt, name='add_debt'),
     path('debts/edit/<int:debt_id>/', add_edit_debt, name='edit_debt'),
     path('debts/delete/<int:debt_id>/', delete_debt, name='delete_debt'),
+     path('download-report/', download_report, name='download_report'),
 ]
