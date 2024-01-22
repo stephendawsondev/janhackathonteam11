@@ -1,10 +1,15 @@
+# Django
 from django.urls import path
+
+# Local
 from .views import (
     income_view, expenditure_view, reports_view, manage_budgets, update_budget,
-    manage_debts, add_edit_debt, delete_debt, add_investment, update_investment, delete_investment, investment_view  # Import investment-related views
+    # Import investment-related views
+    manage_debts, add_edit_debt, delete_debt, add_investment, update_investment, delete_investment, investment_view
 )
 from . import views
 from .views import download_report
+
 urlpatterns = [
     path('income/', income_view, name='income'),
     path('expenditure/', expenditure_view, name='expenditure'),
@@ -27,7 +32,8 @@ urlpatterns = [
     path('download-report/', download_report, name='download_report'),
     path('investments/', investment_view, name='investment_view'),
     path('investments/add/', add_investment, name='add_investment'),
-    path('investments/update/<int:pk>/', update_investment, name='update_investment'),
-    path('investments/delete/<int:pk>/', views.delete_investment, name='delete_investment'),
+    path('investments/update/<int:pk>/',
+         update_investment, name='update_investment'),
+    path('investments/delete/<int:pk>/',
+         views.delete_investment, name='delete_investment'),
 ]
-

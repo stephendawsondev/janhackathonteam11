@@ -1,17 +1,10 @@
+# Django & Python
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-from .forms import ExpenseForm, IncomeForm
-from .models import Expense, Income
-from datetime import datetime, timedelta
-from decimal import Decimal
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import WeeklyBudget, MonthlyBudget, YearlyBudget,DebtDetail,Invest
-from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm,DebtDetailForm,InvestForm
-from accounts.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
@@ -20,6 +13,17 @@ from django.forms.widgets import SelectDateWidget
 import json
 from django.template.loader import render_to_string
 from weasyprint import HTML
+from datetime import datetime, timedelta
+from decimal import Decimal
+from django.shortcuts import render, get_object_or_404, redirect
+
+# Local
+from .forms import ExpenseForm, IncomeForm
+from .models import Expense, Income
+from .models import WeeklyBudget, MonthlyBudget, YearlyBudget, DebtDetail, Invest
+from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm, DebtDetailForm, InvestForm
+from accounts.models import UserProfile
+
 
 @login_required
 def investment_view(request):
@@ -30,16 +34,19 @@ def investment_view(request):
         projection_data = investment.calculate_projection(years=5)
         projections.append({
             "id": investment.id,
-            "min_projection": float(projection_data['min_projection']),  # Convert Decimal to float
-            "max_projection": float(projection_data['max_projection'])   # Convert Decimal to float
+            # Convert Decimal to float
+            "min_projection": float(projection_data['min_projection']),
+            # Convert Decimal to float
+            "max_projection": float(projection_data['max_projection'])
         })
 
     projections_json = json.dumps(projections)
 
     return render(request, 'transactions/investment_view.html', {
-        'investments': investments, 
+        'investments': investments,
         'projections_json': projections_json
     })
+
 
 @login_required
 def add_investment(request):
@@ -56,6 +63,7 @@ def add_investment(request):
 
     return render(request, 'transactions/add_investment.html', {'form': form})
 
+
 @login_required
 def update_investment(request, pk):
     investment = get_object_or_404(Invest, pk=pk, user=request.user)
@@ -70,6 +78,7 @@ def update_investment(request, pk):
 
     return render(request, 'transactions/update_investment.html', {'form': form})
 
+
 @login_required
 def delete_investment(request, pk):
     investment = get_object_or_404(Invest, pk=pk, user=request.user)
@@ -79,13 +88,14 @@ def delete_investment(request, pk):
         return redirect('investment_view')
     return render(request, 'transactions/delete_investment.html', {'investment': investment})
 
+
 @login_required
 def manage_debts(request):
     user = request.user
-    starting_debt = UserProfile.objects.get(user=user).indebt  # Replace with actual field name
+    starting_debt = UserProfile.objects.get(
+        user=user).indebt  # Replace with actual field name
     debts = DebtDetail.objects.filter(user=user)
     total_current_debts = sum(debt.amount for debt in debts)
-
 
     context = {
         'debts': debts,
@@ -93,6 +103,7 @@ def manage_debts(request):
         'total_current_debts': total_current_debts
     }
     return render(request, 'transactions/debts.html', context)
+
 
 @login_required
 def add_edit_debt(request, debt_id=None):
@@ -108,12 +119,14 @@ def add_edit_debt(request, debt_id=None):
             new_debt = form.save(commit=False)
             new_debt.user = user
             new_debt.save()
-            messages.success(request, 'Debt detail added/updated successfully!')
+            messages.success(
+                request, 'Debt detail added/updated successfully!')
             return redirect('manage_debts')
     else:
         form = DebtDetailForm(instance=debt)
 
     return render(request, 'transactions/add_edit_debt.html', {'form': form, 'debt': debt})
+
 
 @login_required
 def delete_debt(request, debt_id):
@@ -123,6 +136,7 @@ def delete_debt(request, debt_id):
         messages.success(request, 'Debt deleted successfully!')
         return redirect('manage_debts')
     return render(request, 'transactions/delete_debt.html', {'debt': debt})
+
 
 @login_required
 def update_budget(request, budget_id, budget_type):
@@ -164,7 +178,7 @@ def manage_budgets(request):
     weekly_budgets = WeeklyBudget.objects.filter(user=user)
     monthly_budgets = MonthlyBudget.objects.filter(user=user)
     yearly_budgets = YearlyBudget.objects.filter(user=user)
-    
+
     if request.method == 'POST':
         # Handling Weekly Budget Form
         if 'weekly_budget' in request.POST:
@@ -250,9 +264,9 @@ def manage_budgets(request):
         'weekly_form': weekly_form,
         'monthly_form': monthly_form,
         'yearly_form': yearly_form,
- 'weekly_budgets1': json.dumps([float(budget['amount']) for budget in WeeklyBudget.objects.values('amount')]),
-    'monthly_budgets1': json.dumps([float(budget['amount']) for budget in MonthlyBudget.objects.values('amount')]),
-    'yearly_budgets1': json.dumps([float(budget['amount']) for budget in YearlyBudget.objects.values('amount')]),
+        'weekly_budgets1': json.dumps([float(budget['amount']) for budget in WeeklyBudget.objects.values('amount')]),
+        'monthly_budgets1': json.dumps([float(budget['amount']) for budget in MonthlyBudget.objects.values('amount')]),
+        'yearly_budgets1': json.dumps([float(budget['amount']) for budget in YearlyBudget.objects.values('amount')]),
     }
     return render(request, 'transactions/manage_budgets.html', context)
 
@@ -276,7 +290,6 @@ def handle_budget_update_delete(request, budget_id, BudgetModel, budget_form, bu
                 request, f'{budget_type.capitalize()} budget updated successfully!')
 
     return redirect('manage_budgets')
-
 
 
 @login_required
@@ -315,7 +328,8 @@ def income_view(request):
     ).aggregate(Sum('amount'))['amount__sum'] or 0
 
     incomes = Income.objects.filter(user=request.user).order_by('-date')
-    datewise_totals = incomes.values('date').annotate(total=Sum('amount')).order_by('-date')
+    datewise_totals = incomes.values('date').annotate(
+        total=Sum('amount')).order_by('-date')
 
     context = {
         'form': form,
@@ -586,7 +600,8 @@ def download_report(request):
     }
 
     # Render the HTML template with context data
-    html_string = render_to_string('transactions/report_template.html', context)
+    html_string = render_to_string(
+        'transactions/report_template.html', context)
     html = HTML(string=html_string)
 
     # Generate PDF

@@ -1,12 +1,16 @@
-from django.shortcuts import render
-import feedparser
-import textwrap
-from .models import ArticleAcademy
+# Django & Python
 from django.core.paginator import Paginator
 from datetime import datetime
 from urllib.parse import urlparse
+from django.shortcuts import render
 import requests
 import random
+import feedparser
+import textwrap
+
+# Local
+from .models import ArticleAcademy
+
 
 # RSS
 
