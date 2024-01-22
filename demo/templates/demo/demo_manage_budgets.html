@@ -1,53 +1,362 @@
-{% extends 'dashboard-base/base.html' %}
+<!-- dashboard.html -->
+{% extends 'demo_base/base.html' %}
+
 {% block content %}
-<div class="container">
-    <h2>Manage Your Budgets</h2>
 
-    <!-- Weekly Budget Form -->
-    <h3>Weekly Budget</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ weekly_form.as_p }}
-        <button type="submit" name="create_weekly">Create/Update Weekly Budget</button>
-    </form>
+<!-- Add Code to the <head> tag -->
+{% block extra_corecss %}
+<style>
+    /* Keyframe animations for attention-grabbing effects */
 
-    <!-- Monthly Budget Form -->
-    <h3>Monthly Budget</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ monthly_form.as_p }}
-        <button type="submit" name="create_monthly">Create/Update Monthly Budget</button>
-    </form>
 
-    <!-- Yearly Budget Form -->
-    <h3>Yearly Budget</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ yearly_form.as_p }}
-        <button type="submit" name="create_yearly">Create/Update Yearly Budget</button>
-    </form>
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+        }
 
-    <!-- Display Existing Budgets -->
-    <div>
-        <h3>Existing Weekly Budgets</h3>
-        {% for budget in weekly_budgets %}
-            <p>Budget from {{ budget.start_date }} to {{ budget.end_date }}: {{ budget.amount }}</p>
-            <!-- Add Update/Delete buttons here -->
-        {% endfor %}
-    </div>
-    <div>
-        <h3>Existing Monthly Budgets</h3>
-        {% for budget in monthly_budgets %}
-            <p>Budget for {{ budget.month }}: {{ budget.amount }}</p>
-            <!-- Add Update/Delete buttons here -->
-        {% endfor %}
-    </div>
-    <div>
-        <h3>Existing Yearly Budgets</h3>
-        {% for budget in yearly_budgets %}
-            <p>Budget for {{ budget.year }}: {{ budget.amount }}</p>
-            <!-- Add Update/Delete buttons here -->
-        {% endfor %}
-    </div>
+        70% {
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    /* Triggering animations in sequence */
+    .bar.animate {
+        animation:
+            slideUp 1s ease-out forwards,
+            /* Slide-up effect */
+            popIn 1s ease-out 1s forwards,
+            /* Pop-in effect */
+            pulse 2s infinite 2s;
+        /* Pulse effect */
+    }
+
+    /* Style for the graph container */
+    .graph-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        height: 400px;
+        margin: 20px auto;
+        background: none;
+        overflow: hidden;
+    }
+
+    /* Style for the bars */
+    .bar {
+        width: 10%;
+        background: linear-gradient(to top, #2980b9, #6dd5fa);
+        margin: 0 2%;
+        border-radius: 5px;
+        transform-origin: bottom;
+        animation: popIn 1s ease-out forwards, pulse 1.5s infinite 2s;
+        max-height: 90%;
+    }
+
+    /* Style for the labels and values */
+    .bar-label {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px;
+        font-size: 0.8em;
+        color: #333;
+        white-space: nowrap;
+        z-index: 1;
+    }
+
+    .bar-value {
+        display: block;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px;
+        font-size: 1.2em;
+        top: 15px;
+        z-index: 2;
+    }
+
+    /* 3D effect with shadows */
+    .bar:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -5px;
+        right: 0px;
+        bottom: 0;
+        z-index: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 1px;
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .graph-container {
+            height: 300px;
+            /* Adjust height for smaller devices */
+        }
+
+        .bar {
+            width: 20%;
+            /* Adjust bar width for smaller devices */
+        }
+
+        .bar-label,
+        .bar-value {
+            font-size: 0.9em;
+            /* Adjust font size for smaller devices */
+        }
+    }
+</style>
+{% endblock extra_corecss %}
+
+<div class="container mt-5">
+    <article class="row d-flex align-items-center justify-content-center">
+
+        <!-- BUDGETS/GOALS -->
+        <div class="col-lg-5 col-md-8 mb-5 col-sm-12">
+            <div class="card shadow h-100">
+                <!-- Card Header -->
+                <header>
+                    <h2 class="card-header text-center">GOALS</h2>
+                </header>
+
+                <!-- Card Thumbnail -->
+                <div class="card-body p-0 mt-2">
+                    <div class="graph-container" id="expenseGraph">
+                        <!-- Bars will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <!-- Weekly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between" data-bs-toggle="modal"
+                                    data-bs-target="#add-weekly-budget-form">
+                                    <h4 class="p-0 m-0">Weekly Budget</h4>
+                                    <h4 class="p-0 m-0"><i class="fa-solid fa-plus"></i></h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Existing Weekly Budgets -->
+                {% if weekly_budgets %}
+                <div class="container p-0 m-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><small>{{ date }} to {{ date }}</small></td>
+                                    <td>${{ amount }}</td>
+                                    <td>{{ description }}</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+
+
+
+                                            <button type="submit" name="update_weekly"
+                                                class="btn btn-warning btn-sm">Update</button>
+
+
+                                            <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                                            <button type="submit" name="delete_weekly"
+                                                class="btn btn-danger btn-sm">Delete</button>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+
+                <!-- Monthly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between" data-bs-toggle="modal"
+                                    data-bs-target="#add-monthly-budget-form">
+                                    <h4 class="p-0 m-0">Monthly Budget</h4>
+                                    <h4 class="p-0 m-0"><i class="fa-solid fa-plus"></i></h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Existing Monthly Budgets -->
+                {% if monthly_budgets %}
+                <div class="container p-0 m-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><small>{{ date }} to {{ date }}</small></td>
+                                    <td>${{ amount }}</td>
+                                    <td>{{ description }}</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+
+                                            <button type="submit" name="update_monthly"
+                                                class="btn btn-warning btn-sm">Update</button>
+
+
+                                            <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                                            <button type="submit" name="delete_monthly"
+                                                class="btn btn-danger btn-sm">Delete</button>
+
+                                        </div>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+
+                <!-- Yearly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between" data-bs-toggle="modal"
+                                    data-bs-target="#add-yearly-budget-form">
+                                    <h4 class="p-0 m-0">Yearly Budget</h4>
+                                    <h4 class="p-0 m-0"><i class="fa-solid fa-plus"></i></h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Existing Yearly Budgets -->
+                {% if yearly_budgets %}
+                <div class="container p-0 m-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><small>{{ date }} to {{ date }}</small></td>
+                                    <td>${{ amount }}</td>
+                                    <td>{{ description }}</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+
+                                            <button type="submit" name="update_yearly"
+                                                class="btn btn-warning btn-sm">Update</button>
+
+                                            <input type="hidden" name="budget_id" value="{{ budget.id }}">
+                                            <button type="submit" name="delete_yearly"
+                                                class="btn btn-danger btn-sm">Delete</button>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </article>
 </div>
+
+<!-- Custom JavaScript-->
+{% block postloadjs %}
+<script>
+    // Values from Django context
+    const weeklyExpense = {{ weekly_budgets }};
+    const monthlyExpense = {{ monthly_budgets }};
+    const yearlyExpense = {{ yearly_budgets }};
+    const maxExpense = Math.max(weeklyExpense, monthlyExpense / 4, yearlyExpense / 52);
+
+    // Function to create a bar for the graph
+    // Function to create and animate a bar for the graph
+    function createBar(value, label, index) {
+        const graphContainer = document.getElementById('expenseGraph');
+        const bar = document.createElement('div');
+        const normalizedValue = label === 'Weekly' ? value : label === 'Monthly' ? value / 4 : value / 52;
+        bar.className = 'bar';
+        bar.style.height = `${(normalizedValue / maxExpense) * 100}%`;
+        // Adding label and value
+        bar.innerHTML = `
+        <span class="bar-label">${label}</span>
+        <span class="bar-value">$${value.toFixed(2)}</span>
+    `;
+        graphContainer.appendChild(bar);
+
+        // Delay the start of the animation based on the index of the bar
+        setTimeout(() => {
+            bar.classList.add('animate');
+        }, index * 500); // Delay each bar's animation by 0.5 seconds incrementally
+    }
+
+    // Create and animate bars for weekly, monthly, yearly
+    createBar(weeklyExpense, 'Weekly', 0);
+    createBar(monthlyExpense, 'Monthly', 1);
+    createBar(yearlyExpense, 'Yearly', 2);
+</script>
+{% endblock postloadjs %}
+
 {% endblock %}
