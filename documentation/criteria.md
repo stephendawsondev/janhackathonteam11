@@ -1,13 +1,14 @@
 # [RETURN](../README.md?tab=readme-ov-file#-documentation-index-legacy)
+
 ## Criteria
 
-| Criteria                                                                | BudgetBuddy's functionality                                                                                                                                                                                                       |
+| Criteria                                                                | BudgetBuddy's Functionality                                                                                                                                                                                                       |
 | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| The project has a creative design that enhances user-experience         | BudgetBuddy has a clean interface and multiple modern components that provide a positive user experience. It is designed to be easy to navigate so that the user can enjoy the different features without getting overwhelmed.    |
-| The project is finance related and has a real world use case            | BudgetBuddy is designed to assist users in managing their personal finances by allowing them to set weekly, monthly, and yearly budgets. Users can track expenses and incomes, making it a practical tool for financial planning. |
-| The project is Responsive and accessible on different screen sizes      | BudgetBuddy is built with Bootstrap to be fully responsive, ensuring a seamless user experience across devices. This adaptability enhances accessibility and convenience for users managing their finances on-the-go.             |
-| The project is well-planned using GitHub Projects or other issue board  | The development of BudgetBuddy was organised using GitHub Projects. This involved detailed issue tracking, feature prioritisation, and progress tracking, ensuring a structured and efficient development process.                |
-| The project has a well documented README based on the provided template | The README document for BudgetBuddy is comprehensive and follows the provided template.                                                                                                                                           |
+| **Creative Design**                                                   | BudgetBuddy boasts a creative and visually appealing design that enhances the user experience. It incorporates modern components for a clean and intuitive interface, ensuring users can navigate effortlessly.                               |
+| **Real-World Use Case**                                              | BudgetBuddy serves as a valuable tool for personal finance management. It empowers users to establish weekly, monthly, and yearly budgets, track income and expenses, making it an indispensable resource for effective financial planning. |
+| **Responsive and Accessible**                                        | BudgetBuddy's responsive design, built with Bootstrap, guarantees a seamless experience across various screen sizes. This adaptability ensures accessibility and convenience for users who manage their finances on diverse devices.             |
+| **Well-Planned Development**                                          | BudgetBuddy's development is meticulously organized through GitHub Projects. This includes comprehensive issue tracking, careful feature prioritization, and meticulous progress monitoring, resulting in a structured and efficient development process.                |
+| **Comprehensive README**                                              | The README for BudgetBuddy is comprehensive and adheres to the provided template, offering clear and detailed information to users, developers, and contributors.                                                                                                                                           |
 
 ## User Stories
 
@@ -15,22 +16,34 @@
 
 ### New Site Users
 
-- As a new visitor, I want to see a demo on how to plan my budget, so that I can understand how the website can help me with my financial planning.
-- As a new user, I want to easily find and use the sign-up option, so that I can create an account.
-- As a user, I want to browse a variety of financial articles, so that I can learn more about managing my finances.
-- As a new site user, I want to be able to create an account, So that I can start setting up my own budget.
-- As a registered user, I want to be able to log into my account securely, So that I can access my budgeting information.
-- As a new site user, I want to be able to contact the Website, So that I can get in touch with the app.
-- As a user, I want to access a FAQ section, so that I can find answers to common questions without having to contact support directly.
-- As a user, I want to learn more about the company and its mission, so that I can feel confident in using the website.
+- **Demo for Budget Planning:** As a new visitor, I want to access a demo that guides me in budget planning, providing insights into how the website can assist me in financial planning.
+
+- **Effortless Sign-Up:** As a new user, I seek a straightforward sign-up option that enables me to create an account seamlessly.
+
+- **Financial Articles:** I want to browse a wide range of financial articles as a user, empowering me to enhance my financial management skills.
+
+- **Account Creation:** As a new site user, I desire the ability to create an account, initiating my journey toward setting up my personalized budget.
+
+- **Secure Login:** As a registered user, I require secure and hassle-free access to my account, allowing me to retrieve and manage my budgeting information.
+
+- **Contact Option:** For queries and communication, I seek a convenient contact option as a new site user, ensuring I can easily get in touch with the platform.
+
+- **FAQ Access:** I want access to a FAQ section as a user, offering solutions to common questions, eliminating the need for direct support contact.
+
+- **Learn About the Company:** As a user, I aim to gain insights into the company's mission and values, fostering confidence in utilizing the website.
 
 ### Returning Site Users
 
-- As a returning user, I want to easily log in to my account, so that I can continue managing my budget and accessing personalized content.
-- As a returning user, I want to log in and view my dashboard, so that I can quickly see an overview of my financial situation.
-- As a returning user, I want to add and categorize my income on the dashboard, so that I can keep track of my earnings and understand where my money comes from.
-- As a returning user, I want to record and categorize my expenses, so that I can monitor where my money is going and manage my spending better.
-- As a returning user, I want to set financial goals on a weekly, monthly, and yearly basis, so that I can plan my savings and spending according to my short-term and long-term.
-- As a returning user, I want to generate reports of my income, expenses, and goal progress, so that I can have a detailed understanding of my financial planing.
-- As a user, I want my financial data to be secure and private, So that I can trust the platform with sensitive information.
+- **Efficient Log-In:** As a returning user, I expect a straightforward log-in process, enabling quick access to my account for continued budget management and personalized content.
 
+- **Dashboard Overview:** I want to log in and swiftly access my dashboard as a returning user, granting me a comprehensive overview of my financial situation.
+
+- **Income Management:** Returning users seek the capability to effortlessly add and categorize their income on the dashboard, providing clarity on earnings sources.
+
+- **Expense Tracking:** I aspire to record and categorize my expenses effortlessly as a returning user, ensuring a detailed overview of my spending habits and better financial management.
+
+- **Financial Goals:** Returning users desire the ability to set financial goals on weekly, monthly, and yearly bases, facilitating savings and spending planning for short-term and long-term objectives.
+
+- **Detailed Reports:** I require the capability to generate reports encompassing income, expenses, and goal progress as a returning user, facilitating a comprehensive understanding of my financial planning.
+
+- **Data Security:** All users expect their financial data to be handled securely and privately, establishing trust in the platform's handling of sensitive information.
