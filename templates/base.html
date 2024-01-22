@@ -110,7 +110,7 @@
                                 {% if user.is_authenticated %}
                                 <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
                                 <li><a class="dropdown-item" href="{% url 'reports' %}">Reports</a></li>
-                                <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
+                                <li><a class="dropdown-item" href="{% url 'manage_settings' %}">Settings</a></li>
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#popupModal"
                                         href="{% url 'logout' %}">Logout</a></li>
                                 {% else %}
