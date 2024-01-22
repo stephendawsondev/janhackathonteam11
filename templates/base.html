@@ -107,10 +107,14 @@
                                 {% endif %}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-light mt-2">
-                                {% if user.is_authenticated %}
+                                {% if user.is_authenticated and not user.is_superuser %}
                                 <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
                                 <li><a class="dropdown-item" href="{% url 'reports' %}">Reports</a></li>
                                 <li><a class="dropdown-item" href="{% url 'manage_settings' %}">Settings</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#popupModal"
+                                        href="{% url 'logout' %}">Logout</a></li>
+                                {% elif user.is_superuser %}
+                                <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Dashboard</a></li>
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#popupModal"
                                         href="{% url 'logout' %}">Logout</a></li>
                                 {% else %}
