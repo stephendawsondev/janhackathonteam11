@@ -27,8 +27,7 @@ The goal of this README is to provide a clear and concise overview of the projec
 | **Target Audience** | Individuals seeking a simple yet effective method to manage personal finances, especially those who find existing financial tools too complex and prefer an intuitive approach. |
 | **Benefits** | 1. **Ease of Use**: Clean, intuitive interface for effortless financial tracking.<br>2. **Financial Clarity**: Better understanding of financial situations for improved decision-making.<br>3. **Goal Achievement**: Effective tracking of expenses and income to reach financial goals.<br>4. **Accessibility**: Responsive design for finance management across various devices at any time. |
 
-## Credits
-
+## 🌟 Credits
 
 - [StartBootstrap Small Business Template](https://startbootstrap.com/theme/small-business) - for the template used to create the foundations of the BudgetBuddy website.
 - [Cooolours](https://coolors.co/) - for the colour palette used in the BudgetBuddy website.
