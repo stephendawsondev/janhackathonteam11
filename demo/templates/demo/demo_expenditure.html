@@ -220,6 +220,16 @@
         </div>
     </article>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Get the context of the canvas element we want to select
+    const expCtx = document.getElementById('expenseGraph').getContext('2d');
+    
+    // Create gradients for each section
+    const gradientWeekly = expCtx.createLinearGradient(0, 0, 0, 400);
+    gradientWeekly.addColorStop(0, 'rgba(33, 150, 243, 1)'); // Start color
+    gradientWeekly.addColorStop(1, 'rgba(33, 150, 243, 0.2)'); // End color
+
 
 
 <!-- Custom JavaScript-->
@@ -271,5 +281,6 @@
     });
 </script>
 {% endblock postloadjs %}
+
 
 {% endblock %}
