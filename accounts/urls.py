@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (login_view, register_view, password_reset_view,
                     dashboard_view, logout_view, manage_settings_view,
                     update_user_view, delete_user)
+from academy.views import (academy_articles_view)
 
 urlpatterns = [
     path('login/', login_view, name='login'),
