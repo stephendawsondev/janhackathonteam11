@@ -27,7 +27,7 @@ The goal of this README is to provide a clear and concise overview of the projec
 | **Target Audience** | Individuals seeking a simple yet effective method to manage personal finances, especially those who find existing financial tools too complex and prefer an intuitive approach. |
 | **Benefits** | 1. **Ease of Use**: Clean, intuitive interface for effortless financial tracking.<br>2. **Financial Clarity**: Better understanding of financial situations for improved decision-making.<br>3. **Goal Achievement**: Effective tracking of expenses and income to reach financial goals.<br>4. **Accessibility**: Responsive design for finance management across various devices at any time. |
 
-### 🌟 Credits
+
 
 
 ## Deployment
@@ -146,35 +146,6 @@ Once the project is cloned or forked, in order to run it locally, you'll need to
 - Load fixtures (if applicable): `python3 manage.py loaddata file-name.json` (repeat for each file)
 - Everything should be ready now, so run the Django app again: `python3 manage.py runserver`
 
-#### Cloning
-
-You can clone the repository by following these steps:
-
-1. Go to the [GitHub repository](https://github.com/JesseRoss001/janhackathonteam11) 
-2. Locate the Code button above the list of files and click it 
-3. Select if you prefer to clone using HTTPS, SSH, or GitHub CLI and click the copy button to copy the URL to your clipboard
-4. Open Git Bash or Terminal
-5. Change the current working directory to the one where you want the cloned directory
-6. In your IDE Terminal, type the following command to clone my repository:
-	- `git clone https://github.com/JesseRoss001/janhackathonteam11.git`
-7. Press Enter to create your local clone.
-
-Alternatively, if using Gitpod, you can click below to create your own workspace using this repository.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/JesseRoss001/janhackathonteam11)
-
-Please note that in order to directly open the project in Gitpod, you need to have the browser extension installed.
-A tutorial on how to do that can be found [here](https://www.gitpod.io/docs/configure/user-settings/browser-extension).
-
-#### Forking
-
-By forking the GitHub Repository, we make a copy of the original repository on our GitHub account to view and/or make changes without affecting the original owner's repository.
-You can fork this repository by using the following steps:
-
-1. Log in to GitHub and locate the [GitHub Repository](https://github.com/JesseRoss001/janhackathonteam11)
-2. At the top of the Repository (not top of page) just above the "Settings" Button on the menu, locate the "Fork" Button.
-3. Once clicked, you should now have a copy of the original repository in your own GitHub account!
-
 
 ## Criteria
 
@@ -248,23 +219,19 @@ The goal section provides a concise summary of the main objective or purpose of 
 - [HTML](https://en.wikipedia.org/wiki/HTML) used for the main site content.
 - [CSS](https://en.wikipedia.org/wiki/CSS) used for the main site design and layout.
 - [CSS :root variables](https://www.w3schools.com/css/css3_variables.asp) used for reusable styles throughout the site.
-- [CSS Flexbox](https://www.w3schools.com/css/css3_flexbox.asp) used for an enhanced responsive layout.
-- [CSS Grid](https://www.w3schools.com/css/css_grid.asp) used for an enhanced responsive layout.
 - [JavaScript](https://www.javascript.com) used for user interaction on the site.
 - [Python](https://www.python.org) used as the back-end programming language.
 - [Git](https://git-scm.com) used for version control. (`git add`, `git commit`, `git push`)
 - [Gitpod](https://gitpod.io) used as a cloud-based IDE for development.
 - [Bootstrap](https://getbootstrap.com) used as the front-end CSS framework for modern responsiveness and pre-built components.
-- [Materialize](https://materializecss.com) used as the front-end CSS framework for modern responsiveness and pre-built components.
 - [Flask](https://flask.palletsprojects.com) used as the Python framework for the site.
 - [Django](https://www.djangoproject.com) used as the Python framework for the site.
-- [MongoDB](https://www.mongodb.com) used as the non-relational database management with Flask.
 - [SQLAlchemy](https://www.sqlalchemy.org) used as the relational database management with Flask.
 - [ElephantSQL](https://www.elephantsql.com) used as the Postgres database.
 - [Heroku](https://www.heroku.com) used for hosting the deployed back-end site.
 - [Cloudinary](https://cloudinary.com) used for online static file storage.
 
-## Credits
+## 🌟 Credits
 
 
 - [StartBootstrap Small Business Template](https://startbootstrap.com/theme/small-business) - for the template used to create the foundations of the BudgetBuddy website.
