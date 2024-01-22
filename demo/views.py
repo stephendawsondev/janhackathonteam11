@@ -86,7 +86,7 @@ def demo_expenditure_view (request):
 
 
 @anonymous_required('manage_budgets')
-def demo_manage_budgets(request):
+def demo_manage_budgets_view(request):
     date = datetime.today()
     amount = random.randint(1000, 2000)
     weekly_budgets = random.randint(1000, 2000)
