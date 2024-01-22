@@ -1,4 +1,4 @@
-# [RETURN](readme.md)
+# [RETURN](/)
 ## Criteria
 
 | Criteria                                                                | BudgetBuddy's functionality                                                                                                                                                                                                       |
