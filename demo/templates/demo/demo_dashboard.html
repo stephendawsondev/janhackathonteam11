@@ -1,7 +1,211 @@
 
-{% extends 'demo_base/base.html' %}
-
+<!-- dashboard.html -->
+{% extends 'dashboard-base/base.html' %}
 {% block content %}
+{% load static %}
+
+{% block extra_corecss %}
+<style>
+    /* Keyframe animations for attention-grabbing effects */
+
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+        }
+
+        70% {
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    /* Triggering animations in sequence */
+    .bar.animate {
+        animation:
+            slideUp 1s ease-out forwards,
+            /* Slide-up effect */
+            popIn 1s ease-out 1s forwards,
+            /* Pop-in effect */
+            pulse 2s infinite 2s;
+        /* Pulse effect */
+    }
+
+    /* Style for the graph container */
+    .graph-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        height: 309px;
+        margin: 20px auto;
+        background: none;
+        overflow: hidden;
+    }
+
+    /* Style for the bars */
+    .bar {
+        width: 10%;
+        background: linear-gradient(to top, #2980b9, #6dd5fa);
+        margin: 0 2%;
+        border-radius: 5px;
+        transform-origin: bottom;
+        animation: popIn 1s ease-out forwards, pulse 1.5s infinite 2s;
+        max-height: 90%;
+    }
+
+    /* Style for the labels and values */
+    .bar-label {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px;
+        font-size: 0.8em;
+        color: #333;
+        white-space: nowrap;
+        z-index: 1;
+    }
+
+    .bar-value {
+        display: block;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px;
+        font-size: 1.2em;
+        top: 15px;
+        z-index: 2;
+    }
+
+    /* 3D effect with shadows */
+    .bar:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -5px;
+        right: 0px;
+        bottom: 0;
+        z-index: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 1px;
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .graph-container {
+            height: 300px;
+            /* Adjust height for smaller devices */
+        }
+
+        .bar {
+            width: 20%;
+            /* Adjust bar width for smaller devices */
+        }
+
+        .bar-label,
+        .bar-value {
+            font-size: 0.9em;
+            /* Adjust font size for smaller devices */
+        }
+    }
+
+    /* Existing CSS for .graph-container and other styles */
+
+    /* Style for the doughnut chart container */
+    .chart-container {
+        width: 80%;
+        max-width: 600px;
+        height: 300px;
+        margin: 20px auto;
+    }
+
+    /* Ensure the canvas fills the container */
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 300px;
+            /* Adjust height for smaller devices */
+        }
+    }
+
+    /* Premium Features Section Style */
+    .premium-features {
+        background-color: #C0C0C0;
+        /* Silver background */
+        color: #333;
+        /* Dark text for contrast */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+            /* subtle shadow */
+            0 6px 20px rgba(0, 0, 0, 0.1),
+            inset 0 1px 1px rgba(255, 255, 255, 0.3),
+            /* inner highlight for 3D effect */
+            inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+        /* inner shadow for 3D effect */
+        margin: 20px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .premium-card {
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin: 10px;
+        padding: 15px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .premium-card:hover {
+        transform: scale(1.05);
+        /* Slightly enlarge cards on hover */
+    }
+
+    .premium-card h3 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .premium-card a {
+        color: #007bff;
+        /* Bootstrap primary color for consistency */
+        text-decoration: none;
+    }
+
+    .premium-card a:hover {
+        text-decoration: underline;
+    }
+
+    /* Additional responsive adjustments and animations can be added here */
+</style>
+
+{% endblock extra_corecss %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"></script>
+
 
 <div class="container mt-5">
     <article class="row">
@@ -15,11 +219,11 @@
                 </header>
 
                 <!-- Card Thumbnail -->
-                <a href="" class="row bg-thumbnail d-block">
-                    <div class="col-12 bg-thumbnail-image"
-                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                <div class="card-body p-0 mt-2">
+                    <div class="graph-container" id="incomeGraph">
+                        <!-- Bars will be inserted here by JavaScript -->
                     </div>
-                </a>
+                </div>
                 <!-- Card Body -->
                 <!-- Weekly -->
                 <section class="card-body pt-1 px-2 pb-1 border">
@@ -85,11 +289,12 @@
                 </header>
 
                 <!-- Card Thumbnail -->
-                <a href="" class="row bg-thumbnail d-block">
-                    <div class="col-12 bg-thumbnail-image"
-                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                <div class="card-body p-0 mt-2">
+
+                    <div class="chart-container">
+                        <canvas id="expenseGraph"></canvas>
                     </div>
-                </a>
+                </div>
 
                 <!-- Card Body -->
                 <!-- Weekly -->
@@ -156,11 +361,10 @@
                 </header>
 
                 <!-- Card Thumbnail -->
-                <a href="" class="row bg-thumbnail d-block">
-                    <div class="col-12 bg-thumbnail-image"
-                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
-                    </div>
-                </a>
+                <div class=" p-0 " style="height:">
+                    <div id="lottie-animation1"></div>
+                    <!-- Bars will be inserted here by JavaScript -->
+                </div>
 
                 <!-- Card Body -->
                 <!-- Budgets -->
@@ -228,12 +432,22 @@
 </div>
 <!-- Custom JavaScript-->
 <!-- Custom JavaScript-->
-{% block postloadjs %}
+
+<script>
+    var animation = bodymovin.loadAnimation({
+        container: document.getElementById('lottie-animation1'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '{% static "budget.json" %}' // Path to your Lottie file
+    });
+</script>
+
 <script>
     // Values from Django context
-    const weeklyIncome = {{ weekly_income_total }};
-    const monthlyIncome = {{ monthly_income_total }};
-    const yearlyIncome = {{ yearly_income_total }};
+    const weeklyIncome = {{  demo_weekly_income_total }};
+    const monthlyIncome = {{  demo_monthly_income_total  }};
+    const yearlyIncome = {{ demo_yearly_income_total }};
     const maxIncome = Math.max(weeklyIncome, monthlyIncome / 4, yearlyIncome / 52);
 
     // Adjusted createBar function
@@ -274,9 +488,9 @@
     gradientYearly.addColorStop(1, 'rgba(13, 71, 161, 0.2)');
 
     // Parsing the Django context variables with null checks
-    const expWeekly = parseFloat('{{ weekly_expenditure_total }}') || 0;
-const expMonthly = parseFloat('{{ monthly_expenditure_total }}') || 0;
-const expYearly = parseFloat('{{ yearly_expenditure_total }}') || 0;
+    const expWeekly = parseFloat('{{  demo_weekly_expenditure_total }}') || 0;
+const expMonthly = parseFloat('{{ demo_monthly_expenditure_total }}') || 0;
+const expYearly = parseFloat('{{ demo_yearly_expenditure_total }}') || 0;
     const expMax = Math.max(expWeekly, expMonthly / 4, expYearly / 52);
 
     // Normalizing the values, avoiding division by zero
@@ -320,6 +534,6 @@ const expYearly = parseFloat('{{ yearly_expenditure_total }}') || 0;
     });
 </script>
 <!-- Additional scripts -->
-{% endblock postloadjs %}
+
 
 {% endblock %}
