@@ -54,8 +54,8 @@ a {
 }
 
 /* Homepage CTA */
-main{
-  flex:1
+main {
+  flex: 1
 }
 
 .bg-main {
@@ -68,39 +68,54 @@ main{
   justify-content: space-between;
 }
 
-.data-row  span {
+.data-row span {
   display: block;
 }
 
 .data-row p {
   margin-bottom: 0;
 }
-.badge-money{
+
+.badge-money {
   border: 1px solid black;
-  border-radius: 20px ;
+  border-radius: 20px;
   padding: 0.2rem;
   align-self: center;
 }
 
 .circle {
-  width: 25px; /* or any size */
-  height: 25px; /* same as width */
-  background-color: #696E79; /* or any color */
-  border-radius: 50%; /* this makes it a circle */
+  width: 25px;
+  /* or any size */
+  height: 25px;
+  /* same as width */
+  background-color: #696E79;
+  /* or any color */
+  border-radius: 50%;
+  /* this makes it a circle */
 }
+
 .half-circle {
-  width: 25px; /* or any size */
-  height: 25px; /* half of the width */
-  background-color: hsl(221, 7%, 44%); /* background for the filled part */
-  border-radius: 50px; /* round the top */
+  width: 25px;
+  /* or any size */
+  height: 25px;
+  /* half of the width */
+  background-color: hsl(221, 7%, 44%);
+  /* background for the filled part */
+  border-radius: 50px;
+  /* round the top */
   background: linear-gradient(to right, #696E79 50%, transparent 50%);
   border: 1px solid #696E79;
 }
+
 .empty-circle {
-  width: 25px; /* or any size */
-  height: 25px; /* same as width */
-  border: 3px solid #696E79; /* border color and width */
-  border-radius: 50%; /* this makes it a circle */
+  width: 25px;
+  /* or any size */
+  height: 25px;
+  /* same as width */
+  border: 3px solid #696E79;
+  /* border color and width */
+  border-radius: 50%;
+  /* this makes it a circle */
   background-color: transparent;
   border: 1px solid #696E79;
 }
@@ -222,7 +237,7 @@ main{
 
 /* Buttons */
 
-.btn-readmore{
+.btn-readmore {
   padding: 5px 10px;
   color: #e7f3fe;
   border: 1px solid #122d46;
@@ -231,10 +246,10 @@ main{
   transition: 0.3s;
 }
 
-.btn-readmore:hover{
+.btn-readmore:hover {
   transition: 0.3s;
   background-color: white;
-  color:#191E29;
+  color: #191E29;
 }
 
 .btn-scroll {
@@ -348,7 +363,7 @@ i {
   color: var(--primary-color);
 }
 
-footer{
+footer {
   background-color: var(--primary-color);
 }
 
@@ -509,7 +524,8 @@ footer{
 }
 
 .team1 .pro-pic .card-img-overlay {
-  background-color: rgba(25, 30, 41, 0.87);;
+  background-color: rgba(25, 30, 41, 0.87);
+  ;
   display: none;
 }
 
@@ -538,24 +554,31 @@ footer{
 /* testimonial section  */
 /* Custom styles for vertical carousel */
 .carousel-inner {
-  min-height: 80px; /* Adjust based on content */
+  min-height: 80px;
+  /* Adjust based on content */
 }
+
 .carousel-item {
-  height: 33.333%; /* Each item takes up one-third of the space */
+  height: 33.333%;
+  /* Each item takes up one-third of the space */
 }
+
 .carousel.vertical .carousel-item-next.carousel-item-left,
 .carousel.vertical .carousel-item-prev.carousel-item-right {
   transform: translateY(0);
 }
+
 .carousel.vertical .carousel-item-left.active,
 .carousel.vertical .carousel-item-right.active {
   transform: translateY(-33.333%);
 }
+
 .carousel.vertical .carousel-item-left,
 .carousel.vertical .carousel-item-right {
   transform: translateY(33.333%);
 }
-.testimonial{
+
+.testimonial {
   padding: 0 3em;
 }
 
@@ -571,9 +594,8 @@ footer{
 
 /* Academy */
 
-.iframe-preview{
+.iframe-preview {
   cursor: pointer;
 }
 
-/* Style for Income Graph */ 
-
+/* Style for Income Graph */

@@ -1,6 +1,8 @@
-# transactions/admin.py
+# Django
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
+
+# Local
 from .models import Expense, Income, ExpenseCategory, IncomeCategory
 
 

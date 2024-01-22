@@ -1,3 +1,4 @@
+# Django & Python
 from django.shortcuts import render
 from accounts.utils import anonymous_required
 from django.contrib import messages

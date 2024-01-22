@@ -1,16 +1,19 @@
+# Django & Python
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
-from .forms import UserRegistrationForm
-from .models import UserProfile
-from transactions.models import Income, Expense, WeeklyBudget, MonthlyBudget, YearlyBudget, Invest
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+
+# Local
+from transactions.models import Income, Expense, WeeklyBudget, MonthlyBudget, YearlyBudget, Invest
+from .forms import UserRegistrationForm
+from .models import UserProfile
 
 # Custom Register
 

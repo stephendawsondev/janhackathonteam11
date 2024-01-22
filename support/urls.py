@@ -1,6 +1,7 @@
-# Django Imports
+# Django
 from django.urls import path, include
 
+# Local
 from .views import faq_view, contact_view, about_view, team_view, privacy_policy_view
 
 urlpatterns = [

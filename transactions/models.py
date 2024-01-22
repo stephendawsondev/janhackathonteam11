@@ -1,13 +1,16 @@
-# transactions/models.py
+# Django & Python
 from django.db import models
-from accounts.models import User
 from django.db.models import Sum
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from decimal import Decimal
 from datetime import date
 import numpy as np  # Make sure to install numpy
-#Premuim Features 
+
+# Local
+from accounts.models import User
+
+# Premuim Features
 
 
 class Invest(models.Model):
@@ -20,8 +23,10 @@ class Invest(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     investment_option = models.CharField(max_length=50, choices=OPTION_CHOICES)
-    min_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Minimum annual rate (percent)
-    max_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Maximum annual rate (percent)
+    # Minimum annual rate (percent)
+    min_rate = models.DecimalField(max_digits=5, decimal_places=2)
+    # Maximum annual rate (percent)
+    max_rate = models.DecimalField(max_digits=5, decimal_places=2)
     initial_amount = models.DecimalField(max_digits=15, decimal_places=2)
     start_date = models.DateField()
 
@@ -39,12 +44,16 @@ class Invest(models.Model):
     def rate_range(self):
         return f"{self.min_rate}% - {self.max_rate}%"
 
+
 class DebtDetail(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    debt_name = models.CharField(max_length=100)  # Changed from category to debt_name
+    # Changed from category to debt_name
+    debt_name = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Annual percentage rate
-    interest_type = models.CharField(max_length=10, choices=(('monthly', 'Monthly'), ('yearly', 'Yearly')))
+    interest_rate = models.DecimalField(
+        max_digits=5, decimal_places=2)  # Annual percentage rate
+    interest_type = models.CharField(max_length=10, choices=(
+        ('monthly', 'Monthly'), ('yearly', 'Yearly')))
     last_updated = models.DateField(auto_now=True)
 
     def __str__(self):
@@ -53,33 +62,16 @@ class DebtDetail(models.Model):
     def calculate_interest(self, current_date=date.today()):
         # Calculate the number of periods (months or years) since last update
         if self.interest_type == 'monthly':
-            periods = (current_date.year - self.last_updated.year) * 12 + current_date.month - self.last_updated.month
-            monthly_rate = Decimal(self.interest_rate) / Decimal(100) / Decimal(12)  # Convert annual rate to monthly
+            periods = (current_date.year - self.last_updated.year) * \
+                12 + current_date.month - self.last_updated.month
+            # Convert annual rate to monthly
+            monthly_rate = Decimal(self.interest_rate) / \
+                Decimal(100) / Decimal(12)
             return self.amount * (1 + monthly_rate) ** periods
         else:
             years = current_date.year - self.last_updated.year
             annual_rate = Decimal(self.interest_rate) / Decimal(100)
             return self.amount * (1 + annual_rate) ** years
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class ExpenseCategory(models.Model):

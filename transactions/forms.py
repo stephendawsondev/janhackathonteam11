@@ -1,7 +1,6 @@
+# Django
 from django import forms
 from datetime import date, timedelta
-from .models import MonthlyBudget, WeeklyBudget, YearlyBudget
-from .models import Expense, ExpenseCategory, Income, IncomeCategory,DebtDetail,Invest
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from decimal import Decimal
@@ -9,12 +8,19 @@ from django.forms.widgets import HiddenInput
 from django.forms import SelectDateWidget
 from django.utils.timezone import now
 from datetime import datetime
-from .models import Invest
 from django.forms.widgets import DateInput
+
+# Local
+from .models import Invest
+from .models import MonthlyBudget, WeeklyBudget, YearlyBudget
+from .models import Expense, ExpenseCategory, Income, IncomeCategory, DebtDetail, Invest
+
+
 class InvestForm(forms.ModelForm):
     class Meta:
         model = Invest
-        fields = ['investment_option', 'min_rate', 'max_rate', 'initial_amount', 'start_date']
+        fields = ['investment_option', 'min_rate',
+                  'max_rate', 'initial_amount', 'start_date']
         help_texts = {
             'min_rate': 'Enter the minimum annual rate (as a percentage).',
             'max_rate': 'Enter the maximum annual rate (as a percentage).',
@@ -29,20 +35,24 @@ class InvestForm(forms.ModelForm):
         cleaned_data = super().clean()
         min_rate = cleaned_data.get("min_rate")
         max_rate = cleaned_data.get("max_rate")
-        
+
         if min_rate is not None and max_rate is not None:
             if min_rate > max_rate:
-                self.add_error('min_rate', "Minimum rate cannot be greater than the maximum rate.")
-        
+                self.add_error(
+                    'min_rate', "Minimum rate cannot be greater than the maximum rate.")
+
         return cleaned_data
+
 
 class DebtDetailForm(forms.ModelForm):
     class Meta:
         model = DebtDetail
-        fields = ['debt_name', 'amount', 'interest_rate', 'interest_type']  # Updated to include 'debt_name'
+        fields = ['debt_name', 'amount', 'interest_rate',
+                  'interest_type']  # Updated to include 'debt_name'
         help_texts = {
             'interest_rate': 'Annual interest rate (percentage per year)',
         }
+
     def clean(self):
         cleaned_data = super().clean()
         amount = cleaned_data.get("amount")
@@ -52,9 +62,11 @@ class DebtDetailForm(forms.ModelForm):
             self.add_error('amount', "Amount must be greater than zero.")
 
         if interest_rate is not None and (interest_rate <= 0 or interest_rate > 100):
-            self.add_error('interest_rate', "Interest rate must be between 0 and 100.")
+            self.add_error('interest_rate',
+                           "Interest rate must be between 0 and 100.")
 
         return cleaned_data
+
 
 def calculate_start_date():
     # Calculate the start date (Thursday of the current week)
