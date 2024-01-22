@@ -1,132 +1,84 @@
 {% extends 'dashboard-base/base.html' %}
-<style>
-    .chart-container {
-        position: relative;
-        margin-top: 20px;
-        width: 100%;
-    }
-</style>
+
 {% block content %}
-<section class="position-relative">
-    <div class="container section-content mt-5">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="page-title">Investments</h1>
-            <button class="btn btn-primary" id="add-investment-button">Add Investment</button>
-        </div>
-        <div class="content-container row position-relative">
-            <div class="investment-table col col-12 mt-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Your Investments</h2>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <!-- Charts will be dynamically inserted here -->
-                        </div>
-                    </div>
-                    <div class="card-body overflow-auto">
-                        {% if investments %}
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Investment Type</th>
-                                    <th scope="col">Initial Amount</th>
-                                    <th scope="col">Start Date</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for investment in investments %}
-                                <tr>
-                                    <th scope="row">{{ investment.investment_option.name }}</th>
-                                    <td>{{ investment.initial_amount }}</td>
-                                    <td>{{ investment.start_date }}</td>
-                                    <td>
-                                        <a class="link link-success"
-                                            href="{% url 'update_investment' investment.id %}">Update</a>
-                                        <a class="link link-danger"
-                                            href="{% url 'delete_investment' investment.id %}">Delete</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% else %}
-                        <p class='lead'>No investments recorded.</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <dialog id="add-investment-form" class="form-dialog p-4">
-        <h3 class="card-title mb-2">Add Investment</h3>
-        <button id="add-investment-close-button" class="btn btn-danger close-button">X</button>
-        <form method="post" action="{% url 'add_investment' %}">
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="form-group mt-3">
-                {{ field|as_crispy_field }}
-            </div>
+<div class="container">
+    <h2>Your Investments</h2>
+    <a href="{% url 'add_investment' %}">Add Investment</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Investment Type</th>
+                <th>Initial Amount</th>
+                <th>Start Date</th>
+                <th>Rate Range</th>
+                <th>Actions</th>
+                <th>Projection</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for investment in investments %}
+            <tr>
+                <td>{{ investment.get_investment_option_display }}</td>
+                <td>{{ investment.initial_amount }}</td>
+                <td>{{ investment.start_date }}</td>
+                <td>{{ investment.min_rate }}% - {{ investment.max_rate }}%</td>
+                <td>
+                    <a href="{% url 'update_investment' investment.id %}">Edit</a> |
+                    <a href="{% url 'delete_investment' investment.id %}">Delete</a>
+                </td>
+                <td>
+                    <!-- Placeholder for the chart -->
+                    <canvas id="chart-{{ investment.id }}"></canvas>
+                </td>
+            </tr>
             {% endfor %}
-            <div class="row mt-3 justify-content-end">
-                <div class="col col-12 col-lg-3"><button type="submit" class="btn btn-primary w-100">Record
-                        Investment</button>
-                </div>
-            </div>
-        </form>
-    </dialog>
-</section>
+        </tbody>
+    </table>
+</div>
 
-<script>
-    const addInvestmentForm = document.getElementById('add-investment-form');
-    const addInvestmentButton = document.getElementById('add-investment-button');
-    const closeInvestmentButton = document.getElementById('add-investment-close-button');
-
-    addInvestmentButton.addEventListener('click', () => {
-        addInvestmentForm.show();
-    });
-
-    closeInvestmentButton.addEventListener('click', () => {
-        addInvestmentForm.close();
-    });
-</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-    // Assuming 'projections_json' is passed from the Django view
-    const projections = JSON.parse('{{ projections_json|safe }}');
+    function calculateProjections(initialAmount, rate, years) {
+        let projections = [initialAmount];
+        for (let i = 1; i <= years; i++) {
+            projections.push(projections[i - 1] * (1 + rate));
+        }
+        return projections;
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Create a chart for each investment
-        Object.keys(projections).forEach(investmentId => {
-            const canvas = document.createElement('canvas');
-            canvas.id = 'chart-' + investmentId;
-            document.querySelector('.chart-container').appendChild(canvas);
+        {% for investment in investments %}
+        const minRate = {{ investment.min_rate }} / 100;
+        const maxRate = {{ investment.max_rate }} / 100;
+        const initialAmount = {{ investment.initial_amount }};
+        const years = 5; // Projection for 5 years
 
-            const ctx = canvas.getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
-                    datasets: [{
-                        label: 'Minimum Projection',
-                        data: calculateProjection(projections[investmentId].min_projection),
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }, {
-                        label: 'Maximum Projection',
-                        data: calculateProjection(projections[investmentId].max_projection),
-                        borderColor: 'rgb(255, 99, 132)',
-                        tension: 0.1
-                    }]
-                }
-            });
+        const minProjections = calculateProjections(initialAmount, minRate, years);
+        const maxProjections = calculateProjections(initialAmount, maxRate, years);
+
+        // Define the projection data for the chart
+        const projectionData = {
+            labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+            datasets: [{
+                label: 'Min Projection',
+                data: minProjections,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }, {
+                label: 'Max Projection',
+                data: maxProjections,
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }]
+        };
+
+        // Render the chart for the current investment
+        const ctx = document.getElementById('chart-' + {{ investment.id }}).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: projectionData
         });
+        {% endfor %}
     });
-
-    function calculateProjection(initialAmount) {
-        return Array.from({length: 5}, (_, i) => initialAmount * Math.pow(1 + i, i));
-    }
 </script>
 {% endblock %}

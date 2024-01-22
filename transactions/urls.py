@@ -27,7 +27,7 @@ urlpatterns = [
     path('download-report/', download_report, name='download_report'),
     path('investments/', investment_view, name='investment_view'),
     path('investments/add/', add_investment, name='add_investment'),
-    path('investments/update/<int:investment_id>/', update_investment, name='update_investment'),
-    path('investments/delete/<int:investment_id>/', delete_investment, name='delete_investment'),
+    path('investments/update/<int:pk>/', update_investment, name='update_investment'),
+    path('investments/delete/<int:pk>/', views.delete_investment, name='delete_investment'),
 ]
 
