@@ -1,0 +1,89 @@
+{% extends 'dashboard-base/base.html' %}
+<style>
+    .chart-container {
+        position: relative;
+        margin-top: 20px;
+        width: 100%;
+    }
+</style>
+{% block content %}
+<section class="position-relative">
+    <div class="container section-content mt-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="page-title">Investments</h1>
+            <button class="btn btn-primary" id="add-investment-button">Add Investment</button>
+        </div>
+        <div class="content-container row position-relative">
+            <div class="investment-table col col-12 mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Your Investments</h2>
+                    </div>
+                    <div class="card-body overflow-auto">
+                        {% if investments %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Investment Type</th>
+                                    <th scope="col">Initial Amount</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for investment in investments %}
+                                <tr>
+                                    <th scope="row">{{ investment.investment_option.name }}</th>
+                                    <td>{{ investment.initial_amount }}</td>
+                                    <td>{{ investment.start_date }}</td>
+                                    <td>
+                                        <a class="link link-success"
+                                            href="{% url 'update_investment' investment.id %}">Update</a>
+                                        <a class="link link-danger"
+                                            href="{% url 'delete_investment' investment.id %}">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p class='lead'>No investments recorded.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <dialog id="add-investment-form" class="form-dialog p-4">
+        <h3 class="card-title mb-2">Add Investment</h3>
+        <button id="add-investment-close-button" class="btn btn-danger close-button">X</button>
+        <form method="post" action="{% url 'add_investment' %}">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group mt-3">
+                {{ field|as_crispy_field }}
+            </div>
+            {% endfor %}
+            <div class="row mt-3 justify-content-end">
+                <div class="col col-12 col-lg-3"><button type="submit" class="btn btn-primary w-100">Record
+                        Investment</button>
+                </div>
+            </div>
+        </form>
+    </dialog>
+</section>
+
+<script>
+    const addInvestmentForm = document.getElementById('add-investment-form');
+    const addInvestmentButton = document.getElementById('add-investment-button');
+    const closeInvestmentButton = document.getElementById('add-investment-close-button');
+
+    addInvestmentButton.addEventListener('click', () => {
+        addInvestmentForm.show();
+    });
+
+    closeInvestmentButton.addEventListener('click', () => {
+        addInvestmentForm.close();
+    });
+</script>
+{% endblock %}
