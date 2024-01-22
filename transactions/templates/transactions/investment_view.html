@@ -19,6 +19,11 @@
                     <div class="card-header">
                         <h2 class="card-title">Your Investments</h2>
                     </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <!-- Charts will be dynamically inserted here -->
+                        </div>
+                    </div>
                     <div class="card-body overflow-auto">
                         {% if investments %}
                         <table class="table">
@@ -85,5 +90,43 @@
     closeInvestmentButton.addEventListener('click', () => {
         addInvestmentForm.close();
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Assuming 'projections_json' is passed from the Django view
+    const projections = JSON.parse('{{ projections_json|safe }}');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Create a chart for each investment
+        Object.keys(projections).forEach(investmentId => {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'chart-' + investmentId;
+            document.querySelector('.chart-container').appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                    datasets: [{
+                        label: 'Minimum Projection',
+                        data: calculateProjection(projections[investmentId].min_projection),
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }, {
+                        label: 'Maximum Projection',
+                        data: calculateProjection(projections[investmentId].max_projection),
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    }]
+                }
+            });
+        });
+    });
+
+    function calculateProjection(initialAmount) {
+        return Array.from({length: 5}, (_, i) => initialAmount * Math.pow(1 + i, i));
+    }
 </script>
 {% endblock %}

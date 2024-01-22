@@ -20,7 +20,58 @@ from django.forms.widgets import SelectDateWidget
 import json
 from django.template.loader import render_to_string
 from weasyprint import HTML
+from .models import Invest, InvestmentOption
+from .forms import InvestForm  # You'll need to create this form
+@login_required
+def investment_view(request):
+    investments = Invest.objects.filter(user=request.user)
+    projections = {}
+    for investment in investments:
+        projections[investment.id] = investment.calculate_projection(years=5)  # Example for 5 years projection
+
+    # Convert projections to JSON for use in JavaScript for graphing
+    projections_json = json.dumps(projections)
+
+    return render(request, 'transactions/investment_view.html', {'investments': investments, 'projections_json': projections_json})
 #Premium Features
+@login_required
+def add_investment(request):
+    if request.method == 'POST':
+        form = InvestForm(request.user, request.POST)
+        if form.is_valid():
+            investment = form.save(commit=False)
+            investment.user = request.user
+            investment.save()
+            messages.success(request, 'Investment added successfully!')
+            return redirect('investment_view')
+    else:
+        form = InvestForm(request.user)
+
+    return render(request, 'transactions/add_investment.html', {'form': form})
+
+@login_required
+def update_investment(request, investment_id):
+    investment = get_object_or_404(Invest, id=investment_id, user=request.user)
+    if request.method == 'POST':
+        form = InvestForm(request.user, request.POST, instance=investment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Investment updated successfully!')
+            return redirect('investment_view')
+    else:
+        form = InvestForm(request.user, instance=investment)
+
+    return render(request, 'transactions/update_investment.html', {'form': form})
+
+@login_required
+def delete_investment(request, investment_id):
+    investment = get_object_or_404(Invest, id=investment_id, user=request.user)
+    if request.method == 'POST':
+        investment.delete()
+        messages.success(request, 'Investment deleted successfully!')
+        return redirect('investment_view')
+    return render(request, 'transactions/delete_investment.html', {'investment': investment})
+
 
 
 @login_required

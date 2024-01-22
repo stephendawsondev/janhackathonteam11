@@ -9,7 +9,16 @@ from django.forms.widgets import HiddenInput
 from django.forms import SelectDateWidget
 from django.utils.timezone import now
 from datetime import datetime
+from .models import Invest, InvestmentOption
 
+class InvestForm(forms.ModelForm):
+    class Meta:
+        model = Invest
+        fields = ['investment_option', 'initial_amount', 'start_date']
+
+    def __init__(self, user, *args, **kwargs):
+        super(InvestForm, self).__init__(*args, **kwargs)
+        self.fields['investment_option'].queryset = InvestmentOption.objects.all()
 
 class DebtDetailForm(forms.ModelForm):
     class Meta:
