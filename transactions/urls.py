@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import (income_view, expenditure_view, reports_view,
-                    manage_budgets, update_budget, manage_debts, add_edit_debt, delete_debt)
+from .views import (
+    income_view, expenditure_view, reports_view, manage_budgets, update_budget,
+    manage_debts, add_edit_debt, delete_debt, add_investment, update_investment, delete_investment, investment_view  # Import investment-related views
+)
 from . import views
 from .views import download_report
 urlpatterns = [
@@ -22,5 +24,10 @@ urlpatterns = [
     path('debts/add/', add_edit_debt, name='add_debt'),
     path('debts/edit/<int:debt_id>/', add_edit_debt, name='edit_debt'),
     path('debts/delete/<int:debt_id>/', delete_debt, name='delete_debt'),
-     path('download-report/', download_report, name='download_report'),
+    path('download-report/', download_report, name='download_report'),
+    path('investments/', investment_view, name='investment_view'),
+    path('investments/add/', add_investment, name='add_investment'),
+    path('investments/update/<int:pk>/', update_investment, name='update_investment'),
+    path('investments/delete/<int:pk>/', views.delete_investment, name='delete_investment'),
 ]
+

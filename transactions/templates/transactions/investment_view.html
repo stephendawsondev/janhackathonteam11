@@ -1,0 +1,84 @@
+{% extends 'dashboard-base/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Your Investments</h2>
+    <a href="{% url 'add_investment' %}">Add Investment</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Investment Type</th>
+                <th>Initial Amount</th>
+                <th>Start Date</th>
+                <th>Rate Range</th>
+                <th>Actions</th>
+                <th>Projection</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for investment in investments %}
+            <tr>
+                <td>{{ investment.get_investment_option_display }}</td>
+                <td>{{ investment.initial_amount }}</td>
+                <td>{{ investment.start_date }}</td>
+                <td>{{ investment.min_rate }}% - {{ investment.max_rate }}%</td>
+                <td>
+                    <a href="{% url 'update_investment' investment.id %}">Edit</a> |
+                    <a href="{% url 'delete_investment' investment.id %}">Delete</a>
+                </td>
+                <td>
+                    <!-- Placeholder for the chart -->
+                    <canvas id="chart-{{ investment.id }}"></canvas>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function calculateProjections(initialAmount, rate, years) {
+        let projections = [initialAmount];
+        for (let i = 1; i <= years; i++) {
+            projections.push(projections[i - 1] * (1 + rate));
+        }
+        return projections;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for investment in investments %}
+        const minRate = {{ investment.min_rate }} / 100;
+        const maxRate = {{ investment.max_rate }} / 100;
+        const initialAmount = {{ investment.initial_amount }};
+        const years = 5; // Projection for 5 years
+
+        const minProjections = calculateProjections(initialAmount, minRate, years);
+        const maxProjections = calculateProjections(initialAmount, maxRate, years);
+
+        // Define the projection data for the chart
+        const projectionData = {
+            labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+            datasets: [{
+                label: 'Min Projection',
+                data: minProjections,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }, {
+                label: 'Max Projection',
+                data: maxProjections,
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }]
+        };
+
+        // Render the chart for the current investment
+        const ctx = document.getElementById('chart-' + {{ investment.id }}).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: projectionData
+        });
+        {% endfor %}
+    });
+</script>
+{% endblock %}

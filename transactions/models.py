@@ -6,8 +6,38 @@ from datetime import datetime, timedelta
 from django.utils.timezone import now
 from decimal import Decimal
 from datetime import date
+import numpy as np  # Make sure to install numpy
 #Premuim Features 
 
+
+class Invest(models.Model):
+    OPTION_CHOICES = [
+        ('SAVINGS', 'Savings Account'),
+        ('LOW_RISK', 'Low Risk Investment'),
+        ('MEDIUM_RISK', 'Medium Risk Investment'),
+        ('HIGH_RISK', 'High Risk Investment')
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    investment_option = models.CharField(max_length=50, choices=OPTION_CHOICES)
+    min_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Minimum annual rate (percent)
+    max_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Maximum annual rate (percent)
+    initial_amount = models.DecimalField(max_digits=15, decimal_places=2)
+    start_date = models.DateField()
+
+    def calculate_projection(self, years=1):
+        min_rate = self.min_rate / Decimal(100)
+        max_rate = self.max_rate / Decimal(100)
+        min_projection = self.initial_amount * ((1 + min_rate) ** years)
+        max_projection = self.initial_amount * ((1 + max_rate) ** years)
+        return {'min_projection': min_projection, 'max_projection': max_projection}
+
+    def __str__(self):
+        return f"{self.user.username}'s {self.get_investment_option_display()}"
+
+    @property
+    def rate_range(self):
+        return f"{self.min_rate}% - {self.max_rate}%"
 
 class DebtDetail(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

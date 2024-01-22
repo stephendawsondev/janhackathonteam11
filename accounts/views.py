@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordResetForm
 from .forms import UserRegistrationForm
 from .models import UserProfile
-from transactions.models import Income, Expense, WeeklyBudget, MonthlyBudget, YearlyBudget
+from transactions.models import Income, Expense, WeeklyBudget, MonthlyBudget, YearlyBudget, Invest
 from django.db.models import Sum
 from django.utils.timezone import now
 from datetime import timedelta

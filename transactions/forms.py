@@ -1,7 +1,7 @@
 from django import forms
 from datetime import date, timedelta
 from .models import MonthlyBudget, WeeklyBudget, YearlyBudget
-from .models import Expense, ExpenseCategory, Income, IncomeCategory,DebtDetail
+from .models import Expense, ExpenseCategory, Income, IncomeCategory,DebtDetail,Invest
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from decimal import Decimal
@@ -9,7 +9,32 @@ from django.forms.widgets import HiddenInput
 from django.forms import SelectDateWidget
 from django.utils.timezone import now
 from datetime import datetime
+from .models import Invest
+from django.forms.widgets import DateInput
+class InvestForm(forms.ModelForm):
+    class Meta:
+        model = Invest
+        fields = ['investment_option', 'min_rate', 'max_rate', 'initial_amount', 'start_date']
+        help_texts = {
+            'min_rate': 'Enter the minimum annual rate (as a percentage).',
+            'max_rate': 'Enter the maximum annual rate (as a percentage).',
+            'initial_amount': 'Enter the initial amount of the investment.',
+            'start_date': 'Select the start date for the investment.',
+        }
+        widgets = {
+            'start_date': DateInput(attrs={'type': 'date'}),
+        }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        min_rate = cleaned_data.get("min_rate")
+        max_rate = cleaned_data.get("max_rate")
+        
+        if min_rate is not None and max_rate is not None:
+            if min_rate > max_rate:
+                self.add_error('min_rate', "Minimum rate cannot be greater than the maximum rate.")
+        
+        return cleaned_data
 
 class DebtDetailForm(forms.ModelForm):
     class Meta:

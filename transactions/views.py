@@ -9,8 +9,8 @@ from .models import Expense, Income
 from datetime import datetime, timedelta
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import WeeklyBudget, MonthlyBudget, YearlyBudget,DebtDetail
-from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm,DebtDetailForm
+from .models import WeeklyBudget, MonthlyBudget, YearlyBudget,DebtDetail,Invest
+from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm,DebtDetailForm,InvestForm
 from accounts.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -20,8 +20,64 @@ from django.forms.widgets import SelectDateWidget
 import json
 from django.template.loader import render_to_string
 from weasyprint import HTML
-#Premium Features
 
+@login_required
+def investment_view(request):
+    investments = Invest.objects.filter(user=request.user)
+    projections = []
+
+    for investment in investments:
+        projection_data = investment.calculate_projection(years=5)
+        projections.append({
+            "id": investment.id,
+            "min_projection": float(projection_data['min_projection']),  # Convert Decimal to float
+            "max_projection": float(projection_data['max_projection'])   # Convert Decimal to float
+        })
+
+    projections_json = json.dumps(projections)
+
+    return render(request, 'transactions/investment_view.html', {
+        'investments': investments, 
+        'projections_json': projections_json
+    })
+
+@login_required
+def add_investment(request):
+    if request.method == 'POST':
+        form = InvestForm(request.POST)
+        if form.is_valid():
+            investment = form.save(commit=False)
+            investment.user = request.user
+            investment.save()
+            messages.success(request, 'Investment added successfully!')
+            return redirect('investment_view')
+    else:
+        form = InvestForm()
+
+    return render(request, 'transactions/add_investment.html', {'form': form})
+
+@login_required
+def update_investment(request, pk):
+    investment = get_object_or_404(Invest, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = InvestForm(request.POST, instance=investment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Investment updated successfully!')
+            return redirect('investment_view')
+    else:
+        form = InvestForm(instance=investment)
+
+    return render(request, 'transactions/update_investment.html', {'form': form})
+
+@login_required
+def delete_investment(request, pk):
+    investment = get_object_or_404(Invest, pk=pk, user=request.user)
+    if request.method == 'POST':
+        investment.delete()
+        messages.success(request, 'Investment deleted successfully!')
+        return redirect('investment_view')
+    return render(request, 'transactions/delete_investment.html', {'investment': investment})
 
 @login_required
 def manage_debts(request):

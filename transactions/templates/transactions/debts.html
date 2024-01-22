@@ -70,5 +70,57 @@
             </div>
         </div>
     </div>
-</section>
+    <div class="row d-flex justify-content-center align-items-center">
+        {% for debt in debts %}
+        
+        <div class=" col-10 col-md-6 col-lg-4 card d-flex w-25 justify-self-center">
+            <div class="card-header">
+            <h3>{{ debt.debt_name }} Projection</h3>
+            </div>
+            <div class="card-body">
+            <canvas id="debtGraph-{{ debt.id }}" width="400" height="200"></canvas>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</section><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for debt in debts %}
+            // Calculate the compounded interest for each debt
+            const principal = {{ debt.amount }};
+            const rate = {{ debt.interest_rate }};
+            const periods = 5; // For example, over 5 years
+            let values = [];
+            let labels = [];
+            
+            for (let i = 1; i <= periods; i++) {
+                labels.push(`Year ${i}`);
+                values.push(principal * Math.pow(1 + rate / 100, i));
+            }
+
+            // Render the graph for the current debt
+            const ctx = document.getElementById('debtGraph-' + {{ debt.id }}).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '{{ debt.debt_name }} Projection',
+                        data: values,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        {% endfor %}
+    });
+</script>
 {% endblock %}
