@@ -3,36 +3,43 @@
 {% block extra_corecss %}
 <style>
     /* Keyframe animations for attention-grabbing effects */
-    
-    
+
+
     @keyframes pulse {
         0% {
             box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
         }
+
         70% {
             box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
         }
+
         100% {
             box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
         }
     }
-    
+
     @keyframes slideUp {
         from {
             transform: translateY(100%);
         }
+
         to {
             transform: translateY(0);
         }
     }
+
     /* Triggering animations in sequence */
     .bar.animate {
-        animation: 
-            slideUp 1s ease-out forwards, /* Slide-up effect */
-            popIn 1s ease-out 1s forwards, /* Pop-in effect */
-            pulse 2s infinite 2s; /* Pulse effect */
+        animation:
+            slideUp 1s ease-out forwards,
+            /* Slide-up effect */
+            popIn 1s ease-out 1s forwards,
+            /* Pop-in effect */
+            pulse 2s infinite 2s;
+        /* Pulse effect */
     }
-    
+
     /* Style for the graph container */
     .graph-container {
         display: flex;
@@ -46,7 +53,7 @@
         background: none;
         overflow: hidden;
     }
-    
+
     /* Style for the bars */
     .bar {
         width: 10%;
@@ -57,7 +64,7 @@
         animation: popIn 1s ease-out forwards, pulse 1.5s infinite 2s;
         max-height: 90%;
     }
-    
+
     /* Style for the labels and values */
     .bar-label {
         position: absolute;
@@ -70,7 +77,7 @@
         white-space: nowrap;
         z-index: 1;
     }
-    
+
     .bar-value {
         display: block;
         position: absolute;
@@ -79,10 +86,10 @@
         transform: translateX(-50%);
         padding: 5px;
         font-size: 1.2em;
-        top:15px;
+        top: 15px;
         z-index: 2;
     }
-    
+
     /* 3D effect with shadows */
     .bar:before {
         content: '';
@@ -97,21 +104,27 @@
         box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
         transition: opacity 0.3s;
     }
-    
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .graph-container {
-            height: 300px; /* Adjust height for smaller devices */
+            height: 300px;
+            /* Adjust height for smaller devices */
         }
+
         .bar {
-            width: 20%; /* Adjust bar width for smaller devices */
+            width: 20%;
+            /* Adjust bar width for smaller devices */
         }
+
         .bar-label,
         .bar-value {
-            font-size: 0.9em; /* Adjust font size for smaller devices */
+            font-size: 0.9em;
+            /* Adjust font size for smaller devices */
         }
     }
-     /* Existing CSS for .graph-container and other styles */
+
+    /* Existing CSS for .graph-container and other styles */
 
     /* Style for the doughnut chart container */
     .chart-container {
@@ -130,10 +143,11 @@
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .chart-container {
-            height: 300px; /* Adjust height for smaller devices */
+            height: 300px;
+            /* Adjust height for smaller devices */
         }
-    }   
-    </style>
+    }
+</style>
 {% endblock extra_corecss %}
 
 <div class="container px-4 px-lg-0">
@@ -153,7 +167,8 @@
                 transforming your
                 financial journey. Efficiently track income, manage expenses, and achieve your savings goals – all in
                 one place. Embrace the clarity and control you need for a financially secure future.</p>
-            <a class="btn-readmore" href="{% url 'academy_articles' %}" target="_blank" aria-label="send to Academy page">Know
+            <a class="btn-readmore" href="{% url 'academy_articles' %}" target="_blank"
+                aria-label="send to Academy page">Know
                 More About Budgeting</a>
         </div>
     </aside>
@@ -165,7 +180,8 @@
             <div class="carousel-item active">
                 <aside class="card text-white quote my-4 py-2 text-center bg-main">
                     <div class="card-body">
-                        <p class="text-white m-0 testimonial">"A budget is telling your money where to go instead of wondering where it
+                        <p class="text-white m-0 testimonial">"A budget is telling your money where to go instead of
+                            wondering where it
                             went."—Dave Ramsey</p>
                     </div>
                 </aside>
@@ -175,7 +191,8 @@
                 {% comment %} <div class="testimonial">Testimonial 2 Content</div> {% endcomment %}
                 <aside class="card text-white quote my-4 py-2 text-center bg-main">
                     <div class="card-body">
-                        <p class="text-white m-0 testimonial">"Thanks to BudgetBuddy, I achieved my financial goals quicker than I ever thought possible!."—John David</p>
+                        <p class="text-white m-0 testimonial">"Thanks to BudgetBuddy, I achieved my financial goals
+                            quicker than I ever thought possible!."—John David</p>
                     </div>
                 </aside>
             </div>
@@ -183,7 +200,8 @@
                 {% comment %} <div class="testimonial">Testimonial 3 Content</div> {% endcomment %}
                 <aside class="card text-white quote my-4 py-2 text-center bg-main">
                     <div class="card-body">
-                        <p class="text-white m-0 testimonial">"BudgetBuddy is a game-changer: simple, powerful, and perfect for managing my expenses and savings!."—Clementina Regorer</p>
+                        <p class="text-white m-0 testimonial">"BudgetBuddy is a game-changer: simple, powerful, and
+                            perfect for managing my expenses and savings!."—Clementina Regorer</p>
                     </div>
                 </aside>
             </div>
@@ -198,7 +216,7 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-    
+
 
     <!-- Demo Row-->
     <article class="row gx-4 gx-lg-5 mt-5">
@@ -239,11 +257,11 @@
                 <section class="card-body pt-1 px-2 pb-1">
                     <div class="row">
                         <div class="col-12 d-inline-block">
-                            
+
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
                                 <p class="badge-money bg-success text-white border-0">+500$</p>
-                        
+
                             </div>
 
                         </div>
@@ -255,7 +273,7 @@
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
                                 <p class="badge-money bg-success text-white border-0">+500$</p>
-                        
+
                             </div>
                         </div>
                     </div>
@@ -266,7 +284,7 @@
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
                                 <p class="badge-money bg-success text-white border-0">+500$</p>
-                        
+
                             </div>
                         </div>
                     </div>
@@ -292,7 +310,7 @@
                 </header>
 
                 <div class="card-body p-0 mt-2">
-                    
+
                     <div class="chart-container">
                         <canvas id="expenseGraph"></canvas>
                     </div>
@@ -321,7 +339,7 @@
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
                                 <p class="badge-money bg-danger text-white border-0">-500$</p>
-                        
+
                             </div>
                         </div>
                     </div>
@@ -332,7 +350,7 @@
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
                                 <p class="badge-money bg-danger text-white border-0">-500$</p>
-                        
+
                             </div>
                         </div>
                     </div>
@@ -343,7 +361,7 @@
                             <div class="data-row">
                                 <p>TransferWise LTD<span>sofortTransfer</span></p>
                                 <p class="badge-money bg-danger text-white border-0">-500$</p>
-                        
+
                             </div>
                         </div>
                     </div>
@@ -400,11 +418,11 @@
 
                                 <div class="data-row">
                                     <p>Weekly Goal</p>
-                                    <p class="d-flex justify-content-center align-items-center" >
-                                        <span class="fw-bold pe-2">500$</span> 
+                                    <p class="d-flex justify-content-center align-items-center">
+                                        <span class="fw-bold pe-2">500$</span>
                                         <span class="circle d-inline-block"></span>
                                     </p>
-                            
+
                                 </div>
 
                             </div>
@@ -420,11 +438,11 @@
 
                                 <div class="data-row">
                                     <p>monthly Goal</p>
-                                    <p class="d-flex justify-content-center align-items-center" >
-                                        <span class="fw-bold pe-2">500$</span> 
+                                    <p class="d-flex justify-content-center align-items-center">
+                                        <span class="fw-bold pe-2">500$</span>
                                         <span class="half-circle d-inline-block"></span>
                                     </p>
-                            
+
                                 </div>
 
                             </div>
@@ -440,11 +458,11 @@
 
                                 <div class="data-row">
                                     <p>monthly Goal</p>
-                                    <p class="d-flex justify-content-center align-items-center" >
-                                        <span class="fw-bold pe-2">500$</span> 
+                                    <p class="d-flex justify-content-center align-items-center">
+                                        <span class="fw-bold pe-2">500$</span>
                                         <span class="empty-circle  d-inline-block"></span>
                                     </p>
-                            
+
                                 </div>
 
                             </div>
@@ -503,7 +521,7 @@
 <script>
     // Get the context of the canvas element we want to select
     const expCtx = document.getElementById('expenseGraph').getContext('2d');
-    
+
     // Create gradients for each section
     const gradientWeekly = expCtx.createLinearGradient(0, 0, 0, 400);
     gradientWeekly.addColorStop(0, 'rgba(33, 150, 243, 1)'); // Start color
@@ -519,8 +537,8 @@
 
     // Parsing the Django context variables with null checks
     const expWeekly = parseFloat('500') || 0;
-const expMonthly = parseFloat('500') || 0;
-const expYearly = parseFloat('500') || 0;
+    const expMonthly = parseFloat('500') || 0;
+    const expYearly = parseFloat('500') || 0;
     const expMax = Math.max(expWeekly, expMonthly / 4, expYearly / 52);
 
     // Normalizing the values, avoiding division by zero
