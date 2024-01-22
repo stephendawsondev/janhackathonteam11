@@ -2,6 +2,11 @@
 site_name: BudgetBuddy
 nav:
   - Home: index.md
+  - Criteria: criteria/criteria.md
+  - Deployment: deployment/deployment.md
+  - Testing: testing/testing.md
+  - Tech: tech/tech.md
+  - Credits: credits/credits.md
 
 # PLUGINS (bug present)
 # plugins:
