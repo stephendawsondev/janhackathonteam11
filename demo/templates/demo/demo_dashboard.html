@@ -42,7 +42,7 @@
         position: relative;
         width: 100%;
         max-width: 600px;
-        height: 300px;
+        height: 309px;
         margin: 20px auto;
         background: none;
         overflow: hidden;
@@ -112,6 +112,28 @@
             font-size: 0.9em; /* Adjust font size for smaller devices */
         }
     }
+     /* Existing CSS for .graph-container and other styles */
+
+    /* Style for the doughnut chart container */
+    .chart-container {
+        width: 80%;
+        max-width: 600px;
+        height: 300px;
+        margin: 20px auto;
+    }
+
+    /* Ensure the canvas fills the container */
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 300px; /* Adjust height for smaller devices */
+        }
+    }   
     </style>
 {% endblock extra_corecss %}
 
@@ -144,6 +166,13 @@
                 <div class="card-header">
                     <h3 class="card-title">Expenditure</h3>
                 </div>
+                <div class="card-body p-0 mt-2">
+                    
+                    <div class="chart-container">
+                        <canvas id="expenseGraph"></canvas>
+                    </div>
+                </div>
+
                 <div class="card-body">
                     <h2>Expenditure Summary</h2>
                     <p>Weekly Expenditure Total: ${{ weekly_expenditure_total }}</p>
@@ -194,7 +223,70 @@
     createBar(monthlyIncome, 'Monthly', 1);
     createBar(yearlyIncome, 'Yearly', 2);
 </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Get the context of the canvas element we want to select
+    const expCtx = document.getElementById('expenseGraph').getContext('2d');
+    
+    // Create gradients for each section
+    const gradientWeekly = expCtx.createLinearGradient(0, 0, 0, 400);
+    gradientWeekly.addColorStop(0, 'rgba(33, 150, 243, 1)'); // Start color
+    gradientWeekly.addColorStop(1, 'rgba(33, 150, 243, 0.2)'); // End color
 
+    const gradientMonthly = expCtx.createLinearGradient(0, 0, 0, 400);
+    gradientMonthly.addColorStop(0, 'rgba(33, 203, 243, 1)');
+    gradientMonthly.addColorStop(1, 'rgba(33, 203, 243, 0.2)');
+
+    const gradientYearly = expCtx.createLinearGradient(0, 0, 0, 400);
+    gradientYearly.addColorStop(0, 'rgba(13, 71, 161, 1)');
+    gradientYearly.addColorStop(1, 'rgba(13, 71, 161, 0.2)');
+
+    // Parsing the Django context variables with null checks
+    const expWeekly = parseFloat('{{ weekly_expenditure_total }}') || 0;
+const expMonthly = parseFloat('{{ monthly_expenditure_total }}') || 0;
+const expYearly = parseFloat('{{ yearly_expenditure_total }}') || 0;
+    const expMax = Math.max(expWeekly, expMonthly / 4, expYearly / 52);
+
+    // Normalizing the values, avoiding division by zero
+    const normalizedExpWeekly = expMax !== 0 ? (expWeekly / expMax) * 100 : 0;
+    const normalizedExpMonthly = expMax !== 0 ? (expMonthly / 4 / expMax) * 100 : 0;
+    const normalizedExpYearly = expMax !== 0 ? (expYearly / 52 / expMax) * 100 : 0;
+
+    // Doughnut Chart for Expenses
+    const expenseChart = new Chart(expCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Weekly', 'Monthly', 'Yearly'],
+            datasets: [{
+                label: 'Expenditure',
+                data: [normalizedExpWeekly, normalizedExpMonthly, normalizedExpYearly],
+                backgroundColor: [gradientWeekly, gradientMonthly, gradientYearly],
+                borderColor: 'rgba(255, 255, 255, 1)', // White borders for a clean look
+                borderWidth: 2 // Adjust border width as needed
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutoutPercentage: 50, // Adjust this value to change the thickness of the doughnut
+            legend: {
+                labels: {
+                    fontColor: 'blue', // Adjust the legend label color to match the theme
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                bodyFontColor: 'blue', // Adjust the tooltip font color to match the theme
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    });
+</script>
 <!-- Additional scripts -->
 {% endblock postloadjs %}
 
