@@ -16,6 +16,9 @@ Welcome to BudgetBuddy, your go-to companion for financial empowerment! BudgetBu
 3. [Testing](documentation/testing.md)
 4. [Tech](documentation/tech.md)
 
+### 📚 Documentation (MODERN)
+[![Budget Busters Documentation](https://img.shields.io/badge/View-Plexohub_Documentation-blue)](https://plexoio.github.io/janhackathonteam11/) 
+
 ### 🎯 Goal
 
 The goal of this README is to provide a clear and concise overview of the project or software. It details the main objective and its relevance to user needs. The key aspects are organized into tables for better readability.
