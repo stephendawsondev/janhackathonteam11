@@ -110,7 +110,7 @@
                                 {% if user.is_authenticated %}
                                 <li><a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a></li>
                                 <li><a class="dropdown-item" href="{% url 'reports' %}">Reports</a></li>
-                                <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
+                                <li><a class="dropdown-item" href="{% url 'manage_settings' %}">Settings</a></li>
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#popupModal"
                                         href="{% url 'logout' %}">Logout</a></li>
                                 {% else %}
@@ -191,7 +191,7 @@
     {% block page_header %}
     {% endblock page_header %}
 
-    <main>
+    <main class="py-5">
         {% block content %}
         {% endblock content %}
     </main>
@@ -250,10 +250,10 @@
                         <h6 class="text-uppercase fw-bold mb-4">
                             <i class="fa-brands fa-connectdevelop"></i> About Us
                         </h6>
-                        <p class="text-justify">
+                        <p>
                             <a href="{% url 'team' %}" class="text-reset">Meet the team</a>
                         </p>
-                        <h6 class="text-uppercase fw-bold mb-4">
+                        <h6 class="text-uppercase fw-bold mt-4 mb-2">
                             <i class="fa fa-link" aria-hidden="true"></i> Useful links
                         </h6>
                         <p>
@@ -292,8 +292,8 @@
                                                 <div class="content">
 
                                                     <!-- Mailchimp Form -->
-                                                    <form
-                                                    id="newsletter" class="row g-6 form-3d" method="POST" action="/">
+                                                    <form id="newsletter" class="row g-6 form-3d" method="POST"
+                                                        action="/">
                                                         <div class="input-group">
 
                                                             <!-- Email Input -->
@@ -308,16 +308,16 @@
                                                                     aria-label="Subscribe to Newsletter"
                                                                     name="subscribe" id="mc-embedded-subscribe"
                                                                     class="newsletter-btn px-3 mb-0"><i
-                                                                        class="fa-regular fa-paper-plane"></i></button>
+                                                                        class="fa-regular fa-paper-plane"></i>
+                                                                </button>
                                                             </span>
 
                                                         </div>
                                                         <!-- Third Party Acknowledgment -->
-                                                        <p id="newsletter-confirmation" class="m-2 text-center">
-                                                            <small>(We send newsletters on a weekly basis)</small>
-                                                        </p>
-                                                        <p id="newsletter-confirmation2" class="m-2 text-center" style="display: none;">
-                                                            <small class= "marquee-text" >Your subscription is successful!</small>
+                                                        <p id="newsletter-confirmation2" class="m-2 text-center"
+                                                            style="display: none;">
+                                                            <small class="marquee-text">Your subscription is
+                                                                successful!</small>
                                                         </p>
 
                                                         <!-- Hidden fields and response divs -->
@@ -346,43 +346,15 @@
                         {% comment %} location {% endcomment %}
                         <ul class="list-unstyled">
                             <li>
-                                <p><i class="fas fa-map-marker-alt pe-2"></i>Warsaw, 57 Street, Poland</p>
+                                <p><i class="fas fa-map-marker-alt pe-2"></i>Dublin, Ireland</p>
                             </li>
                             <li>
-                                <p><i class="fas fa-phone pe-2"></i>+ 01 234 567 89</p>
+                                <p><i class="fas fa-phone pe-2"></i>+ 353 1 234 567 89</p>
                             </li>
                             <li>
-                                <p><i class="fas fa-envelope pe-2 mb-0"></i>contact@example.com</p>
+                                <p><i class="fas fa-envelope pe-2 mb-0"></i>contact@budgetbuddy.com</p>
                             </li>
                         </ul>
-
-                        <!-- Social -->
-                        {% comment %} <h6 class="text-uppercase fw-bold">
-                            Social Media
-                        </h6>
-                        <section class="d-flex justify-content-center pt-2 pb-2">
-                            <div>
-                                <ul class="list-unstyled d-flex mb-0">
-                                    <li class="me-4"><a href="https://github.com/" target="_blank"
-                                            rel="noopener noreferrer" aria-label="GitHub"><i
-                                                class="fab fa-github"></i></a></li>
-                                    <li class="me-4"><a href="https://www.facebook.com/" target="_blank"
-                                            rel="noopener noreferrer" aria-label="Facebook"><i
-                                                class="fab fa-facebook-f"></i></a></li>
-                                    <li class="me-4"><a href="https://x.com/" target="_blank" rel="noopener noreferrer"
-                                            aria-label="Twitter"><i class="fab fa-twitter"></i></a></li>
-                                    <li class="me-4"><a href="https://google.com/" target="_blank"
-                                            rel="noopener noreferrer" aria-label="Google"><i
-                                                class="fab fa-google"></i></a></li>
-                                    <li class="me-4"><a href="https://instagram.com/" target="_blank"
-                                            rel="noopener noreferrer" aria-label="Instagram"><i
-                                                class="fab fa-instagram"></i></a></li>
-                                    <li class="me-4"><a href="https://linkedin.com/" target="_blank"
-                                            rel="noopener noreferrer" aria-label="LinkedIn"><i
-                                                class="fab fa-linkedin"></i></a></li>
-                                </ul>
-                            </div>
-                        </section> {% endcomment %}
                     </div>
                 </div>
             </div>
@@ -410,52 +382,60 @@
     <script>
         /***
          * Function that displays success message */
-        
-        window.onload = function() {
-          (function() {emailjs.init('fmW4GpFYwUGFFFHtJ');})();
-          document.getElementById('newsletter').addEventListener('submit', function(event) {
-              event.preventDefault();
-              messageAlert();
-              emailjs.sendForm('service_mup50nj', 'template_7gaaz3j', this)
-                  .then(function() {
-                      console.log('SUCCESS!');
-                  }, function(error) {
-                      console.log('FAILED...', error);
-                  });
-          });
+
+        window.onload = function () {
+            (function () {
+                emailjs.init('fmW4GpFYwUGFFFHtJ');
+            })();
+            document.getElementById('newsletter').addEventListener('submit', function (event) {
+                event.preventDefault();
+                messageAlert();
+                emailjs.sendForm('service_mup50nj', 'template_7gaaz3j', this)
+                    .then(function () {
+                        console.log('SUCCESS!');
+                    }, function (error) {
+                        console.log('FAILED...', error);
+                    });
+            });
         };
-      
-        function messageAlert () {
-          const message = document.getElementById('newsletter-confirmation');
-          const message2 =  document.getElementById('newsletter-confirmation2');
-          message.style.display = 'none';
-          message2.style.display = 'block';
+
+        function messageAlert() {
+            const message = document.getElementById('newsletter-confirmation');
+            const message2 = document.getElementById('newsletter-confirmation2');
+            message.style.display = 'none';
+            message2.style.display = 'block';
         }
-      
     </script>
 
-<style>
-    /* Define the animation */
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
+    <style>
+        /* Define the animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-    /* Apply styles to the element */
-    #newsletter-confirmation2 {
-        display: none;
-        padding: 10px; /* Add some padding for better visibility */
-        background-color: #fb0000; /* Red color for success */
-        color: #fff; /* White text color */
-        border-radius: 5px; /* Rounded corners */
-        animation: fadeIn 0.5s ease; /* Use the fadeIn animation with a duration of 0.5 seconds */
-        position: relative; /* Position relative for absolute positioning of the spinner */
-    }
-</style>
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Apply styles to the element */
+        #newsletter-confirmation2 {
+            display: none;
+            padding: 10px;
+            /* Add some padding for better visibility */
+            background-color: #fb0000;
+            /* Red color for success */
+            color: #fff;
+            /* White text color */
+            border-radius: 5px;
+            /* Rounded corners */
+            animation: fadeIn 0.5s ease;
+            /* Use the fadeIn animation with a duration of 0.5 seconds */
+            position: relative;
+            /* Position relative for absolute positioning of the spinner */
+        }
+    </style>
 </body>
 
 </html>
