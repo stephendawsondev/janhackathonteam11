@@ -93,7 +93,6 @@ def rss_news(urls):
                 'domain_name': domain,
             }
             all_news.append(news_item)
-        random.shuffle(all_news)
     return all_news
 
 
