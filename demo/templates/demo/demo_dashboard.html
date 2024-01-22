@@ -219,11 +219,11 @@
                 </header>
 
                 <!-- Card Thumbnail -->
-                <a href="" class="row bg-thumbnail d-block">
-                    <div class="col-12 bg-thumbnail-image"
-                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                <div class="card-body p-0 mt-2">
+                    <div class="graph-container" id="incomeGraph">
+                        <!-- Bars will be inserted here by JavaScript -->
                     </div>
-                </a>
+                </div>
                 <!-- Card Body -->
                 <!-- Weekly -->
                 <section class="card-body pt-1 px-2 pb-1 border">
@@ -289,11 +289,12 @@
                 </header>
 
                 <!-- Card Thumbnail -->
-                <a href="" class="row bg-thumbnail d-block">
-                    <div class="col-12 bg-thumbnail-image"
-                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                <div class="card-body p-0 mt-2">
+
+                    <div class="chart-container">
+                        <canvas id="expenseGraph"></canvas>
                     </div>
-                </a>
+                </div>
 
                 <!-- Card Body -->
                 <!-- Weekly -->
@@ -444,9 +445,9 @@
 
 <script>
     // Values from Django context
-    const weeklyIncome = {{ weekly_income_total }};
-    const monthlyIncome = {{ monthly_income_total }};
-    const yearlyIncome = {{ yearly_income_total }};
+    const weeklyIncome = {{  demo_weekly_income_total }};
+    const monthlyIncome = {{  demo_monthly_income_total  }};
+    const yearlyIncome = {{ demo_yearly_income_total }};
     const maxIncome = Math.max(weeklyIncome, monthlyIncome / 4, yearlyIncome / 52);
 
     // Adjusted createBar function
@@ -487,9 +488,9 @@
     gradientYearly.addColorStop(1, 'rgba(13, 71, 161, 0.2)');
 
     // Parsing the Django context variables with null checks
-    const expWeekly = parseFloat('{{ weekly_expenditure_total }}') || 0;
-const expMonthly = parseFloat('{{ monthly_expenditure_total }}') || 0;
-const expYearly = parseFloat('{{ yearly_expenditure_total }}') || 0;
+    const expWeekly = parseFloat('{{  demo_weekly_expenditure_total }}') || 0;
+const expMonthly = parseFloat('{{ demo_monthly_expenditure_total }}') || 0;
+const expYearly = parseFloat('{{ demo_yearly_expenditure_total }}') || 0;
     const expMax = Math.max(expWeekly, expMonthly / 4, expYearly / 52);
 
     // Normalizing the values, avoiding division by zero
