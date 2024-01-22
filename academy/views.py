@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from datetime import datetime
 from urllib.parse import urlparse
 import requests
+import random
 
 # RSS
 
@@ -56,7 +57,7 @@ def rss_news(urls):
 
         # Parse the RSS feed
         feed = feedparser.parse(url)
-        top = feed.entries[:3]  # Get top 3 news entries
+        top = feed.entries[:3]
         image = ''
 
         for news in top:
@@ -65,7 +66,7 @@ def rss_news(urls):
                 for enclosure in news.enclosures:
                     if 'image' in enclosure.type:
                         image = enclosure.url
-                        break  
+                        break
 
             if 'image' in news and not image:
                 image = news.image["href"]
@@ -92,7 +93,7 @@ def rss_news(urls):
                 'domain_name': domain,
             }
             all_news.append(news_item)
-
+        random.shuffle(all_news)
     return all_news
 
 
@@ -107,8 +108,8 @@ def academy_articles_view(request):
     news_items = rss_news(urls)
 
     # Pagination
-    paginator = Paginator(news_items, 12)
+    paginator = Paginator(news_items, 6)
     page_number = int(request.GET.get('page', 1))
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'academy_articles.html', {'page_obj': page_obj, 'news_items': news_items})
+    return render(request, 'academy_articles.html', {'page_obj': page_obj})
