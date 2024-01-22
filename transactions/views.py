@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,16 +9,75 @@ from .models import Expense, Income
 from datetime import datetime, timedelta
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import WeeklyBudget, MonthlyBudget, YearlyBudget,DebtDetail
-from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm,DebtDetailForm
+from .models import WeeklyBudget, MonthlyBudget, YearlyBudget,DebtDetail,Invest
+from .forms import WeeklyBudgetForm, MonthlyBudgetForm, YearlyBudgetForm,DebtDetailForm,InvestForm
 from accounts.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from django.db.models import Min
 from django.forms.widgets import SelectDateWidget
-#Premium Features
+import json
+from django.template.loader import render_to_string
+from weasyprint import HTML
 
+@login_required
+def investment_view(request):
+    investments = Invest.objects.filter(user=request.user)
+    projections = []
+
+    for investment in investments:
+        projection_data = investment.calculate_projection(years=5)
+        projections.append({
+            "id": investment.id,
+            "min_projection": float(projection_data['min_projection']),  # Convert Decimal to float
+            "max_projection": float(projection_data['max_projection'])   # Convert Decimal to float
+        })
+
+    projections_json = json.dumps(projections)
+
+    return render(request, 'transactions/investment_view.html', {
+        'investments': investments, 
+        'projections_json': projections_json
+    })
+
+@login_required
+def add_investment(request):
+    if request.method == 'POST':
+        form = InvestForm(request.POST)
+        if form.is_valid():
+            investment = form.save(commit=False)
+            investment.user = request.user
+            investment.save()
+            messages.success(request, 'Investment added successfully!')
+            return redirect('investment_view')
+    else:
+        form = InvestForm()
+
+    return render(request, 'transactions/add_investment.html', {'form': form})
+
+@login_required
+def update_investment(request, pk):
+    investment = get_object_or_404(Invest, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = InvestForm(request.POST, instance=investment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Investment updated successfully!')
+            return redirect('investment_view')
+    else:
+        form = InvestForm(instance=investment)
+
+    return render(request, 'transactions/update_investment.html', {'form': form})
+
+@login_required
+def delete_investment(request, pk):
+    investment = get_object_or_404(Invest, pk=pk, user=request.user)
+    if request.method == 'POST':
+        investment.delete()
+        messages.success(request, 'Investment deleted successfully!')
+        return redirect('investment_view')
+    return render(request, 'transactions/delete_investment.html', {'investment': investment})
 
 @login_required
 def manage_debts(request):
@@ -104,7 +164,7 @@ def manage_budgets(request):
     weekly_budgets = WeeklyBudget.objects.filter(user=user)
     monthly_budgets = MonthlyBudget.objects.filter(user=user)
     yearly_budgets = YearlyBudget.objects.filter(user=user)
-
+    
     if request.method == 'POST':
         # Handling Weekly Budget Form
         if 'weekly_budget' in request.POST:
@@ -190,6 +250,9 @@ def manage_budgets(request):
         'weekly_form': weekly_form,
         'monthly_form': monthly_form,
         'yearly_form': yearly_form,
+ 'weekly_budgets1': json.dumps([float(budget['amount']) for budget in WeeklyBudget.objects.values('amount')]),
+    'monthly_budgets1': json.dumps([float(budget['amount']) for budget in MonthlyBudget.objects.values('amount')]),
+    'yearly_budgets1': json.dumps([float(budget['amount']) for budget in YearlyBudget.objects.values('amount')]),
     }
     return render(request, 'transactions/manage_budgets.html', context)
 
@@ -468,3 +531,69 @@ def delete_income(request, income_id):
         messages.success(request, 'Income deleted successfully!')
         return redirect('income')  # Replace with your view name
     return render(request, 'transactions/delete_income.html', {'income': income})
+
+
+@login_required
+def download_report(request):
+    user = request.user
+    today = datetime.today().date()
+
+    # Aggregate all necessary data
+    weekly_budgets = WeeklyBudget.objects.filter(user=user)
+    monthly_budgets = MonthlyBudget.objects.filter(user=user)
+    yearly_budgets = YearlyBudget.objects.filter(user=user)
+    incomes = Income.objects.filter(user=user).order_by('-date')
+    expenses = Expense.objects.filter(user=user).order_by('-date')
+    debts = DebtDetail.objects.filter(user=user)
+
+    # Additional aggregated data like total income, expenses etc.
+    total_income = incomes.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_expense = expenses.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_debt = debts.aggregate(Sum('amount'))['amount__sum'] or 0
+  # Aggregate incomes and expenses for each budget
+    budget_data = []
+    for budget_list in [weekly_budgets, monthly_budgets, yearly_budgets]:
+        for budget in budget_list:
+            income_total = Income.objects.filter(
+                user=user, date__range=[budget.start_date, budget.end_date]).aggregate(Sum('amount'))['amount__sum'] or 0
+            expense_total = Expense.objects.filter(
+                user=user, date__range=[budget.start_date, budget.end_date]).aggregate(Sum('amount'))['amount__sum'] or 0
+
+            budget_data.append({
+                'type': budget.__class__.__name__.replace('Budget', ''),
+                'amount': budget.amount,
+                'start_date': budget.start_date,
+                'end_date': budget.end_date,
+                'income_total': income_total,
+                'expense_total': expense_total,
+                'surplus_deficit': income_total - expense_total
+            })
+    # Prepare context
+    context = {
+        'user': user,
+        'weekly_budgets': weekly_budgets,
+        'monthly_budgets': monthly_budgets,
+        'yearly_budgets': yearly_budgets,
+        'incomes': incomes,
+        'expenses': expenses,
+        'debts': debts,
+        'total_income': total_income,
+        'total_expense': total_expense,
+        'total_debt': total_debt,
+        'today': today,
+        'budget_data': budget_data,
+        # Add any other context data you need for the report
+    }
+
+    # Render the HTML template with context data
+    html_string = render_to_string('transactions/report_template.html', context)
+    html = HTML(string=html_string)
+
+    # Generate PDF
+    pdf = html.write_pdf()
+
+    # Prepare response
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="financial_report.pdf"'
+
+    return response

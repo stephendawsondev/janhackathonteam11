@@ -1,26 +1,41 @@
 {% extends 'dashboard-base/base.html' %}
 
 {% block content %}
-<section class="position-relative">
-    <div class="container section-content mt-5">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="page-title">Debts</h1>
-            <button class="btn btn-primary" onclick="location.href='{% url 'add_debt' %}'">Add Debt</button>
+<section class="position-relative py-5" style="background-color: #f8f9fa;">
+    <div class="container mt-5">
+        <!-- Page Title and Add Debt Button -->
+        <div class="d-flex justify-content-center align-items-center mb-4">
+            <h1 class="page-title text-dark">Debts</h1>
+            <button class=" ms-3 btn btn-success" onclick="location.href='{% url 'add_debt' %}'">Add Debt</button>
         </div>
-        <div class="content-container row position-relative">
-            <div class="debts-cards col col-12 col-lg-4">
-                <div class="container section-content mt-5">
-                    <h2>Starting Debt: ${{ starting_debt }}</h2>
-                    <h2>Total Current Debts: ${{ total_current_debts }}</h2>
+
+        <!-- Content Container -->
+        <div class="row">
+            <!-- Debts Summary Cards -->
+            <div class="col-12 col-lg-4 mb-3">
+                <div class="card bg-light shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title text-secondary">Starting Debt</h3>
+                        <p class="card-text display-6">${{ starting_debt }}</p>
+                    </div>
+                </div>
+                <div class="card bg-light shadow-sm mt-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-secondary">Total Current Debts</h3>
+                        <p class="card-text display-6">${{ total_current_debts }}</p>
+                    </div>
+                </div>
             </div>
-            <div class="recent-debts-table col col-lg-8 mt-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Recent Debts</h2>
+
+            <!-- Recent Debts Table -->
+            <div class="col-12 col-lg-8">
+                <div class="card shadow">
+                    <div class="card-header bg-silver" style="background-color: silver;">
+                        <h2 class="card-title text-white">Recent Debts</h2>
                     </div>
                     <div class="card-body overflow-auto">
                         {% if debts %}
-                        <table class="table">
+                        <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th scope="col">Name</th>
@@ -40,8 +55,8 @@
                                     <td>{{ debt.interest_type|title }}</td>
                                     <td>{{ debt.last_updated }}</td>
                                     <td>
-                                        <a class="link link-success" href="{% url 'edit_debt' debt.id %}">Edit</a>
-                                        <a class="link link-danger" href="{% url 'delete_debt' debt.id %}">Delete</a>
+                                        <a class="btn btn-success btn-sm" href="{% url 'edit_debt' debt.id %}">Edit</a>
+                                        <a class="btn btn-danger btn-sm" href="{% url 'delete_debt' debt.id %}">Delete</a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -55,5 +70,57 @@
             </div>
         </div>
     </div>
-</section>
+    <div class="row d-flex justify-content-center align-items-center">
+        {% for debt in debts %}
+        
+        <div class=" col-10 col-md-6 col-lg-4 card d-flex w-25 justify-self-center">
+            <div class="card-header">
+            <h3>{{ debt.debt_name }} Projection</h3>
+            </div>
+            <div class="card-body">
+            <canvas id="debtGraph-{{ debt.id }}" width="400" height="200"></canvas>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</section><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for debt in debts %}
+            // Calculate the compounded interest for each debt
+            const principal = {{ debt.amount }};
+            const rate = {{ debt.interest_rate }};
+            const periods = 5; // For example, over 5 years
+            let values = [];
+            let labels = [];
+            
+            for (let i = 1; i <= periods; i++) {
+                labels.push(`Year ${i}`);
+                values.push(principal * Math.pow(1 + rate / 100, i));
+            }
+
+            // Render the graph for the current debt
+            const ctx = document.getElementById('debtGraph-' + {{ debt.id }}).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '{{ debt.debt_name }} Projection',
+                        data: values,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        {% endfor %}
+    });
+</script>
 {% endblock %}

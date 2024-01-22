@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Financial Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Financial Report</h1>
+        <p>Date: {{ today }}</p>
+        <p>User: {{ user.username }}</p>
+    </div>
+
+    <!-- Budgets Section -->
+    <h2>Budgets</h2>
+    {% for budget in budget_data %}
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Income Total</th>
+            <th>Expense Total</th>
+            <th>Surplus/Deficit</th>
+        </tr>
+        <tr>
+            <td>{{ budget.type }}</td>
+            <td>${{ budget.amount }}</td>
+            <td>{{ budget.start_date }}</td>
+            <td>{{ budget.end_date }}</td>
+            <td>${{ budget.income_total }}</td>
+            <td>${{ budget.expense_total }}</td>
+            <td>${{ budget.surplus_deficit }}</td>
+        </tr>
+    </table>
+    {% endfor %}
+
+    <!-- Incomes Section -->
+    <h2>Incomes</h2>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        {% for income in incomes %}
+        <tr>
+            <td>{{ income.date }}</td>
+            <td>${{ income.amount }}</td>
+            <td>{{ income.description }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No income records</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Expenses Section -->
+    <h2>Expenses</h2>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        {% for expense in expenses %}
+        <tr>
+            <td>{{ expense.date }}</td>
+            <td>${{ expense.amount }}</td>
+            <td>{{ expense.description }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No expense records</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+    <!-- Summary Section -->
+    <h2>Summary</h2>
+    <table>
+        <tr>
+            <th>Total Income</th>
+            <td>${{ total_income }}</td>
+        </tr>
+        <tr>
+            <th>Total Expenses</th>
+            <td>${{ total_expense }}</td>
+        </tr>
+
+    </table>
+</body>
+</html>
