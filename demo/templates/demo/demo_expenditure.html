@@ -1,54 +1,224 @@
-{% extends 'dashboard-base/base.html' %}
+{% extends 'demo_base/base.html' %}
+
 {% block content %}
-<div class="card-body">
-    {% if messages %}
-    {% for message in messages %}
-    <div>{{ message }}</div>
-    {% endfor %}
-    {% endif %}
 
-    <button type="submit" class="btn btn-primary">Submit Expense</button>
+<!-- Add Code to the <head> tag -->
+{% block extra_corecss %}
+<style>
+    /* Keyframe animations for attention-grabbing effects */
 
-    <h2>Weekly Total</h2>
-    <p>This week's total: {{ demo_weekly_totals|default:"0.00" }}</p>
 
-    <h2>Monthly Total</h2>
-    <p>This month's total: {{ demo_monthly_totals|default:"0.00" }}</p>
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+        }
 
-    <h2>Yearly Total</h2>
-    <p>This year's total: {{ demo_yearly_totals|default:"0.00" }}</p>
+        70% {
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
+        }
 
-    <h2>Daily Totals This Week</h2>
-    {% for demo_day_total in demo_daily_totals %}
-    <p>{{ demo_day_total.day }}: {{ demo_day_total.total|default:"0.00" }}</p>
-    {% endfor %}
+        100% {
+            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+        }
+    }
 
-    <h2>Recent Expenses</h2>
-    {% if demo_expenses %}
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Expense</th>
-            <th>Action</th>
-        </tr>
-        {% for demo_day_total in demo_daily_totals %}
-        <tr>
-            <td>{{ demo_day_total.day }}</td>
-            <td>{{ demo_day_total.total|default:"0.00" }}</td>
-            <td>{{ demo_day_total.total|default:"0.00" }}</td>
-            <td>{{ demo_day_total.total|default:"0.00" }}</td>
-            <td>
-                <a href="#">Update</a>
-                <a href="#">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-    <p>No expenses recorded.</p>
-    {% endif %}
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    /* Triggering animations in sequence */
+    .bar.animate {
+        animation:
+            slideUp 1s ease-out forwards,
+            /* Slide-up effect */
+            popIn 1s ease-out 1s forwards,
+            /* Pop-in effect */
+            pulse 2s infinite 2s;
+        /* Pulse effect */
+    }
+
+    /* Style for the graph container */
+    .graph-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        height: 400px;
+        margin: 20px auto;
+        background: none;
+        overflow: hidden;
+    }
+
+    /* Style for the bars */
+    .bar {
+        width: 10%;
+        background: linear-gradient(to top, #2980b9, #6dd5fa);
+        margin: 0 2%;
+        border-radius: 5px;
+        transform-origin: bottom;
+        animation: popIn 1s ease-out forwards, pulse 1.5s infinite 2s;
+        max-height: 90%;
+    }
+
+    /* Style for the labels and values */
+    .bar-label {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px;
+        font-size: 0.8em;
+        color: #333;
+        white-space: nowrap;
+        z-index: 1;
+    }
+
+    .bar-value {
+        display: block;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 5px;
+        font-size: 1.2em;
+        top: 15px;
+        z-index: 2;
+    }
+
+    /* 3D effect with shadows */
+    .bar:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -5px;
+        right: 0px;
+        bottom: 0;
+        z-index: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 1px;
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .graph-container {
+            height: 300px;
+            /* Adjust height for smaller devices */
+        }
+
+        .bar {
+            width: 20%;
+            /* Adjust bar width for smaller devices */
+        }
+
+        .bar-label,
+        .bar-value {
+            font-size: 0.9em;
+            /* Adjust font size for smaller devices */
+        }
+    }
+</style>
+{% endblock extra_corecss %}
+
+<div class="container mt-5">
+    <article class="row d-flex align-items-center justify-content-center">
+
+        <!-- INCOMES -->
+        <div class="col-lg-5 col-md-8 mb-5 col-sm-12">
+            <div class="card shadow h-100">
+                <!-- Card Header -->
+                <header>
+                    <h2 class="card-header text-center">EXPENDITURE</h2>
+                </header>
+
+                <!-- Card Thumbnail -->
+                <div class="card-body p-0 mt-2">
+                    <div class="graph-container" id="incomeGraph">
+                        <!-- Bars will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <!-- Weekly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Weekly</h4>
+                                    <h4 class="p-0 m-0 text-danger">-${{ weekly_income_total }}</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Monthly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Monthly</h4>
+                                    <h4 class="p-0 m-0 text-danger">-${{ monthly_income_total }}</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Yearly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Yearly</h4>
+                                    <h4 class="p-0 m-0 text-danger">-${{ yearly_income_total }}</h4>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Income Records -->
+                <section class="card-body pt-1 px-2 pb-1">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="data-row">
+                                <p>{{ source }}<span>{{ date }}</span></p>
+                                <div class="mt-2">
+                                    <a href="#" class="btn btn-warning btn-sm">Update</a>
+                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                </div>
+                                <p class="badge-money border bg-danger text-white">-${{ amount }}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card Footer -->
+                <footer id="add-income-button" data-bs-toggle="modal" data-bs-target="#add-income-form">
+                    <p class="card-footer text-center fs-5 btn w-100 m-0">
+                        ADD
+                    </p>
+                </footer>
+            </div>
+        </div>
+    </article>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -60,58 +230,57 @@
     gradientWeekly.addColorStop(0, 'rgba(33, 150, 243, 1)'); // Start color
     gradientWeekly.addColorStop(1, 'rgba(33, 150, 243, 0.2)'); // End color
 
-    const gradientMonthly = expCtx.createLinearGradient(0, 0, 0, 400);
-    gradientMonthly.addColorStop(0, 'rgba(33, 203, 243, 1)');
-    gradientMonthly.addColorStop(1, 'rgba(33, 203, 243, 0.2)');
 
-    const gradientYearly = expCtx.createLinearGradient(0, 0, 0, 400);
-    gradientYearly.addColorStop(0, 'rgba(13, 71, 161, 1)');
-    gradientYearly.addColorStop(1, 'rgba(13, 71, 161, 0.2)');
 
-    // Parsing the Django context variables with null checks
-    const expWeekly = parseFloat('{{ weekly_totals.weekly_total }}') || 0;
-const expMonthly = parseFloat('{{ monthly_totals.monthly_total }}') || 0;
-const expYearly = parseFloat('{{ yearly_totals.yearly_total }}') || 0;
-    const expMax = Math.max(expWeekly, expMonthly / 4, expYearly / 52);
+<!-- Custom JavaScript-->
+{% block postloadjs %}
+<script>
+    // Values from Django context
+    const weeklyIncome = {{ weekly_income_total }};
+    const monthlyIncome = {{ monthly_income_total }};
+    const yearlyIncome = {{ yearly_income_total }};
+    const maxIncome = Math.max(weeklyIncome, monthlyIncome / 4, yearlyIncome / 52);
 
-    // Normalizing the values, avoiding division by zero
-    const normalizedExpWeekly = expMax !== 0 ? (expWeekly / expMax) * 100 : 0;
-    const normalizedExpMonthly = expMax !== 0 ? (expMonthly / 4 / expMax) * 100 : 0;
-    const normalizedExpYearly = expMax !== 0 ? (expYearly / 52 / expMax) * 100 : 0;
+    // Function to create a bar for the graph
+    // Function to create and animate a bar for the graph
+    function createBar(value, label, index) {
+        const graphContainer = document.getElementById('incomeGraph');
+        const bar = document.createElement('div');
+        const normalizedValue = label === 'Weekly' ? value : label === 'Monthly' ? value / 4 : value / 52;
+        bar.className = 'bar';
+        bar.style.height = `${(normalizedValue / maxIncome) * 100}%`;
+        // Adding label and value
+        bar.innerHTML = `
+        <span class="bar-label">${label}</span>
+        <span class="bar-value">$${value.toFixed(2)}</span>
+    `;
+        graphContainer.appendChild(bar);
 
-    // Doughnut Chart for Expenses
-    const expenseChart = new Chart(expCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Weekly', 'Monthly', 'Yearly'],
-            datasets: [{
-                label: 'Expenditure',
-                data: [normalizedExpWeekly, normalizedExpMonthly, normalizedExpYearly],
-                backgroundColor: [gradientWeekly, gradientMonthly, gradientYearly],
-                borderColor: 'rgba(255, 255, 255, 1)', // White borders for a clean look
-                borderWidth: 2 // Adjust border width as needed
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutoutPercentage: 50, // Adjust this value to change the thickness of the doughnut
-            legend: {
-                labels: {
-                    fontColor: 'blue', // Adjust the legend label color to match the theme
-                }
-            },
-            tooltips: {
-                enabled: true,
-                mode: 'index',
-                intersect: false,
-                bodyFontColor: 'blue', // Adjust the tooltip font color to match the theme
-            },
-            animation: {
-                animateScale: true,
-                animateRotate: true
-            }
-        }
+        // Delay the start of the animation based on the index of the bar
+        setTimeout(() => {
+            bar.classList.add('animate');
+        }, index * 500); // Delay each bar's animation by 0.5 seconds incrementally
+    }
+
+    // Create and animate bars for weekly, monthly, yearly
+    createBar(weeklyIncome, 'Weekly', 0);
+    createBar(monthlyIncome, 'Monthly', 1);
+    createBar(yearlyIncome, 'Yearly', 2);
+</script>
+<script>
+    const addIncomeForm = document.getElementById('add-income-form');
+    const addIncomeButton = document.getElementById('add-income-button');
+    const closeButton = document.getElementById('add-income-close-button');
+
+    addIncomeButton.addEventListener('click', () => {
+        addIncomeForm.show();
+    });
+
+    closeButton.addEventListener('click', () => {
+        addIncomeForm.close();
     });
 </script>
+{% endblock postloadjs %}
+
+
 {% endblock %}

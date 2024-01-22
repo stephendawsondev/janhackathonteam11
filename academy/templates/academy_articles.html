@@ -13,7 +13,7 @@
         <div class="row">
 
             <!-- Article  -->
-            {% for item in news_items %}
+            {% for item in page_obj %}
             <article class="col-lg-4 mb-4 d-flex">
                 <div class="card card-shadow border flex-fill">
 
@@ -52,10 +52,14 @@
                             </div>
                         </div>
                     </div>
+                    {% if item.can_embed %}
                     <div class="card-footer iframe-preview" data-bs-toggle="modal" data-bs-target="#rssInstance"
                         data-attributedomain="{{ item.domain_name }}" data-attributelink="{{ item.link }}">
                         <p class=" text-center m-0 p-0"><strong>Preview</strong></p>
                     </div>
+                    {% else %}
+                    <a href="#" class="card-footer btn btn-primary disabled" aria-disabled="true">CSP Protected</a>
+                    {% endif %}
                 </div>
             </article>
 
@@ -121,6 +125,10 @@
             <iframe height="400" id="iframeUrl" class="modal-body">
 
             </iframe>
+            <div id="errorIframe" style="display:none;">
+                Sorry, the site chooses not to display this content due to Content Security Policy (CSP). Please <a
+                    id="urlFailed" target="_blank">click here</a> to view it on its original site.
+            </div>
         </section>
     </div>
 </div>

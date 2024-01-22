@@ -1,13 +1,40 @@
 from django.shortcuts import render
 import feedparser
-# from bs4 import BeautifulSoup
 import textwrap
 from .models import ArticleAcademy
 from django.core.paginator import Paginator
 from datetime import datetime
 from urllib.parse import urlparse
+import requests
+import random
 
 # RSS
+
+
+def can_embed_url(url):
+    try:
+        response = requests.get(url, timeout=10)
+        csp = response.headers.get('Content-Security-Policy', '')
+        x_frame_options = response.headers.get('X-Frame-Options', '')
+
+        # Check for 'frame-ancestors' in CSP
+        if "frame-ancestors" in csp:
+            if "'self'" in csp or "yourdomain.com" in csp:
+                return False
+            else:
+                return True
+
+        # Check for 'X-Frame-Options'
+        elif x_frame_options:
+            if x_frame_options.lower() in ['deny', 'sameorigin']:
+                return False
+            else:
+                return True
+        else:
+            return True
+    except requests.RequestException as e:
+        print(f"Error checking URL {url}: {e}")
+        return False
 
 
 def rss_news(urls):
@@ -17,56 +44,48 @@ def rss_news(urls):
     all_news = []
 
     for url in urls:
-        # Parse URL
+        # Parse URL to get the domain name
         parsed_uri = urlparse(url)
         domain = '{uri.netloc}'.format(
             uri=parsed_uri).replace('www.', '').capitalize()
 
+        # Remove '.com' and capitalize
         if domain.endswith('.com'):
             domain = domain[:-4].capitalize()
         else:
             domain = domain.capitalize()
 
+        # Parse the RSS feed
         feed = feedparser.parse(url)
         top = feed.entries[:3]
         image = ''
 
         for news in top:
+            # Find an image URL
             if 'enclosures' in news:
                 for enclosure in news.enclosures:
                     if 'image' in enclosure.type:
                         image = enclosure.url
+                        break
 
-            # if 'description' in news:
-            #     soup = BeautifulSoup(news.description, 'html.parser')
-            #     images = soup.find_all('img')
-            #     for img in images:
-            #         image = img['src']
-
-            if 'media_content' in news:
-                for media in news.media_content:
-                    if 'image' in media.get('type', ''):
-                        image = media["url"]
-
-            # if 'content' in news:
-            #     soup = BeautifulSoup(news.content[0].value, 'html.parser')
-            #     images = soup.find_all('img')
-            #     for img in images:
-            #         image = img['src']
-
-            if 'image' in news:
+            if 'image' in news and not image:
                 image = news.image["href"]
 
-            # Parse time
-            date_str = news.published
+            # Parse and format the publication date
+            date_str = news.published.replace(' GMT', ' +0000')
             formatted_date = datetime.strptime(
                 date_str, "%a, %d %b %Y %H:%M:%S %z")
-            clean_date = formatted_date.strftime("%a, %d %b %Y %H:%M")
+            clean_date = formatted_date.strftime("%a, %d %b %Y")
+
+            # Check if the news link can be embedded
+            url_proctect = news.link
+            can_embed = can_embed_url(url_proctect)
 
             # Process and format the news item
             news_item = {
+                'can_embed': can_embed,
                 'title': news.title,
-                'summary': f'{news.summary[:200]}...',
+                'summary': f'{news.summary[:150]}...',
                 'link': news.link,
                 'base': news.title_detail.base,
                 'image': image,
@@ -74,8 +93,9 @@ def rss_news(urls):
                 'domain_name': domain,
             }
             all_news.append(news_item)
-
+        random.shuffle(all_news)
     return all_news
+
 
 # Article's page
 
@@ -88,8 +108,8 @@ def academy_articles_view(request):
     news_items = rss_news(urls)
 
     # Pagination
-    paginator = Paginator(news_items, 12)
+    paginator = Paginator(news_items, 6)
     page_number = int(request.GET.get('page', 1))
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'academy_articles.html', {'page_obj': page_obj, 'news_items': news_items})
+    return render(request, 'academy_articles.html', {'page_obj': page_obj})

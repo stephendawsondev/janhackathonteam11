@@ -1,198 +1,230 @@
-<!-- dashboard.html -->
-{% extends 'dashboard-base/base.html' %}
+
+{% extends 'demo_base/base.html' %}
+
 {% block content %}
-{% block extra_corecss %}
-<style>
-    /* Keyframe animations for attention-grabbing effects */
-    
-    
-    @keyframes pulse {
-        0% {
-            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
-        }
-        70% {
-            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
-        }
-        100% {
-            box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-        }
-    }
-    
-    @keyframes slideUp {
-        from {
-            transform: translateY(100%);
-        }
-        to {
-            transform: translateY(0);
-        }
-    }
-    /* Triggering animations in sequence */
-    .bar.animate {
-        animation: 
-            slideUp 1s ease-out forwards, /* Slide-up effect */
-            popIn 1s ease-out 1s forwards, /* Pop-in effect */
-            pulse 2s infinite 2s; /* Pulse effect */
-    }
-    
-    /* Style for the graph container */
-    .graph-container {
-        display: flex;
-        justify-content: space-around;
-        align-items: flex-end;
-        position: relative;
-        width: 100%;
-        max-width: 600px;
-        height: 309px;
-        margin: 20px auto;
-        background: none;
-        overflow: hidden;
-    }
-    
-    /* Style for the bars */
-    .bar {
-        width: 10%;
-        background: linear-gradient(to top, #2980b9, #6dd5fa);
-        margin: 0 2%;
-        border-radius: 5px;
-        transform-origin: bottom;
-        animation: popIn 1s ease-out forwards, pulse 1.5s infinite 2s;
-        max-height: 90%;
-    }
-    
-    /* Style for the labels and values */
-    .bar-label {
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 5px;
-        font-size: 0.8em;
-        color: #333;
-        white-space: nowrap;
-        z-index: 1;
-    }
-    
-    .bar-value {
-        display: block;
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 5px;
-        font-size: 1.2em;
-        top:15px;
-        z-index: 2;
-    }
-    
-    /* 3D effect with shadows */
-    .bar:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -5px;
-        right: 0px;
-        bottom: 0;
-        z-index: 0;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 1px;
-        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-        transition: opacity 0.3s;
-    }
-    
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .graph-container {
-            height: 300px; /* Adjust height for smaller devices */
-        }
-        .bar {
-            width: 20%; /* Adjust bar width for smaller devices */
-        }
-        .bar-label,
-        .bar-value {
-            font-size: 0.9em; /* Adjust font size for smaller devices */
-        }
-    }
-     /* Existing CSS for .graph-container and other styles */
 
-    /* Style for the doughnut chart container */
-    .chart-container {
-        width: 80%;
-        max-width: 600px;
-        height: 300px;
-        margin: 20px auto;
-    }
+<div class="container mt-5">
+    <article class="row">
 
-    /* Ensure the canvas fills the container */
-    .chart-container canvas {
-        width: 100% !important;
-        height: 100% !important;
-    }
+        <!-- INCOMES -->
+        <div class="col-lg-4 col-md-12 mb-5 col-sm-12">
+            <div class="card shadow h-100">
+                <!-- Card Header -->
+                <header>
+                    <h2 class="card-header text-center">INCOME</h2>
+                </header>
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .chart-container {
-            height: 300px; /* Adjust height for smaller devices */
-        }
-    }   
-    </style>
-{% endblock extra_corecss %}
-
-<div class="container mt-4">
-    <div class="row">
-        <!-- Income Card -->
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Income</h3>
-                </div>
-                <div class="card-body p-0 mt-2">
-                    <div class="graph-container" id="incomeGraph">
-                        <!-- Bars will be inserted here by JavaScript -->
+                <!-- Card Thumbnail -->
+                <a href="" class="row bg-thumbnail d-block">
+                    <div class="col-12 bg-thumbnail-image"
+                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
                     </div>
-                </div>
-                <div class="card-body">
-                    <h2>Income Summary</h2>
-                    <p>Weekly Income Total: ${{ weekly_income_total }}</p>
-                    <p>Monthly Income Total: ${{ monthly_income_total }}</p>
-                    <p>Yearly Income Total: ${{ yearly_income_total }}</p>
-                    <a href="{% url 'demo_income' %}" class="btn btn-primary">View Income Details</a>
-                </div>
-            </div>
-        </div>
+                </a>
+                <!-- Card Body -->
+                <!-- Weekly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
 
-        <!-- Expenditure Card -->
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Expenditure</h3>
-                </div>
-                <div class="card-body p-0 mt-2">
-                    
-                    <div class="chart-container">
-                        <canvas id="expenseGraph"></canvas>
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Weekly</h4>
+                                    <h5 class="p-0 m-0 text-success">${{ demo_weekly_income_total }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </section>
+                <!-- Monthly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
 
-                <div class="card-body">
-                    <h2>Expenditure Summary</h2>
-                    <p>Weekly Expenditure Total: ${{ weekly_expenditure_total }}</p>
-                    <p>Monthly Expenditure Total: ${{ monthly_expenditure_total }}</p>
-                    <p>Yearly Expenditure Total: ${{ yearly_expenditure_total }}</p>
-                    <a href="{% url 'demo_expenditure' %}" class="btn btn-primary">View Expenditure Details</a>
-                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Monthly</h4>
+                                    <h5 class="p-0 m-0 text-success">${{ demo_monthly_income_total }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Yearly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Yearly</h4>
+                                    <h5 class="p-0 m-0 text-success">${{ demo_yearly_income_total }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card Footer -->
+                <footer>
+                    <a class="card-footer text-center fs-5 btn w-100" href="{% url 'demo_income' %}">
+                        DETAILS
+                    </a>
+                </footer>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Budgets</h3>
-                </div>
-                <div class="card-body">
-                    <a href="{% url 'manage_budgets' %}" class="btn btn-primary">View Expenditure Details</a>
-                </div>
+
+        <!-- EXPENDITURES -->
+        <div class="col-lg-4 col-md-12 mb-5 col-sm-12">
+            <div class="card shadow h-100">
+                <!-- Card Header -->
+                <header>
+                    <h2 class="card-header text-center">EXPENDITURE</h2>
+                </header>
+
+                <!-- Card Thumbnail -->
+                <a href="" class="row bg-thumbnail d-block">
+                    <div class="col-12 bg-thumbnail-image"
+                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                    </div>
+                </a>
+
+                <!-- Card Body -->
+                <!-- Weekly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Weekly</h4>
+                                    <h5 class="p-0 m-0 text-danger">-${{ demo_weekly_expenditure_total }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Monthly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Monthly</h4>
+                                    <h5 class="p-0 m-0 text-danger">-${{ demo_monthly_expenditure_total }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Yearly -->
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Yearly</h4>
+                                    <h5 class="p-0 m-0 text-danger">-${{ demo_yearly_expenditure_total }}</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Card Footer -->
+                <footer>
+                    <a class="card-footer text-center fs-5 btn w-100" href="{% url 'demo_expenditure_view' %}">
+                        DETAILS
+                    </a>
+                </footer>
             </div>
         </div>
-    </div>
+
+        <!-- GOALS -->
+        <div class="col-lg-4 col-md-12 mb-5 col-sm-12">
+            <div class="card shadow">
+                <!-- Card Header -->
+                <header>
+                    <h2 class="card-header text-center">GOALS</h2>
+                </header>
+
+                <!-- Card Thumbnail -->
+                <a href="" class="row bg-thumbnail d-block">
+                    <div class="col-12 bg-thumbnail-image"
+                        style="background-image: url('https://placehold.co/600x400/EEE/31343C')">
+                    </div>
+                </a>
+
+                <!-- Card Body -->
+                <!-- Budgets -->
+                <!-- Weekly -->
+                {% if latest_weekly_budget %}
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Weekly</h4>
+                                    <span class="p-0 m-0"><small>{{ demo_start_date }}</small></span>
+                                    <h5 class="p-0 m-0">${{ demo_weekly_income_total }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                <!-- Monthly -->
+                {% if latest_monthly_budget %}
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Monthly</h4>
+                                    <span class="p-0 m-0"><small>{{ demo_start_date }}</small></span>
+                                    <h5 class="p-0 m-0">${{ demo_monthly_income_total }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                <!-- Yearly -->
+                {% if latest_yearly_budget %}
+                <section class="card-body pt-1 px-2 pb-1 border">
+                    <div class="row">
+                        <div class="col-12 d-inline-block">
+                            <div class="p-1">
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="p-0 m-0">Yearly</h4>
+                                    <span class="p-0 m-0"><small>{{ demo_start_date }}</small></span>
+                                    <h5 class="p-0 m-0">${{ demo_yearly_income_total }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+
+                <!-- Card Footer -->
+                <footer>
+                    <a class="card-footer text-center fs-5 btn w-100" href="{% url 'demo_manage_budgets' %}">
+                        DETAILS
+                    </a>
+                </footer>
+            </div>
+        </div>
+    </article>
 </div>
 <!-- Custom JavaScript-->
 <!-- Custom JavaScript-->
