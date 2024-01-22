@@ -3,6 +3,14 @@
   <img src="https://res.cloudinary.com/djdefbnij/image/upload/v1705314715/Hackathons/Screenshot_2024-01-15_at_10.27.38_rc7lor.png" alt="BudgetBustersBanner" width="1200"/>
 </p>
 
+???+ quote "Budget Busters"
+    Your go-to companion for financial empowerment!
+
+[GitHub Repository](https://github.com/JesseRoss001/janhackathonteam11){ .md-button .md-button--primary }
+
+[Deployed Site](https://budgetbuddy2-38958568c907.herokuapp.com/){ .md-button .md-button--primary }
+
+
 ## 📄 About Submission
 
 Welcome to BudgetBuddy, your go-to companion for financial empowerment! BudgetBuddy is a comprehensive budgeting app designed to assist users in making informed financial decisions, helping them achieve their financial goals with ease and confidence. We created BudgetBuddy to simplify the expense and income tracking process. There are tools out there that make something as simple (and important!) as your finances so difficult. BudgetBuddy gives you a straightforward way to keep you on track to your savings goals.
